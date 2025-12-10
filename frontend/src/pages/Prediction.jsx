@@ -160,9 +160,8 @@ const Prediction = () => {
                 setCombinedData(preds.map(p => ({ ...p, actual: null })));
             }
 
-        } catch (err) {
             console.error('Error generating predictions:', err);
-            setError(err.response?.data?.detail || 'Failed to generate predictions');
+            setError(`DEBUG: ${err.message} - ${err.response?.data?.detail || ''} (Status: ${err.response?.status})`);
         } finally {
             setLoading(false);
         }
