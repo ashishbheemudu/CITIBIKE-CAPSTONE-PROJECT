@@ -30,7 +30,27 @@ async def startup_event():
     # Load data on startup
     print("DEBUG: Loading core data...")
     data_loader.load_core_data()
-    print("DEBUG: Core data loaded. Prediction service handles model loading.")
+    print("DEBUG: Core data loaded. Initializing Prediction Service with shared data...")
+    
+    # Initialize PredictionService with shared data to check memory
+    # We import inside function to avoid circular/early imports if needed, 
+    # but here we need to set the global in the module.
+    import prediction_service as ps_module
+    from prediction_service import PredictionService
+    
+    # Inject data (pass None if not loaded)
+    robust = getattr(data_loader, 'robust_features', None)
+    
+    # Instantiate globally
+    ps_module.prediction_service = PredictionService(
+        reference_data=None, # It will load recent ref data if needed, or we could pass robust here too? 
+                             # prediction_service logic falls back to ref if hist is missing. 
+                             # But robust contains ALL history.
+                             # Actually robust features IS the historical data.
+        historical_data=robust
+    )
+    print("DEBUG: Prediction Service initialized with shared memory.")
+    
     # data_loader.load_advanced_model()
     print("DEBUG: Startup complete.")
 

@@ -15,13 +15,20 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 MODELS_DIR = os.path.join(BASE_DIR, "models")
 
 class PredictionService:
-    def __init__(self):
+    def __init__(self, reference_data=None, historical_data=None):
         self.models = {}
         self.scalers = {}
-        self.reference_data = None
+        self.reference_data = reference_data
         self.feature_names = []
         self.ensemble_weights = {}
+        self.historical_data = historical_data
         self._load_models()
+
+    def set_data(self, reference_data, historical_data):
+        """Inject data from DataLoader to save memory (avoid double loading)"""
+        self.reference_data = reference_data
+        self.historical_data = historical_data
+        logger.info("✅ Data injected from DataLoader")
 
     def _load_models(self):
         """Load Colab-trained models"""
@@ -43,7 +50,7 @@ class PredictionService:
                     self.ensemble_weights = config.get('weights', {})
                 logger.info(f"✅ Ensemble weights: {self.ensemble_weights}")
 
-            # 3. Load models
+            # 3. Load models (Lazy import to save memory on startup)
             import xgboost as xgb
             import lightgbm as lgb
             from catboost import CatBoostRegressor
@@ -79,26 +86,27 @@ class PredictionService:
                 self.scalers['y'] = joblib.load(scaler_y_path)
                 logger.info("✅ Loaded target scaler")
 
-            # 5. Load reference data
-            ref_path = os.path.join(MODELS_DIR, "reference_data_recent.parquet")
-            if os.path.exists(ref_path):
-                self.reference_data = pd.read_parquet(ref_path)
-                if 'time' in self.reference_data.columns:
-                    self.reference_data['time'] = pd.to_datetime(self.reference_data['time'])
-                self.reference_data.sort_values(['station_name', 'time'], inplace=True)
-                logger.info(f"✅ Loaded reference data: {len(self.reference_data)} rows")
+            # 5. Load reference data (Skip if already injected)
+            if self.reference_data is None:
+                ref_path = os.path.join(MODELS_DIR, "reference_data_recent.parquet")
+                if os.path.exists(ref_path):
+                    self.reference_data = pd.read_parquet(ref_path)
+                    if 'time' in self.reference_data.columns:
+                        self.reference_data['time'] = pd.to_datetime(self.reference_data['time'])
+                    self.reference_data.sort_values(['station_name', 'time'], inplace=True)
+                    logger.info(f"✅ Loaded reference data: {len(self.reference_data)} rows")
 
-            # 6. Load historical data for lag features (covers 2019-2025)
-            hist_path = os.path.join(BASE_DIR, "data", "v1_core", "final_station_demand_robust_features.parquet")
-            if os.path.exists(hist_path):
-                self.historical_data = pd.read_parquet(hist_path)
-                if 'time' in self.historical_data.columns:
-                    self.historical_data['time'] = pd.to_datetime(self.historical_data['time'])
-                self.historical_data.sort_values(['station_name', 'time'], inplace=True)
-                logger.info(f"✅ Loaded historical data: {len(self.historical_data)} rows")
-            else:
-                self.historical_data = None
-                logger.warning("⚠️ Historical data not found")
+            # 6. Load historical data (Skip if already injected)
+            if self.historical_data is None:
+                hist_path = os.path.join(BASE_DIR, "data", "v1_core", "final_station_demand_robust_features.parquet")
+                if os.path.exists(hist_path):
+                    self.historical_data = pd.read_parquet(hist_path)
+                    if 'time' in self.historical_data.columns:
+                        self.historical_data['time'] = pd.to_datetime(self.historical_data['time'])
+                    self.historical_data.sort_values(['station_name', 'time'], inplace=True)
+                    logger.info(f"✅ Loaded historical data: {len(self.historical_data)} rows")
+                else:
+                    logger.warning("⚠️ Historical data not found")
 
             logger.info(f"🎉 Loaded {len(self.models)} REAL ML models successfully!")
 

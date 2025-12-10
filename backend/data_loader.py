@@ -147,6 +147,13 @@ class DataLoader:
             self.weather_cache = daily_weather.set_index('date_str').rename(columns={'temp': 'tavg'}).to_dict(orient='index')
             print(f"Weather cache populated with {len(self.weather_cache)} days.")
             
+            # OPTIMIZE MEMORY: Downcast float64 to float32
+            print("Optimizing memory: Downcasting float64 -> float32...")
+            for col in self.robust_features.select_dtypes(include=['float64']).columns:
+                self.robust_features[col] = self.robust_features[col].astype('float32')
+            import gc
+            gc.collect()
+            
             # --- HYDRA AUTO-RECOVERY ---
             # If CSVs failed to load station_locations, extract it from Parquet!
             if self.station_locations is None or self.station_locations.empty:
