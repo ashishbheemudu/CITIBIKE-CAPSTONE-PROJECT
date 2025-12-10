@@ -13,25 +13,44 @@ const API_BASE_URL = 'https://18.218.154.66.nip.io/api';
 const Prediction = () => {
     const [stations, setStations] = useState([]);
     const [selectedStation, setSelectedStation] = useState('');
+    const [selectedYear, setSelectedYear] = useState(2024);
+    const [selectedMonth, setSelectedMonth] = useState(11);
+    const [selectedDay, setSelectedDay] = useState(26);
     const [startDate, setStartDate] = useState('');
     const [predictions, setPredictions] = useState([]);
     const [combinedData, setCombinedData] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
     const [accuracy, setAccuracy] = useState(null);
+    const [totalTrips, setTotalTrips] = useState(0);
+
+    // Update startDate when year/month/day change
+    useEffect(() => {
+        const formattedDate = `${selectedYear}-${String(selectedMonth).padStart(2, '0')}-${String(selectedDay).padStart(2, '0')}`;
+        setStartDate(formattedDate);
+    }, [selectedYear, selectedMonth, selectedDay]);
 
     useEffect(() => {
         fetchStations();
-        // Set date to 2 weeks ago to have historical data
-        // Use UTC to avoid timezone issues
-        const twoWeeksAgo = new Date();
-        twoWeeksAgo.setDate(twoWeeksAgo.getDate() - 14);
-        // Format as YYYY-MM-DD in local timezone
-        const year = twoWeeksAgo.getFullYear();
-        const month = String(twoWeeksAgo.getMonth() + 1).padStart(2, '0');
-        const day = String(twoWeeksAgo.getDate()).padStart(2, '0');
-        setStartDate(`${year}-${month}-${day}`);
     }, []);
+
+    // Years available in the dataset (2019-2025)
+    const years = [2019, 2020, 2021, 2022, 2023, 2024, 2025];
+    const months = [
+        { value: 1, label: 'January' },
+        { value: 2, label: 'February' },
+        { value: 3, label: 'March' },
+        { value: 4, label: 'April' },
+        { value: 5, label: 'May' },
+        { value: 6, label: 'June' },
+        { value: 7, label: 'July' },
+        { value: 8, label: 'August' },
+        { value: 9, label: 'September' },
+        { value: 10, label: 'October' },
+        { value: 11, label: 'November' },
+        { value: 12, label: 'December' }
+    ];
+    const days = Array.from({ length: 31 }, (_, i) => i + 1);
 
     const fetchStations = async () => {
         try {
@@ -136,6 +155,7 @@ const Prediction = () => {
                     return {
                         date: pred.date,
                         predicted: roundedPrediction,
+                        actualDemand: actual ? actual.demand : 0,
                         actual: actual ? actual.demand : null
                     };
                 });
@@ -156,6 +176,10 @@ const Prediction = () => {
                         mape: mape.toFixed(1),
                         samples: validPairs.length
                     });
+
+                    // Calculate total actual trips
+                    const totalActualTrips = combined.reduce((sum, d) => sum + (d.actual || 0), 0);
+                    setTotalTrips(Math.round(totalActualTrips));
                 }
             } catch (actualErr) {
                 console.error('Historical data error:', actualErr);
@@ -200,15 +224,38 @@ const Prediction = () => {
                         </select>
                     </div>
 
-                    {/* Date Picker */}
-                    <div>
-                        <label className="block text-sm text-gray-400 mb-2 uppercase tracking-wider">Start Date</label>
-                        <input
-                            type="date"
-                            value={startDate}
-                            onChange={(e) => setStartDate(e.target.value)}
-                            className="w-full px-4 py-3 bg-[#1a1a2e] border border-gray-800 rounded-lg text-white focus:border-purple-500 focus:outline-none transition-colors"
-                        />
+                    {/* Date Selectors - Year, Month, Day */}
+                    <div className="grid grid-cols-3 gap-2">
+                        <div>
+                            <label className="block text-sm text-gray-400 mb-2 uppercase tracking-wider">Year</label>
+                            <select
+                                value={selectedYear}
+                                onChange={(e) => setSelectedYear(parseInt(e.target.value))}
+                                className="w-full px-3 py-3 bg-[#1a1a2e] border border-gray-800 rounded-lg text-white focus:border-purple-500 focus:outline-none transition-colors"
+                            >
+                                {years.map(y => <option key={y} value={y}>{y}</option>)}
+                            </select>
+                        </div>
+                        <div>
+                            <label className="block text-sm text-gray-400 mb-2 uppercase tracking-wider">Month</label>
+                            <select
+                                value={selectedMonth}
+                                onChange={(e) => setSelectedMonth(parseInt(e.target.value))}
+                                className="w-full px-3 py-3 bg-[#1a1a2e] border border-gray-800 rounded-lg text-white focus:border-purple-500 focus:outline-none transition-colors"
+                            >
+                                {months.map(m => <option key={m.value} value={m.value}>{m.label}</option>)}
+                            </select>
+                        </div>
+                        <div>
+                            <label className="block text-sm text-gray-400 mb-2 uppercase tracking-wider">Day</label>
+                            <select
+                                value={selectedDay}
+                                onChange={(e) => setSelectedDay(parseInt(e.target.value))}
+                                className="w-full px-3 py-3 bg-[#1a1a2e] border border-gray-800 rounded-lg text-white focus:border-purple-500 focus:outline-none transition-colors"
+                            >
+                                {days.map(d => <option key={d} value={d}>{d}</option>)}
+                            </select>
+                        </div>
                     </div>
 
                     {/* Generate Button */}
@@ -244,8 +291,8 @@ const Prediction = () => {
                 {predictions.length > 0 && (
                     <div className={`grid ${accuracy ? 'grid-cols-4' : 'grid-cols-3'} gap-4 mb-8`}>
                         <div className="bg-[#1a1a2e] border border-gray-800 rounded-lg p-6">
-                            <div className="text-gray-400 text-sm mb-2">Total Predictions</div>
-                            <div className="text-4xl font-bold">{predictions.length}</div>
+                            <div className="text-gray-400 text-sm mb-2">Total Trips (48h)</div>
+                            <div className="text-4xl font-bold text-cyan-400">{totalTrips}</div>
                         </div>
                         <div className="bg-[#1a1a2e] border border-gray-800 rounded-lg p-6">
                             <div className="text-gray-400 text-sm mb-2">Peak Demand</div>
