@@ -166,15 +166,16 @@ class PredictionService:
                 X_scaled = X.values
 
             # Get predictions from each model
+            model_start = time_module.time()
             predictions = {}
             for model_name, model in self.models.items():
                 try:
                     pred_scaled = model.predict(X_scaled)
                     predictions[model_name] = pred_scaled
-                    # DEBUG: Log raw model output range
                     logger.info(f"✅ {model_name} range: [{pred_scaled.min():.3f}, {pred_scaled.max():.3f}]")
                 except Exception as e:
                     logger.warning(f"⚠️ {model_name} prediction failed: {e}")
+            logger.info(f"⏱️ Model predictions: {(time_module.time() - model_start)*1000:.0f}ms")
 
             # Ensemble predictions (weighted average)
             if predictions:
