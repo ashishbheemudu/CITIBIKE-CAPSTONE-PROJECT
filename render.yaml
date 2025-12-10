@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: citibike-backend
+    env: python
+    region: ohio
+    plan: free
+    rootCommand: cd backend && pip install -r requirements.txt
+    buildCommand: echo "Built"
+    startCommand: cd backend && uvicorn main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: PORT
+        sync: false
+    autoDeploy: true

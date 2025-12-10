@@ -5,6 +5,9 @@ archive_final/
 # Exclude large model directories
 models_*/
 dashboard_models/
+backend/models/xgb.json
+backend/models/*.cbm
+backend/models/*.pkl
 
 # Exclude system files
 .DS_Store

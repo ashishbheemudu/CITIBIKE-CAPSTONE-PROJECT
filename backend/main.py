@@ -494,4 +494,8 @@ async def get_historical_demand(
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
+    import os
+    port = int(os.environ.get("PORT", 8000))
+    # Reload only if not in production/docker (optional logic, hardcoding false for safety or keeping true for dev if env var not set)
+    # Better: defaults to data loaded. 
+    uvicorn.run("main:app", host="0.0.0.0", port=port, reload=False)
