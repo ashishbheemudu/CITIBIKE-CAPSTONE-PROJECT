@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, BarChart, Bar } from 'recharts';
-import { Activity, TrendingUp, Calendar, Zap, Target, Upload, FileText, CheckCircle, AlertCircle } from 'lucide-react';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { Activity, TrendingUp, Calendar, Zap, Target } from 'lucide-react';
 import ChartErrorBoundary from '../components/ChartErrorBoundary';
 
 // Use centralized API configuration
@@ -11,10 +11,6 @@ const API_BASE_URL = 'https://18.218.154.66.nip.io/api';
 // const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api';
 
 const Prediction = () => {
-    // Mode: 'single' or 'batch'
-    const [mode, setMode] = useState('single');
-
-    // Single station prediction state
     const [stations, setStations] = useState([]);
     const [selectedStation, setSelectedStation] = useState('');
     const [startDate, setStartDate] = useState('');
@@ -23,13 +19,6 @@ const Prediction = () => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
     const [accuracy, setAccuracy] = useState(null);
-
-    // CSV Upload state
-    const [uploadFile, setUploadFile] = useState(null);
-    const [uploadLoading, setUploadLoading] = useState(false);
-    const [uploadProgress, setUploadProgress] = useState(0);
-    const [uploadResults, setUploadResults] = useState(null);
-    const [dragActive, setDragActive] = useState(false);
 
     useEffect(() => {
         fetchStations();
@@ -57,68 +46,6 @@ const Prediction = () => {
         } catch (err) {
             console.error('Error fetching stations:', err);
             setError('Failed to load stations. Backend may be offline.');
-        }
-    };
-
-    // CSV Upload handlers
-    const handleDrag = (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        if (e.type === 'dragenter' || e.type === 'dragover') {
-            setDragActive(true);
-        } else if (e.type === 'dragleave') {
-            setDragActive(false);
-        }
-    };
-
-    const handleDrop = (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        setDragActive(false);
-        if (e.dataTransfer.files && e.dataTransfer.files[0]) {
-            handleFileSelect(e.dataTransfer.files[0]);
-        }
-    };
-
-    const handleFileSelect = (file) => {
-        if (!file.name.endsWith('.csv')) {
-            setError('Please upload a CSV file');
-            return;
-        }
-        setUploadFile(file);
-        setError('');
-        setUploadResults(null);
-    };
-
-    const handleFileUpload = async () => {
-        if (!uploadFile) {
-            setError('Please select a file first');
-            return;
-        }
-
-        setUploadLoading(true);
-        setUploadProgress(0);
-        setError('');
-
-        try {
-            const formData = new FormData();
-            formData.append('file', uploadFile);
-
-            const response = await axios.post(`${API_BASE_URL}/evaluate`, formData, {
-                headers: { 'Content-Type': 'multipart/form-data' },
-                onUploadProgress: (progressEvent) => {
-                    const percent = Math.round((progressEvent.loaded * 100) / progressEvent.total);
-                    setUploadProgress(percent);
-                }
-            });
-
-            setUploadResults(response.data);
-            setUploadProgress(100);
-        } catch (err) {
-            console.error('Upload error:', err);
-            setError(err.response?.data?.detail || 'Failed to evaluate CSV');
-        } finally {
-            setUploadLoading(false);
         }
     };
 
@@ -253,378 +180,189 @@ const Prediction = () => {
 
                 </div>
 
-                {/* Mode Toggle Tabs */}
-                <div className="flex gap-2 mb-6">
-                    <button
-                        onClick={() => setMode('single')}
-                        className={`px-6 py-3 rounded-lg font-medium transition-all flex items-center gap-2 ${mode === 'single'
-                            ? 'bg-gradient-to-r from-purple-600 to-blue-600 text-white'
-                            : 'bg-[#1a1a2e] text-gray-400 hover:text-white border border-gray-800'
-                            }`}
-                    >
-                        <Target className="w-4 h-4" />
-                        Single Station
-                    </button>
-                    <button
-                        onClick={() => setMode('batch')}
-                        className={`px-6 py-3 rounded-lg font-medium transition-all flex items-center gap-2 ${mode === 'batch'
-                            ? 'bg-gradient-to-r from-green-600 to-teal-600 text-white'
-                            : 'bg-[#1a1a2e] text-gray-400 hover:text-white border border-gray-800'
-                            }`}
-                    >
-                        <Upload className="w-4 h-4" />
-                        Batch Upload & Evaluate
-                    </button>
+                {/* Controls */}
+                <div className="grid grid-cols-3 gap-4 mb-8">
+                    {/* Station Selector */}
+                    <div>
+                        <label className="block text-sm text-gray-400 mb-2 uppercase tracking-wider">Station</label>
+                        <select
+                            value={selectedStation}
+                            onChange={(e) => setSelectedStation(e.target.value)}
+                            className="w-full px-4 py-3 bg-[#1a1a2e] border border-gray-800 rounded-lg text-white focus:border-purple-500 focus:outline-none transition-colors"
+                        >
+                            {stations.length === 0 ? (
+                                <option value="">No stations available</option>
+                            ) : stations.map((station) => (
+                                <option key={station} value={station}>
+                                    {station}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+
+                    {/* Date Picker */}
+                    <div>
+                        <label className="block text-sm text-gray-400 mb-2 uppercase tracking-wider">Start Date</label>
+                        <input
+                            type="date"
+                            value={startDate}
+                            onChange={(e) => setStartDate(e.target.value)}
+                            className="w-full px-4 py-3 bg-[#1a1a2e] border border-gray-800 rounded-lg text-white focus:border-purple-500 focus:outline-none transition-colors"
+                        />
+                    </div>
+
+                    {/* Generate Button */}
+                    <div className="flex items-end">
+                        <button
+                            onClick={generatePredictions}
+                            disabled={loading || !selectedStation}
+                            className="w-full px-6 py-3 bg-gradient-to-r from-purple-600 to-blue-600 text-white font-medium rounded-lg hover:from-purple-700 hover:to-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all flex items-center justify-center gap-2"
+                        >
+                            {loading ? (
+                                <>
+                                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                                    Generating...
+                                </>
+                            ) : (
+                                <>
+                                    <Zap className="w-4 h-4" />
+                                    Generate
+                                </>
+                            )}
+                        </button>
+                    </div>
                 </div>
 
                 {/* Error */}
                 {error && (
-                    <div className="mb-6 p-4 bg-red-900/20 border border-red-800 rounded-lg text-red-400 flex items-center gap-2">
-                        <AlertCircle className="w-5 h-5" />
+                    <div className="mb-6 p-4 bg-red-900/20 border border-red-800 rounded-lg text-red-400">
                         {error}
                     </div>
                 )}
 
-                {/* BATCH MODE: CSV Upload */}
-                {mode === 'batch' && (
-                    <div className="space-y-6">
-                        {/* Upload Zone */}
-                        <div
-                            className={`border-2 border-dashed rounded-xl p-12 text-center transition-all ${dragActive
-                                ? 'border-green-500 bg-green-500/10'
-                                : 'border-gray-700 hover:border-gray-600'
-                                }`}
-                            onDragEnter={handleDrag}
-                            onDragLeave={handleDrag}
-                            onDragOver={handleDrag}
-                            onDrop={handleDrop}
-                        >
-                            {uploadFile ? (
-                                <div className="flex items-center justify-center gap-4">
-                                    <FileText className="w-12 h-12 text-green-500" />
-                                    <div className="text-left">
-                                        <p className="text-xl font-semibold">{uploadFile.name}</p>
-                                        <p className="text-gray-400">{(uploadFile.size / 1024 / 1024).toFixed(1)} MB</p>
-                                    </div>
-                                    <button
-                                        onClick={() => setUploadFile(null)}
-                                        className="ml-4 text-gray-400 hover:text-red-400"
-                                    >
-                                        ✕
-                                    </button>
-                                </div>
-                            ) : (
-                                <>
-                                    <Upload className="w-16 h-16 text-gray-600 mx-auto mb-4" />
-                                    <p className="text-xl text-gray-300 mb-2">
-                                        Drag & Drop your CitiBike CSV here
-                                    </p>
-                                    <p className="text-gray-500 mb-4">or</p>
-                                    <label className="cursor-pointer">
-                                        <span className="px-6 py-3 bg-[#1a1a2e] border border-gray-700 rounded-lg hover:border-gray-500 transition">
-                                            Browse Files
-                                        </span>
-                                        <input
-                                            type="file"
-                                            accept=".csv"
-                                            className="hidden"
-                                            onChange={(e) => e.target.files[0] && handleFileSelect(e.target.files[0])}
-                                        />
-                                    </label>
-                                </>
-                            )}
+                {/* Stats Cards */}
+                {predictions.length > 0 && (
+                    <div className={`grid ${accuracy ? 'grid-cols-4' : 'grid-cols-3'} gap-4 mb-8`}>
+                        <div className="bg-[#1a1a2e] border border-gray-800 rounded-lg p-6">
+                            <div className="text-gray-400 text-sm mb-2">Total Predictions</div>
+                            <div className="text-4xl font-bold">{predictions.length}</div>
                         </div>
-
-                        {/* Upload Button */}
-                        {uploadFile && (
-                            <button
-                                onClick={handleFileUpload}
-                                disabled={uploadLoading}
-                                className="w-full px-6 py-4 bg-gradient-to-r from-green-600 to-teal-600 text-white font-medium rounded-lg hover:from-green-700 hover:to-teal-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all flex items-center justify-center gap-2 text-lg"
-                            >
-                                {uploadLoading ? (
-                                    <>
-                                        <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
-                                        Processing... {uploadProgress}%
-                                    </>
-                                ) : (
-                                    <>
-                                        <Zap className="w-5 h-5" />
-                                        Evaluate Model on This Data
-                                    </>
-                                )}
-                            </button>
-                        )}
-
-                        {/* Results */}
-                        {uploadResults && (
-                            <div className="space-y-6">
-                                {/* Metrics Cards */}
-                                <div className="grid grid-cols-4 gap-4">
-                                    <div className="bg-[#1a1a2e] border border-gray-800 rounded-lg p-6">
-                                        <div className="text-gray-400 text-sm mb-2">MAE</div>
-                                        <div className="text-4xl font-bold text-green-400">{uploadResults.metrics.mae}</div>
-                                        <div className="text-xs text-gray-500">bikes/hour</div>
-                                    </div>
-                                    <div className="bg-[#1a1a2e] border border-gray-800 rounded-lg p-6">
-                                        <div className="text-gray-400 text-sm mb-2">RMSE</div>
-                                        <div className="text-4xl font-bold text-blue-400">{uploadResults.metrics.rmse}</div>
-                                        <div className="text-xs text-gray-500">bikes/hour</div>
-                                    </div>
-                                    <div className="bg-[#1a1a2e] border border-gray-800 rounded-lg p-6">
-                                        <div className="text-gray-400 text-sm mb-2">R² Score</div>
-                                        <div className="text-4xl font-bold text-purple-400">{uploadResults.metrics.r2}</div>
-                                        <div className="text-xs text-gray-500">variance explained</div>
-                                    </div>
-                                    <div className="bg-[#1a1a2e] border border-gray-800 rounded-lg p-6">
-                                        <div className="text-gray-400 text-sm mb-2">MAPE</div>
-                                        <div className="text-4xl font-bold text-yellow-400">{uploadResults.metrics.mape}%</div>
-                                        <div className="text-xs text-gray-500">mean % error</div>
-                                    </div>
+                        <div className="bg-[#1a1a2e] border border-gray-800 rounded-lg p-6">
+                            <div className="text-gray-400 text-sm mb-2">Peak Demand</div>
+                            <div className="text-4xl font-bold text-purple-400">
+                                {(() => {
+                                    const validPreds = predictions.filter(p => p.predicted !== null && p.predicted !== undefined);
+                                    return validPreds.length > 0 ? Math.max(...validPreds.map(p => p.predicted)).toFixed(0) : '0';
+                                })()}
+                            </div>
+                        </div>
+                        <div className="bg-[#1a1a2e] border border-gray-800 rounded-lg p-6">
+                            <div className="text-gray-400 text-sm mb-2">Avg Demand</div>
+                            <div className="text-4xl font-bold text-blue-400">
+                                {(() => {
+                                    const validPreds = predictions.filter(p => p.predicted !== null && p.predicted !== undefined);
+                                    return validPreds.length > 0
+                                        ? (validPreds.reduce((sum, p) => sum + p.predicted, 0) / validPreds.length).toFixed(1)
+                                        : '0.0';
+                                })()}
+                            </div>
+                        </div>
+                        {accuracy && (
+                            <div className="bg-[#1a1a2e] border border-gray-800 rounded-lg p-6">
+                                <div className="text-gray-400 text-sm mb-2 flex items-center gap-2">
+                                    <Target className="w-4 h-4" />
+                                    Model Accuracy
                                 </div>
-
-                                {/* Summary */}
-                                <div className="bg-[#1a1a2e] border border-gray-800 rounded-lg p-6">
-                                    <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
-                                        <CheckCircle className="w-5 h-5 text-green-500" />
-                                        Evaluation Summary
-                                    </h3>
-                                    <div className="grid grid-cols-4 gap-4 text-center">
-                                        <div>
-                                            <div className="text-2xl font-bold">{uploadResults.summary.total_trips?.toLocaleString()}</div>
-                                            <div className="text-gray-400 text-sm">Total Pickups</div>
-                                        </div>
-                                        <div>
-                                            <div className="text-2xl font-bold">{uploadResults.summary.total_records?.toLocaleString()}</div>
-                                            <div className="text-gray-400 text-sm">Hourly Records</div>
-                                        </div>
-                                        <div>
-                                            <div className="text-2xl font-bold">{uploadResults.summary.unique_stations}</div>
-                                            <div className="text-gray-400 text-sm">Unique Stations</div>
-                                        </div>
-                                        <div>
-                                            <div className="text-sm font-medium text-gray-300">{uploadResults.summary.date_range}</div>
-                                            <div className="text-gray-400 text-sm">Date Range</div>
-                                        </div>
-                                    </div>
+                                <div className="text-4xl font-bold text-green-400">
+                                    MAE: {accuracy.mae}
                                 </div>
-
-                                {/* Hourly Pattern Chart */}
-                                {uploadResults.hourly_pattern && (
-                                    <div className="bg-[#1a1a2e] border border-gray-800 rounded-lg p-6">
-                                        <h3 className="text-lg font-semibold mb-4">Hourly Pattern: Actual vs Predicted</h3>
-                                        <ChartErrorBoundary>
-                                            <div className="h-[300px]">
-                                                <ResponsiveContainer width="100%" height="100%">
-                                                    <BarChart data={uploadResults.hourly_pattern}>
-                                                        <CartesianGrid strokeDasharray="3 3" stroke="#333" vertical={false} />
-                                                        <XAxis dataKey="hour" stroke="#666" />
-                                                        <YAxis stroke="#666" />
-                                                        <Tooltip
-                                                            contentStyle={{ backgroundColor: '#1a1a2e', borderColor: '#333', borderRadius: '8px' }}
-                                                        />
-                                                        <Legend />
-                                                        <Bar dataKey="pickups" name="Actual" fill="#06b6d4" />
-                                                        <Bar dataKey="predicted" name="Predicted" fill="#a855f7" />
-                                                    </BarChart>
-                                                </ResponsiveContainer>
-                                            </div>
-                                        </ChartErrorBoundary>
-                                    </div>
-                                )}
+                                <div className="text-xs text-gray-500 mt-1">
+                                    MAPE: {accuracy.mape}% • {accuracy.samples} samples
+                                </div>
                             </div>
                         )}
                     </div>
                 )}
 
-                {/* SINGLE MODE: Original Controls */}
-                {mode === 'single' && (
-                    <>
-                        {/* Controls */}
-                        <div className="grid grid-cols-3 gap-4 mb-8">
-                            {/* Station Selector */}
-                            <div>
-                                <label className="block text-sm text-gray-400 mb-2 uppercase tracking-wider">Station</label>
-                                <select
-                                    value={selectedStation}
-                                    onChange={(e) => setSelectedStation(e.target.value)}
-                                    className="w-full px-4 py-3 bg-[#1a1a2e] border border-gray-800 rounded-lg text-white focus:border-purple-500 focus:outline-none transition-colors"
-                                >
-                                    {stations.length === 0 ? (
-                                        <option value="">No stations available</option>
-                                    ) : stations.map((station) => (
-                                        <option key={station} value={station}>
-                                            {station}
-                                        </option>
-                                    ))}
-                                </select>
+                {/* Chart */}
+                {combinedData.length > 0 && (
+                    <div className="bg-[#1a1a2e] border border-gray-800 rounded-lg p-6">
+                        <ChartErrorBoundary>
+                            <div className="h-[400px]">
+                                <ResponsiveContainer width="100%" height="100%">
+                                    <LineChart data={combinedData}>
+                                        <CartesianGrid strokeDasharray="3 3" stroke="#333" vertical={false} />
+                                        <XAxis
+                                            dataKey="date"
+                                            stroke="#666"
+                                            tick={{ fontSize: 12, fill: '#666' }}
+                                            tickLine={false}
+                                            axisLine={false}
+                                            tickFormatter={(value) => {
+                                                const date = new Date(value);
+                                                return `${date.getUTCMonth() + 1}/${date.getUTCDate()} ${date.getUTCHours()}:00`;
+                                            }}
+                                        />
+                                        <YAxis
+                                            stroke="#666"
+                                            tick={{ fontSize: 12, fill: '#666' }}
+                                            tickLine={false}
+                                            axisLine={false}
+                                            label={{ value: 'Bikes', angle: -90, position: 'insideLeft', fill: '#666' }}
+                                        />
+                                        <Tooltip
+                                            contentStyle={{
+                                                backgroundColor: '#1a1a2e',
+                                                borderColor: '#333',
+                                                borderRadius: '8px',
+                                                color: '#fff'
+                                            }}
+                                            labelFormatter={(value) => new Date(value).toLocaleString()}
+                                            formatter={(value) => value !== null ? value.toFixed(2) + ' bikes' : 'N/A'}
+                                        />
+                                        <Legend wrapperStyle={{ paddingTop: '20px' }} />
+                                        <Line
+                                            type="monotone"
+                                            dataKey="predicted"
+                                            stroke="#a855f7"
+                                            strokeWidth={2}
+                                            dot={false}
+                                            name="🤖 AI Prediction"
+                                        />
+                                        <Line
+                                            type="monotone"
+                                            dataKey="actual"
+                                            stroke="#06b6d4"
+                                            strokeWidth={2}
+                                            dot={false}
+                                            name="📊 Actual Demand"
+                                            connectNulls={false}
+                                        />
+                                    </LineChart>
+                                </ResponsiveContainer>
                             </div>
+                        </ChartErrorBoundary>
+                    </div>
+                )}
 
-                            {/* Date Picker */}
-                            <div>
-                                <label className="block text-sm text-gray-400 mb-2 uppercase tracking-wider">Start Date</label>
-                                <input
-                                    type="date"
-                                    value={startDate}
-                                    onChange={(e) => setStartDate(e.target.value)}
-                                    className="w-full px-4 py-3 bg-[#1a1a2e] border border-gray-800 rounded-lg text-white focus:border-purple-500 focus:outline-none transition-colors"
-                                />
-                            </div>
+                {/* Empty State */}
+                {predictions.length === 0 && !loading && !error && (
+                    <div className="bg-[#1a1a2e] border border-gray-800 rounded-lg p-12 text-center">
+                        <Activity className="w-16 h-16 text-gray-600 mx-auto mb-4" />
+                        <h3 className="text-xl font-medium text-gray-300 mb-2">No Predictions Yet</h3>
+                        <p className="text-gray-500">
+                            Select a station and date, then click Generate to see AI-powered forecasts
+                        </p>
+                    </div>
+                )}
 
-                            {/* Generate Button */}
-                            <div className="flex items-end">
-                                <button
-                                    onClick={generatePredictions}
-                                    disabled={loading || !selectedStation}
-                                    className="w-full px-6 py-3 bg-gradient-to-r from-purple-600 to-blue-600 text-white font-medium rounded-lg hover:from-purple-700 hover:to-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all flex items-center justify-center gap-2"
-                                >
-                                    {loading ? (
-                                        <>
-                                            <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
-                                            Generating...
-                                        </>
-                                    ) : (
-                                        <>
-                                            <Zap className="w-4 h-4" />
-                                            Generate
-                                        </>
-                                    )}
-                                </button>
-                            </div>
-                        </div>
-
-                        {/* Error */}
-                        {error && (
-                            <div className="mb-6 p-4 bg-red-900/20 border border-red-800 rounded-lg text-red-400">
-                                {error}
-                            </div>
-                        )}
-
-                        {/* Stats Cards */}
-                        {predictions.length > 0 && (
-                            <div className={`grid ${accuracy ? 'grid-cols-4' : 'grid-cols-3'} gap-4 mb-8`}>
-                                <div className="bg-[#1a1a2e] border border-gray-800 rounded-lg p-6">
-                                    <div className="text-gray-400 text-sm mb-2">Total Predictions</div>
-                                    <div className="text-4xl font-bold">{predictions.length}</div>
-                                </div>
-                                <div className="bg-[#1a1a2e] border border-gray-800 rounded-lg p-6">
-                                    <div className="text-gray-400 text-sm mb-2">Peak Demand</div>
-                                    <div className="text-4xl font-bold text-purple-400">
-                                        {(() => {
-                                            const validPreds = predictions.filter(p => p.predicted !== null && p.predicted !== undefined);
-                                            return validPreds.length > 0 ? Math.max(...validPreds.map(p => p.predicted)).toFixed(0) : '0';
-                                        })()}
-                                    </div>
-                                </div>
-                                <div className="bg-[#1a1a2e] border border-gray-800 rounded-lg p-6">
-                                    <div className="text-gray-400 text-sm mb-2">Avg Demand</div>
-                                    <div className="text-4xl font-bold text-blue-400">
-                                        {(() => {
-                                            const validPreds = predictions.filter(p => p.predicted !== null && p.predicted !== undefined);
-                                            return validPreds.length > 0
-                                                ? (validPreds.reduce((sum, p) => sum + p.predicted, 0) / validPreds.length).toFixed(1)
-                                                : '0.0';
-                                        })()}
-                                    </div>
-                                </div>
-                                {accuracy && (
-                                    <div className="bg-[#1a1a2e] border border-gray-800 rounded-lg p-6">
-                                        <div className="text-gray-400 text-sm mb-2 flex items-center gap-2">
-                                            <Target className="w-4 h-4" />
-                                            Model Accuracy
-                                        </div>
-                                        <div className="text-4xl font-bold text-green-400">
-                                            MAE: {accuracy.mae}
-                                        </div>
-                                        <div className="text-xs text-gray-500 mt-1">
-                                            MAPE: {accuracy.mape}% • {accuracy.samples} samples
-                                        </div>
-                                    </div>
-                                )}
-                            </div>
-                        )}
-
-                        {/* Chart */}
-                        {combinedData.length > 0 && (
-                            <div className="bg-[#1a1a2e] border border-gray-800 rounded-lg p-6">
-                                <ChartErrorBoundary>
-                                    <div className="h-[400px]">
-                                        <ResponsiveContainer width="100%" height="100%">
-                                            <LineChart data={combinedData}>
-                                                <CartesianGrid strokeDasharray="3 3" stroke="#333" vertical={false} />
-                                                <XAxis
-                                                    dataKey="date"
-                                                    stroke="#666"
-                                                    tick={{ fontSize: 12, fill: '#666' }}
-                                                    tickLine={false}
-                                                    axisLine={false}
-                                                    tickFormatter={(value) => {
-                                                        const date = new Date(value);
-                                                        return `${date.getUTCMonth() + 1}/${date.getUTCDate()} ${date.getUTCHours()}:00`;
-                                                    }}
-                                                />
-                                                <YAxis
-                                                    stroke="#666"
-                                                    tick={{ fontSize: 12, fill: '#666' }}
-                                                    tickLine={false}
-                                                    axisLine={false}
-                                                    label={{ value: 'Bikes', angle: -90, position: 'insideLeft', fill: '#666' }}
-                                                />
-                                                <Tooltip
-                                                    contentStyle={{
-                                                        backgroundColor: '#1a1a2e',
-                                                        borderColor: '#333',
-                                                        borderRadius: '8px',
-                                                        color: '#fff'
-                                                    }}
-                                                    labelFormatter={(value) => new Date(value).toLocaleString()}
-                                                    formatter={(value) => value !== null ? value.toFixed(2) + ' bikes' : 'N/A'}
-                                                />
-                                                <Legend wrapperStyle={{ paddingTop: '20px' }} />
-                                                <Line
-                                                    type="monotone"
-                                                    dataKey="predicted"
-                                                    stroke="#a855f7"
-                                                    strokeWidth={2}
-                                                    dot={false}
-                                                    name="🤖 AI Prediction"
-                                                />
-                                                <Line
-                                                    type="monotone"
-                                                    dataKey="actual"
-                                                    stroke="#06b6d4"
-                                                    strokeWidth={2}
-                                                    dot={false}
-                                                    name="📊 Actual Demand"
-                                                    connectNulls={false}
-                                                />
-                                            </LineChart>
-                                        </ResponsiveContainer>
-                                    </div>
-                                </ChartErrorBoundary>
-                            </div>
-                        )}
-
-                        {/* Empty State */}
-                        {predictions.length === 0 && !loading && !error && (
-                            <div className="bg-[#1a1a2e] border border-gray-800 rounded-lg p-12 text-center">
-                                <Activity className="w-16 h-16 text-gray-600 mx-auto mb-4" />
-                                <h3 className="text-xl font-medium text-gray-300 mb-2">No Predictions Yet</h3>
-                                <p className="text-gray-500">
-                                    Select a station and date, then click Generate to see AI-powered forecasts
-                                </p>
-                            </div>
-                        )}
-
-                        {/* Loading State */}
-                        {loading && (
-                            <div className="bg-[#1a1a2e] border border-gray-800 rounded-lg p-12 text-center">
-                                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-500 mx-auto mb-4"></div>
-                                <h3 className="text-xl font-medium text-gray-300 mb-2">Generating Predictions...</h3>
-                                <p className="text-gray-500">Running ML models for {selectedStation}</p>
-                            </div>
-                        )}
-                    </>
+                {/* Loading State */}
+                {loading && (
+                    <div className="bg-[#1a1a2e] border border-gray-800 rounded-lg p-12 text-center">
+                        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-500 mx-auto mb-4"></div>
+                        <h3 className="text-xl font-medium text-gray-300 mb-2">Generating Predictions...</h3>
+                        <p className="text-gray-500">Running ML models for {selectedStation}</p>
+                    </div>
                 )}
             </div>
         </div>
