@@ -195,20 +195,44 @@ class PredictionService:
                 # Inverse transform
                 if 'y' in self.scalers:
                     final_pred = self.scalers['y'].inverse_transform(final_pred_scaled.reshape(-1, 1)).flatten()
-                    # DEBUG: Log after inverse transform
                     logger.info(f"📈 After inverse_transform: [{final_pred.min():.2f}, {final_pred.max():.2f}]")
-                    # DEBUG: Log scaler params
-                    logger.info(f"🔧 Scaler mean: {self.scalers['y'].mean_[0]:.3f}, scale: {self.scalers['y'].scale_[0]:.3f}")
                 else:
                     final_pred = final_pred_scaled
-                    logger.info(f"⚠️ No Y scaler - using raw predictions")
+                
+                # ═══════════════════════════════════════════════════════════
+                # CALIBRATION: Scale predictions based on station's historical variance
+                # The model underestimates peaks, so we expand the range
+                # ═══════════════════════════════════════════════════════════
+                if station_cache is not None and not station_cache.empty and 'pickups' in station_cache.columns:
+                    hist_demands = station_cache['pickups'].values
+                    if len(hist_demands) > 10:
+                        hist_mean = np.mean(hist_demands)
+                        hist_std = np.std(hist_demands)
+                        hist_max = np.max(hist_demands)
+                        
+                        pred_mean = np.mean(final_pred)
+                        pred_std = np.std(final_pred) if np.std(final_pred) > 0 else 1.0
+                        
+                        # Calculate calibration factor based on variance ratio
+                        if hist_std > 0 and pred_std > 0:
+                            variance_ratio = hist_std / pred_std
+                            # Cap the calibration between 1.0 and 3.0 to avoid extreme values
+                            cal_factor = min(max(variance_ratio, 1.0), 3.0)
+                            
+                            # Center predictions around historical mean and scale
+                            final_pred = hist_mean + (final_pred - pred_mean) * cal_factor
+                            
+                            # Ensure non-negative
+                            final_pred = np.maximum(final_pred, 0)
+                            
+                            logger.info(f"🎯 Calibrated: factor={cal_factor:.2f}, new range=[{final_pred.min():.2f}, {final_pred.max():.2f}]")
 
                 # Format output
                 results = []
                 for ts, pred_value in zip(timestamps, final_pred):
                     results.append({
                         'date': ts.isoformat(),
-                        'predicted': float(pred_value)  # Allow negative for net_demand
+                        'predicted': float(pred_value)
                     })
 
                 logger.info(f"🎯 Generated {len(results)} predictions")
