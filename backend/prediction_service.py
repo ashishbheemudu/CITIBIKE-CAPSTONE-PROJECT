@@ -149,9 +149,12 @@ class PredictionService:
                         station_cache = before_ts.tail(168)  # Last week
             logger.info(f"⏱️ Station filter: {(time_module.time() - perf_start)*1000:.0f}ms")
 
-            # VECTORIZED FEATURE CREATION (MAJOR SPEEDUP)
+            # Create features for each hour (use original method that works correctly)
             feat_start = time_module.time()
-            features_list = self._create_features_batch(station_name, timestamps, station_cache)
+            features_list = []
+            for ts in timestamps:
+                features = self._create_features(station_name, ts, station_cache)
+                features_list.append(features)
             logger.info(f"⏱️ Feature creation: {(time_module.time() - feat_start)*1000:.0f}ms")
 
             X = pd.DataFrame(features_list, columns=self.feature_names)
