@@ -11,6 +11,7 @@ services:
       - ./backend:/app
     environment:
       - PORT=8000
+    restart: always
 
   frontend:
     # Use a simple node image to run dev server or build

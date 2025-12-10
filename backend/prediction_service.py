@@ -210,9 +210,31 @@ class PredictionService:
         if ts.tz is not None:
             ts = ts.tz_localize(None)
         
-        # Try historical data first (covers 2019-2025)
+        # Try historical data (Optimized Load)
         if hasattr(self, 'historical_data') and self.historical_data is not None:
-            hist_station = self.historical_data[self.historical_data['station_name'] == station_name].copy()
+             # Already loaded (e.g. dev mode)
+             pass
+        else:
+             # Load ONLY this station's data from disk
+             hist_path = os.path.join(BASE_DIR, "data", "v1_core", "final_station_demand_robust_features.parquet")
+             if os.path.exists(hist_path):
+                 try:
+                     # Use filters to read only specific station rows (Requires pyarrow)
+                     self.historical_data = pd.read_parquet(
+                         hist_path,
+                         columns=['time', 'station_name', 'pickups', 'temp', 'prcp', 'wspd'],
+                         filters=[('station_name', '==', station_name)]
+                     )
+                     self.historical_data['time'] = pd.to_datetime(self.historical_data['time'])
+                     # Type optim
+                     for col in self.historical_data.select_dtypes(include=['float64']).columns:
+                         self.historical_data[col] = self.historical_data[col].astype('float32')
+                 except Exception as e:
+                     logger.warning(f"⚠️ Failed to filter-load parquet: {e}")
+
+        # Filter for memory buffer
+        if hasattr(self, 'historical_data') and self.historical_data is not None:
+            hist_station = self.historical_data[(self.historical_data['station_name'] == station_name)].copy()
             if not hist_station.empty:
                 # Get data BEFORE the prediction time (for lag features)
                 hist_station['time'] = pd.to_datetime(hist_station['time']).dt.tz_localize(None)
