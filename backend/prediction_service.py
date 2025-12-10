@@ -83,17 +83,47 @@ class PredictionService:
                 logger.info("✅ Loaded target scaler")
             
             logger.info(f"🎉 Lazy Loaded {len(self.models)} models!")
-
         except Exception as e:
             logger.error(f"❌ Error lazy loading models: {e}")
             import traceback
             traceback.print_exc()
+
+    def _lazy_load_data(self):
+        """Load historical data ONLY when needed (Lazy Loading) with aggressive pruning"""
+        if self.historical_data is not None: return # Already loaded
+
+        try:
+            logger.info("READING DATA: Lazy loading historical data...")
+            hist_path = os.path.join(BASE_DIR, "data", "v1_core", "final_station_demand_robust_features.parquet")
+            
+            if os.path.exists(hist_path):
+                # MEMORY OPTIMIZATION: Only load essential columns
+                self.historical_data = pd.read_parquet(
+                    hist_path, 
+                    columns=['time', 'station_name', 'pickups', 'temp', 'prcp']
+                )
+                
+                # Optimize types
+                for col in self.historical_data.select_dtypes(include=['float64']).columns:
+                    self.historical_data[col] = self.historical_data[col].astype('float32')
+                
+                if 'time' in self.historical_data.columns:
+                    self.historical_data['time'] = pd.to_datetime(self.historical_data['time'])
+                
+                logger.info(f"✅ Lazy Loaded {len(self.historical_data)} rows of historical data (Optimized)")
+            else:
+                logger.warning("⚠️ Historical data file not found during lazy load")
+                
+        except Exception as e:
+            logger.error(f"❌ Error lazy loading data: {e}")
+            self.historical_data = pd.DataFrame() # Prevent NoneType errors
 
     def predict(self, station_name, start_time, hours_ahead=48):
         """Generate predictions using REAL ML models"""
         try:
             # Enforce Lazy Loading on first request
             self._lazy_load_models()
+            self._lazy_load_data()
             
             if not self.models:
                 logger.error("❌ No models loaded")
