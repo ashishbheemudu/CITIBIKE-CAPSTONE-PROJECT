@@ -6,7 +6,9 @@ import ChartErrorBoundary from '../components/ChartErrorBoundary';
 
 // Use centralized API configuration
 // Use centralized API configuration
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api';
+// FORCE AWS BACKEND
+const API_BASE_URL = 'https://18.218.154.66.nip.io/api';
+// const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api';
 
 const Prediction = () => {
     const [stations, setStations] = useState([]);
