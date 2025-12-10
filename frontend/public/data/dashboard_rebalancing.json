@@ -1,0 +1,302 @@
+[
+  {
+    "station": "W 21 St & 6 Ave",
+    "action": "RESTOCK",
+    "quantity": 10,
+    "priority": "HIGH"
+  },
+  {
+    "station": "West St & Chambers St",
+    "action": "RESTOCK",
+    "quantity": 10,
+    "priority": "HIGH"
+  },
+  {
+    "station": "University Pl & E 14 St",
+    "action": "RESTOCK",
+    "quantity": 10,
+    "priority": "HIGH"
+  },
+  {
+    "station": "1 Ave & E 68 St",
+    "action": "RESTOCK",
+    "quantity": 10,
+    "priority": "HIGH"
+  },
+  {
+    "station": "Broadway & E 14 St",
+    "action": "RESTOCK",
+    "quantity": 10,
+    "priority": "HIGH"
+  },
+  {
+    "station": "Broadway & W 25 St",
+    "action": "RESTOCK",
+    "quantity": 10,
+    "priority": "HIGH"
+  },
+  {
+    "station": "6 Ave & W 33 St",
+    "action": "RESTOCK",
+    "quantity": 10,
+    "priority": "HIGH"
+  },
+  {
+    "station": "11 Ave & W 41 St",
+    "action": "RESTOCK",
+    "quantity": 10,
+    "priority": "HIGH"
+  },
+  {
+    "station": "E 33 St & 1 Ave",
+    "action": "RESTOCK",
+    "quantity": 10,
+    "priority": "HIGH"
+  },
+  {
+    "station": "12 Ave & W 40 St",
+    "action": "RESTOCK",
+    "quantity": 10,
+    "priority": "HIGH"
+  },
+  {
+    "station": "Lafayette St & E 8 St",
+    "action": "RESTOCK",
+    "quantity": 10,
+    "priority": "HIGH"
+  },
+  {
+    "station": "Cleveland Pl & Spring St",
+    "action": "RESTOCK",
+    "quantity": 10,
+    "priority": "HIGH"
+  },
+  {
+    "station": "W 31 St & 7 Ave",
+    "action": "RESTOCK",
+    "quantity": 10,
+    "priority": "HIGH"
+  },
+  {
+    "station": "E 17 St & Broadway",
+    "action": "RESTOCK",
+    "quantity": 10,
+    "priority": "HIGH"
+  },
+  {
+    "station": "8 Ave & W 31 St",
+    "action": "RESTOCK",
+    "quantity": 10,
+    "priority": "HIGH"
+  },
+  {
+    "station": "Broadway & W 58 St",
+    "action": "RESTOCK",
+    "quantity": 10,
+    "priority": "HIGH"
+  },
+  {
+    "station": "Central Park S & 6 Ave",
+    "action": "RESTOCK",
+    "quantity": 10,
+    "priority": "HIGH"
+  },
+  {
+    "station": "West St & Liberty St",
+    "action": "RESTOCK",
+    "quantity": 10,
+    "priority": "HIGH"
+  },
+  {
+    "station": "7 Ave & Central Park South",
+    "action": "RESTOCK",
+    "quantity": 10,
+    "priority": "HIGH"
+  },
+  {
+    "station": "W 41 St & 8 Ave",
+    "action": "RESTOCK",
+    "quantity": 10,
+    "priority": "HIGH"
+  },
+  {
+    "station": "W 30 St & 10 Ave",
+    "action": "RESTOCK",
+    "quantity": 10,
+    "priority": "HIGH"
+  },
+  {
+    "station": "9 Ave & W 22 St",
+    "action": "RESTOCK",
+    "quantity": 10,
+    "priority": "HIGH"
+  },
+  {
+    "station": "Grand St & Elizabeth St",
+    "action": "RESTOCK",
+    "quantity": 10,
+    "priority": "HIGH"
+  },
+  {
+    "station": "Christopher St & Greenwich St",
+    "action": "RESTOCK",
+    "quantity": 10,
+    "priority": "HIGH"
+  },
+  {
+    "station": "W 22 St & 10 Ave",
+    "action": "RESTOCK",
+    "quantity": 10,
+    "priority": "HIGH"
+  },
+  {
+    "station": "Carmine St & 6 Ave",
+    "action": "RESTOCK",
+    "quantity": 10,
+    "priority": "HIGH"
+  },
+  {
+    "station": "Greenwich Ave & 8 Ave",
+    "action": "RESTOCK",
+    "quantity": 10,
+    "priority": "HIGH"
+  },
+  {
+    "station": "Clinton St & Grand St",
+    "action": "RESTOCK",
+    "quantity": 10,
+    "priority": "HIGH"
+  },
+  {
+    "station": "6 Ave & W 34 St",
+    "action": "RESTOCK",
+    "quantity": 10,
+    "priority": "HIGH"
+  },
+  {
+    "station": "W 43 St & 10 Ave",
+    "action": "RESTOCK",
+    "quantity": 10,
+    "priority": "HIGH"
+  },
+  {
+    "station": "W 24 St & 7 Ave",
+    "action": "RESTOCK",
+    "quantity": 10,
+    "priority": "HIGH"
+  },
+  {
+    "station": "Columbus Ave & W 72 St",
+    "action": "RESTOCK",
+    "quantity": 10,
+    "priority": "HIGH"
+  },
+  {
+    "station": "Norfolk St & Broome St",
+    "action": "RESTOCK",
+    "quantity": 10,
+    "priority": "HIGH"
+  },
+  {
+    "station": "Pier 40 - Hudson River Park",
+    "action": "RESTOCK",
+    "quantity": 10,
+    "priority": "HIGH"
+  },
+  {
+    "station": "Canal St & Rutgers St",
+    "action": "RESTOCK",
+    "quantity": 10,
+    "priority": "HIGH"
+  },
+  {
+    "station": "Broadway & E 21 St",
+    "action": "RESTOCK",
+    "quantity": 10,
+    "priority": "HIGH"
+  },
+  {
+    "station": "Amsterdam Ave & W 73 St",
+    "action": "RESTOCK",
+    "quantity": 10,
+    "priority": "HIGH"
+  },
+  {
+    "station": "W 4 St & 7 Ave S",
+    "action": "RESTOCK",
+    "quantity": 10,
+    "priority": "HIGH"
+  },
+  {
+    "station": "8 Ave & W 38 St",
+    "action": "RESTOCK",
+    "quantity": 10,
+    "priority": "HIGH"
+  },
+  {
+    "station": "Lafayette St & Jersey St",
+    "action": "RESTOCK",
+    "quantity": 10,
+    "priority": "HIGH"
+  },
+  {
+    "station": "W 15 St & 6 Ave",
+    "action": "RESTOCK",
+    "quantity": 10,
+    "priority": "HIGH"
+  },
+  {
+    "station": "Broadway & W 29 St",
+    "action": "RESTOCK",
+    "quantity": 10,
+    "priority": "HIGH"
+  },
+  {
+    "station": "10 Ave & W 28 St",
+    "action": "RESTOCK",
+    "quantity": 10,
+    "priority": "HIGH"
+  },
+  {
+    "station": "W 27 St & 7 Ave",
+    "action": "RESTOCK",
+    "quantity": 10,
+    "priority": "HIGH"
+  },
+  {
+    "station": "Washington St & Gansevoort St",
+    "action": "RESTOCK",
+    "quantity": 10,
+    "priority": "HIGH"
+  },
+  {
+    "station": "8 Ave & W 16 St",
+    "action": "RESTOCK",
+    "quantity": 10,
+    "priority": "HIGH"
+  },
+  {
+    "station": "Metropolitan Ave & Bedford Ave",
+    "action": "RESTOCK",
+    "quantity": 10,
+    "priority": "HIGH"
+  },
+  {
+    "station": "Vesey Pl & River Terrace",
+    "action": "RESTOCK",
+    "quantity": 10,
+    "priority": "HIGH"
+  },
+  {
+    "station": "1 Ave & E 18 St",
+    "action": "RESTOCK",
+    "quantity": 10,
+    "priority": "HIGH"
+  },
+  {
+    "station": "1 Ave & E 16 St",
+    "action": "RESTOCK",
+    "quantity": 10,
+    "priority": "HIGH"
+  }
+]

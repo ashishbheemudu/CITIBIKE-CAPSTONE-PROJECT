@@ -1,0 +1,28 @@
+# Exclude large archive directories
+_archive*/
+archive_final/
+
+# Exclude large model directories
+models_*/
+dashboard_models/
+
+# Exclude system files
+.DS_Store
+
+# Exclude python bytecode and environments
+__pycache__/
+*.py[cod]
+.venv/
+env/
+venv/
+
+# Exclude IDE settings
+.vscode/
+
+# Exclude notebook checkpoints and outputs (optional but recommended)
+.ipynb_checkpoints/
+
+# Exclude frontend dependencies and build artifacts
+frontend/node_modules/
+frontend/dist/
+frontend/build/
