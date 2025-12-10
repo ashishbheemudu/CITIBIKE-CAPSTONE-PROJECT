@@ -6,8 +6,10 @@ FROM python:3.9-slim
 WORKDIR /app
 
 # Install system dependencies (for building numpy/pandas if needed)
+# Install system dependencies
+# Removed build-essential to save space (Wheels available)
 RUN apt-get update && apt-get install -y \
-    build-essential \
+    curl \
     && rm -rf /var/lib/apt/lists/*
 
 # Copy dependencies first for caching
