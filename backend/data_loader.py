@@ -119,7 +119,19 @@ class DataLoader:
         
         if path:
             print(f"Loading robust features from {path}...")
-            self.robust_features = pd.read_parquet(path)
+            # MEMORY OPTIMIZATION: Only load columns we actually use.
+            # We DONT need the pre-calculated lags/rolling features because PredictionService recalculates them.
+            # essential_cols = ['time', 'station_name', 'pickups', 'temp', 'prcp']
+            try:
+                self.robust_features = pd.read_parquet(
+                    path, 
+                    columns=['time', 'station_name', 'pickups', 'temp', 'prcp']
+                )
+                print("✅ Optimization: Loaded only 5 essential columns (dropped ~50 unused feature columns).")
+            except Exception as e:
+                print(f"⚠️ Failed to load optimized columns, falling back to full load: {e}")
+                self.robust_features = pd.read_parquet(path)
+
             self.robust_features['time'] = pd.to_datetime(self.robust_features['time'])
             
             # Populate Weather Cache from Robust Features (Avoids Meteostat calls)
