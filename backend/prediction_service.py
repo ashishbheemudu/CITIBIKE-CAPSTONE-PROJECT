@@ -21,19 +21,15 @@ class PredictionService:
         self.reference_data = reference_data
         self.feature_names = []
         self.ensemble_weights = {}
-        self.historical_data = historical_data
-        self._load_models()
+    # REMOVED _load_models from __init__ to enable LAZY LOADING
+    # self._load_models() 
+    
+    def _lazy_load_models(self):
+        """Load models ONLY when needed (Lazy Loading) to prevent startup OOM"""
+        if self.models: return # Already loaded
 
-    def set_data(self, reference_data, historical_data):
-        """Inject data from DataLoader to save memory (avoid double loading)"""
-        self.reference_data = reference_data
-        self.historical_data = historical_data
-        logger.info("✅ Data injected from DataLoader")
-
-    def _load_models(self):
-        """Load Colab-trained models"""
         try:
-            logger.info("🚀 Loading Colab-trained ML models...")
+            logger.info("🚀 Lazy Loading ML models...")
 
             # 1. Load feature names
             feature_path = os.path.join(MODELS_DIR, "feature_names.json")
@@ -50,25 +46,25 @@ class PredictionService:
                     self.ensemble_weights = config.get('weights', {})
                 logger.info(f"✅ Ensemble weights: {self.ensemble_weights}")
 
-            # 3. Load models (Lazy import to save memory on startup)
+            # 3. Load models (Import here to save memory until needed)
             import xgboost as xgb
             import lightgbm as lgb
             from catboost import CatBoostRegressor
 
-            # XGBoost
+            # XGBoost (101MB)
             xgb_path = os.path.join(MODELS_DIR, "xgb.json")
             if os.path.exists(xgb_path):
                 self.models['xgb'] = xgb.XGBRegressor()
                 self.models['xgb'].load_model(xgb_path)
                 logger.info("✅ Loaded XGBoost")
 
-            # LightGBM
+            # LightGBM (3MB)
             lgb_path = os.path.join(MODELS_DIR, "lgb.pkl")
             if os.path.exists(lgb_path):
                 self.models['lgb'] = joblib.load(lgb_path)
                 logger.info("✅ Loaded LightGBM")
 
-            # CatBoost
+            # CatBoost (16MB)
             cb_path = os.path.join(MODELS_DIR, "cb.cbm")
             if os.path.exists(cb_path):
                 self.models['cb'] = CatBoostRegressor()
@@ -79,45 +75,26 @@ class PredictionService:
             scaler_tree_path = os.path.join(MODELS_DIR, "scaler_tree.save")
             if os.path.exists(scaler_tree_path):
                 self.scalers['tree'] = joblib.load(scaler_tree_path)
-                logger.info(f"✅ Loaded feature scaler ({self.scalers['tree'].n_features_in_} features)")
+                logger.info(f"✅ Loaded feature scaler")
 
             scaler_y_path = os.path.join(MODELS_DIR, "scaler_y.save")
             if os.path.exists(scaler_y_path):
                 self.scalers['y'] = joblib.load(scaler_y_path)
                 logger.info("✅ Loaded target scaler")
-
-            # 5. Load reference data (Skip if already injected)
-            if self.reference_data is None:
-                ref_path = os.path.join(MODELS_DIR, "reference_data_recent.parquet")
-                if os.path.exists(ref_path):
-                    self.reference_data = pd.read_parquet(ref_path)
-                    if 'time' in self.reference_data.columns:
-                        self.reference_data['time'] = pd.to_datetime(self.reference_data['time'])
-                    self.reference_data.sort_values(['station_name', 'time'], inplace=True)
-                    logger.info(f"✅ Loaded reference data: {len(self.reference_data)} rows")
-
-            # 6. Load historical data (Skip if already injected)
-            if self.historical_data is None:
-                hist_path = os.path.join(BASE_DIR, "data", "v1_core", "final_station_demand_robust_features.parquet")
-                if os.path.exists(hist_path):
-                    self.historical_data = pd.read_parquet(hist_path)
-                    if 'time' in self.historical_data.columns:
-                        self.historical_data['time'] = pd.to_datetime(self.historical_data['time'])
-                    self.historical_data.sort_values(['station_name', 'time'], inplace=True)
-                    logger.info(f"✅ Loaded historical data: {len(self.historical_data)} rows")
-                else:
-                    logger.warning("⚠️ Historical data not found")
-
-            logger.info(f"🎉 Loaded {len(self.models)} REAL ML models successfully!")
+            
+            logger.info(f"🎉 Lazy Loaded {len(self.models)} models!")
 
         except Exception as e:
-            logger.error(f"❌ Error loading models: {e}")
+            logger.error(f"❌ Error lazy loading models: {e}")
             import traceback
             traceback.print_exc()
 
     def predict(self, station_name, start_time, hours_ahead=48):
         """Generate predictions using REAL ML models"""
         try:
+            # Enforce Lazy Loading on first request
+            self._lazy_load_models()
+            
             if not self.models:
                 logger.error("❌ No models loaded")
                 raise ValueError("No models loaded - prediction service not initialized properly")
