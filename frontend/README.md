@@ -1,4 +1,4 @@
-# React + Vite
+# NYC Citi Bike Analytics (Vercel Deployed)
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
