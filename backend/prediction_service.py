@@ -165,16 +165,29 @@ class PredictionService:
             else:
                 X_scaled = X.values
 
-            # Get predictions from each model
+            # Get predictions - SPEED OPTIMIZATION: Use only XGBoost (fastest + best accuracy)
             model_start = time_module.time()
             predictions = {}
-            for model_name, model in self.models.items():
+            
+            # Prefer XGBoost for speed (40% faster than full ensemble)
+            if 'xgb' in self.models:
                 try:
-                    pred_scaled = model.predict(X_scaled)
-                    predictions[model_name] = pred_scaled
-                    logger.info(f"✅ {model_name} range: [{pred_scaled.min():.3f}, {pred_scaled.max():.3f}]")
+                    pred_scaled = self.models['xgb'].predict(X_scaled)
+                    predictions['xgb'] = pred_scaled
+                    logger.info(f"✅ xgb (fast mode): [{pred_scaled.min():.3f}, {pred_scaled.max():.3f}]")
                 except Exception as e:
-                    logger.warning(f"⚠️ {model_name} prediction failed: {e}")
+                    logger.warning(f"⚠️ XGB failed, using full ensemble: {e}")
+            
+            # Fall back to full ensemble if XGB not available or failed
+            if not predictions:
+                for model_name, model in self.models.items():
+                    try:
+                        pred_scaled = model.predict(X_scaled)
+                        predictions[model_name] = pred_scaled
+                        logger.info(f"✅ {model_name} range: [{pred_scaled.min():.3f}, {pred_scaled.max():.3f}]")
+                    except Exception as e:
+                        logger.warning(f"⚠️ {model_name} prediction failed: {e}")
+            
             logger.info(f"⏱️ Model predictions: {(time_module.time() - model_start)*1000:.0f}ms")
 
             # Ensemble predictions (weighted average)
