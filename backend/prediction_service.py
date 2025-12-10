@@ -134,11 +134,25 @@ class PredictionService:
             # Create prediction timestamps
             start_dt = pd.to_datetime(start_time)
             timestamps = [start_dt + timedelta(hours=i) for i in range(hours_ahead)]
+            
+            # PRE-FILTER station data ONCE (major optimization - avoids 48x filtering)
+            import time as time_module
+            perf_start = time_module.time()
+            station_cache = None
+            if hasattr(self, 'historical_data') and self.historical_data is not None:
+                ts_start = pd.Timestamp(start_dt).tz_localize(None) if pd.Timestamp(start_dt).tz else pd.Timestamp(start_dt)
+                hist_station = self.historical_data[self.historical_data['station_name'] == station_name].copy()
+                if not hist_station.empty:
+                    hist_station['time'] = pd.to_datetime(hist_station['time']).dt.tz_localize(None)
+                    before_ts = hist_station[hist_station['time'] < ts_start]
+                    if not before_ts.empty:
+                        station_cache = before_ts.tail(168)  # Last week
+            logger.info(f"⏱️ Station filter: {(time_module.time() - perf_start)*1000:.0f}ms")
 
-            # Create features for each hour
+            # Create features for each hour (pass cached station data)
             features_list = []
             for ts in timestamps:
-                features = self._create_features(station_name, ts)
+                features = self._create_features(station_name, ts, station_cache)
                 features_list.append(features)
 
             X = pd.DataFrame(features_list, columns=self.feature_names)
@@ -200,54 +214,55 @@ class PredictionService:
             traceback.print_exc()
             raise ValueError(f"Prediction failed: {str(e)}")
 
-    def _create_features(self, station_name, timestamp):
+    def _create_features(self, station_name, timestamp, station_cache=None):
         """Create all 56 features for a single prediction point"""
         
-        # Get historical data for this station BEFORE the prediction timestamp
-        # This gives us proper lag features
-        station_data = None
+        # Use pre-cached station data if provided (MAJOR SPEEDUP)
+        station_data = station_cache
         ts = pd.Timestamp(timestamp)
         if ts.tz is not None:
             ts = ts.tz_localize(None)
         
-        # Try historical data (Optimized Load)
-        if hasattr(self, 'historical_data') and self.historical_data is not None:
-             # Already loaded (e.g. dev mode)
-             pass
-        else:
-             # Load ONLY this station's data from disk
-             hist_path = os.path.join(BASE_DIR, "data", "v1_core", "final_station_demand_robust_features.parquet")
-             if os.path.exists(hist_path):
-                 try:
-                     # Use filters to read only specific station rows (Requires pyarrow)
-                     self.historical_data = pd.read_parquet(
-                         hist_path,
-                         columns=['time', 'station_name', 'pickups', 'temp', 'prcp', 'wspd'],
-                         filters=[('station_name', '==', station_name)]
-                     )
-                     self.historical_data['time'] = pd.to_datetime(self.historical_data['time'])
-                     # Type optim
-                     for col in self.historical_data.select_dtypes(include=['float64']).columns:
-                         self.historical_data[col] = self.historical_data[col].astype('float32')
-                 except Exception as e:
-                     logger.warning(f"⚠️ Failed to filter-load parquet: {e}")
+        # Only filter if no cache provided (backward compatibility)
+        if station_cache is None:
+            # Try historical data (Optimized Load)
+            if hasattr(self, 'historical_data') and self.historical_data is not None:
+                 # Already loaded (e.g. dev mode)
+                 pass
+            else:
+                 # Load ONLY this station's data from disk
+                 hist_path = os.path.join(BASE_DIR, "data", "v1_core", "final_station_demand_robust_features.parquet")
+                 if os.path.exists(hist_path):
+                     try:
+                         # Use filters to read only specific station rows (Requires pyarrow)
+                         self.historical_data = pd.read_parquet(
+                             hist_path,
+                             columns=['time', 'station_name', 'pickups', 'temp', 'prcp', 'wspd'],
+                             filters=[('station_name', '==', station_name)]
+                         )
+                         self.historical_data['time'] = pd.to_datetime(self.historical_data['time'])
+                         # Type optim
+                         for col in self.historical_data.select_dtypes(include=['float64']).columns:
+                             self.historical_data[col] = self.historical_data[col].astype('float32')
+                     except Exception as e:
+                         logger.warning(f"⚠️ Failed to filter-load parquet: {e}")
 
-        # Filter for memory buffer
-        if hasattr(self, 'historical_data') and self.historical_data is not None:
-            hist_station = self.historical_data[(self.historical_data['station_name'] == station_name)].copy()
-            if not hist_station.empty:
-                # Get data BEFORE the prediction time (for lag features)
-                hist_station['time'] = pd.to_datetime(hist_station['time']).dt.tz_localize(None)
-                before_ts = hist_station[hist_station['time'] < ts]
-                if not before_ts.empty:
-                    station_data = before_ts.tail(168)  # Last week of data before prediction
+            # Filter for memory buffer
+            if hasattr(self, 'historical_data') and self.historical_data is not None:
+                hist_station = self.historical_data[(self.historical_data['station_name'] == station_name)].copy()
+                if not hist_station.empty:
+                    # Get data BEFORE the prediction time (for lag features)
+                    hist_station['time'] = pd.to_datetime(hist_station['time']).dt.tz_localize(None)
+                    before_ts = hist_station[hist_station['time'] < ts]
+                    if not before_ts.empty:
+                        station_data = before_ts.tail(168)  # Last week of data before prediction
         
-        # Fallback to reference data if no historical data
-        if station_data is None or station_data.empty:
-            if self.reference_data is not None:
-                station_data = self.reference_data[
-                    self.reference_data['station_name'] == station_name
-                ].tail(168)
+            # Fallback to reference data if no historical data
+            if station_data is None or (hasattr(station_data, 'empty') and station_data.empty):
+                if self.reference_data is not None:
+                    station_data = self.reference_data[
+                        self.reference_data['station_name'] == station_name
+                    ].tail(168)
         
         # ═══════════════════════════════════════════════════════════════
         # WEATHER FEATURES (3)
