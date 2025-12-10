@@ -175,6 +175,12 @@ const Prediction = () => {
                     <div className="text-sm text-gray-400 mb-2 uppercase tracking-wider">Advanced Machine Learning</div>
                     <h1 className="text-3xl font-bold mb-1">Urban Mobility Command</h1>
                     <p className="text-gray-400">48-hour precision forecaster</p>
+                    {/* DEBUG HUD */}
+                    <div className="mt-4 p-2 bg-gray-900 border border-gray-700 rounded text-xs font-mono text-green-400">
+                        <div>API: {API_BASE_URL}</div>
+                        <div>Status: {loading ? 'Running...' : (error ? 'Error' : 'Ready')}</div>
+                        <div>Last Err: {error}</div>
+                    </div>
                 </div>
 
                 {/* Controls */}
