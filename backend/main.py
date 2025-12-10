@@ -1,7 +1,8 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, File, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from data_loader import data_loader
 from prediction_service import prediction_service
+from csv_evaluator import csv_evaluator
 from pydantic import BaseModel
 import pandas as pd
 import numpy as np
@@ -19,7 +20,7 @@ app = FastAPI(title="NYC Citi Bike Analytics Dashboard API")
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],  # Allow all origins for cloud deployment
-    allow_credentials=True,
+    allow_credentials=False,
     allow_methods=["*"],
     allow_headers=["*"],
 )
@@ -511,6 +512,51 @@ async def get_historical_demand(
         import traceback
         traceback.print_exc()
         raise HTTPException(status_code=500, detail=f"Internal server error: {str(e)}")
+
+
+# ==============================================================================
+# CSV UPLOAD & EVALUATE ENDPOINT
+# ==============================================================================
+@app.post("/api/evaluate")
+async def evaluate_csv(file: UploadFile = File(...)):
+    """
+    Upload a CitiBike trip CSV file and get model evaluation results.
+    
+    Returns:
+        - metrics: MAE, RMSE, R², MAPE
+        - summary: total trips, stations, date range
+        - hourly_pattern: actual vs predicted by hour
+        - sample_predictions: first 100 predictions
+    """
+    try:
+        # Validate file type
+        if not file.filename.endswith('.csv'):
+            raise HTTPException(status_code=400, detail="Only CSV files are supported")
+        
+        # Read file content
+        content = await file.read()
+        
+        # Check file size (max 200MB)
+        if len(content) > 200 * 1024 * 1024:
+            raise HTTPException(status_code=400, detail="File too large. Max 200MB.")
+        
+        print(f"DEBUG: Received file {file.filename} ({len(content) / 1024 / 1024:.1f}MB)", flush=True)
+        
+        # Process CSV
+        results = csv_evaluator.process_csv(content)
+        
+        if "error" in results:
+            raise HTTPException(status_code=400, detail=results["error"])
+        
+        return results
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        import traceback
+        traceback.print_exc()
+        raise HTTPException(status_code=500, detail=f"Evaluation failed: {str(e)}")
+
 
 if __name__ == "__main__":
     import uvicorn
