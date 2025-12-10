@@ -9,3 +9,5 @@ joblib==1.3.2
 holidays==0.45
 tensorflow-cpu==2.15.0  # Use CPU version to save 500MB+ slug size
 watchfiles==0.21.0      # For uvicorn reload
+pyarrow==15.0.0         # For reading parquet files
+fastparquet==2023.10.1  # Alternative parquet engine
