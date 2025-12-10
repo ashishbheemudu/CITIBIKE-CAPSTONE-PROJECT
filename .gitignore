@@ -2,10 +2,9 @@
 _archive*/
 archive_final/
 
-# Exclude large model directories
+# Exclude large model directories (xgb.json handled by LFS)
 models_*/
 dashboard_models/
-backend/models/xgb.json
 backend/models/*.cbm
 backend/models/*.pkl
 
