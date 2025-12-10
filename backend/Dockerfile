@@ -8,8 +8,10 @@ WORKDIR /app
 # Install system dependencies (for building numpy/pandas if needed)
 # Install system dependencies
 # Removed build-essential to save space (Wheels available)
+# libgomp1 is required for XGBoost/LightGBM OpenMP support
 RUN apt-get update && apt-get install -y \
     curl \
+    libgomp1 \
     && rm -rf /var/lib/apt/lists/*
 
 # Copy dependencies first for caching
