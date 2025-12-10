@@ -171,7 +171,8 @@ class PredictionService:
                 try:
                     pred_scaled = model.predict(X_scaled)
                     predictions[model_name] = pred_scaled
-                    logger.info(f"✅ {model_name} predicted {len(pred_scaled)} values")
+                    # DEBUG: Log raw model output range
+                    logger.info(f"✅ {model_name} range: [{pred_scaled.min():.3f}, {pred_scaled.max():.3f}]")
                 except Exception as e:
                     logger.warning(f"⚠️ {model_name} prediction failed: {e}")
 
@@ -187,12 +188,20 @@ class PredictionService:
 
                 if total_weight > 0:
                     final_pred_scaled = final_pred_scaled / total_weight
+                
+                # DEBUG: Log ensemble scaled output
+                logger.info(f"🔢 Ensemble scaled range: [{final_pred_scaled.min():.3f}, {final_pred_scaled.max():.3f}]")
 
                 # Inverse transform
                 if 'y' in self.scalers:
                     final_pred = self.scalers['y'].inverse_transform(final_pred_scaled.reshape(-1, 1)).flatten()
+                    # DEBUG: Log after inverse transform
+                    logger.info(f"📈 After inverse_transform: [{final_pred.min():.2f}, {final_pred.max():.2f}]")
+                    # DEBUG: Log scaler params
+                    logger.info(f"🔧 Scaler mean: {self.scalers['y'].mean_[0]:.3f}, scale: {self.scalers['y'].scale_[0]:.3f}")
                 else:
                     final_pred = final_pred_scaled
+                    logger.info(f"⚠️ No Y scaler - using raw predictions")
 
                 # Format output
                 results = []
