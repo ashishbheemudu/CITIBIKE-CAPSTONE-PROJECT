@@ -19,6 +19,7 @@ class PredictionService:
         self.models = {}
         self.scalers = {}
         self.reference_data = reference_data
+        self.historical_data = historical_data
         self.feature_names = []
         self.ensemble_weights = {}
     # REMOVED _load_models from __init__ to enable LAZY LOADING
@@ -98,9 +99,10 @@ class PredictionService:
             
             if os.path.exists(hist_path):
                 # MEMORY OPTIMIZATION: Only load essential columns
+                # BEAST MODE UPDATE: AWS has 1GB RAM, can load 'wspd' and other columns if needed.
                 self.historical_data = pd.read_parquet(
                     hist_path, 
-                    columns=['time', 'station_name', 'pickups', 'temp', 'prcp']
+                    columns=['time', 'station_name', 'pickups', 'temp', 'prcp', 'wspd']
                 )
                 
                 # Optimize types
