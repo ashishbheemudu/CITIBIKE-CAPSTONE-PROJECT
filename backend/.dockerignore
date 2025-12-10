@@ -1,0 +1,22 @@
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+.venv/
+.git/
+.gitignore
+.DS_Store
+# Ignore heavy archives and temp data
+_archive/
+_archive_data_versions_20251208/
+_archive_old_models_20251208/
+archive_final/
+# Ignore data/v1_core/raw if it exists (only keep processed)
+data/v1_core/raw/
+# Ignore tests/cache
+.pytest_cache/
+# Ignore local Jupyter notebooks
+*.ipynb
