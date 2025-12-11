@@ -167,7 +167,7 @@ function MapExplorer() {
             ...viewState,
             longitude: station.lon,
             latitude: station.lat,
-            zoom: 16,
+            zoom: 14,
             pitch: 45,
             bearing: 0,
             transitionDuration: 1500

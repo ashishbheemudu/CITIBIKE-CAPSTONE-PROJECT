@@ -19,6 +19,7 @@ import MapOutlinedIcon from '@mui/icons-material/MapOutlined';
 import TimelineOutlinedIcon from '@mui/icons-material/TimelineOutlined';
 import PlaceOutlinedIcon from '@mui/icons-material/PlaceOutlined';
 import ShowChartOutlinedIcon from '@mui/icons-material/ShowChartOutlined';
+import DirectionsBikeIcon from '@mui/icons-material/DirectionsBike';
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import PublicIcon from '@mui/icons-material/Public';
@@ -229,7 +230,7 @@ function Layout({ children }) {
                         <Box sx={{ px: 3, mb: 4, mt: 2 }}>
                             <div className="flex items-center gap-3 mb-1">
                                 <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center shadow-lg shadow-indigo-500/20">
-                                    <ShowChartOutlinedIcon sx={{ color: 'white', fontSize: 18 }} />
+                                    <DirectionsBikeIcon sx={{ color: 'white', fontSize: 18 }} />
                                 </div>
                                 <div>
                                     <Typography variant="caption" sx={{ color: 'text.secondary', letterSpacing: '0.1em', fontSize: '0.65rem', display: 'block', mb: -0.5 }}>NYC</Typography>
