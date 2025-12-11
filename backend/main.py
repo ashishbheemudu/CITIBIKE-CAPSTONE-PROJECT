@@ -1,62 +1,121 @@
-from fastapi import FastAPI, HTTPException
+from contextlib import asynccontextmanager
+from fastapi import FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
-from data_loader import data_loader
-from prediction_service import prediction_service
-from pydantic import BaseModel
-import pandas as pd
-import numpy as np
-import asyncio
-from concurrent.futures import ThreadPoolExecutor
+from pydantic import BaseModel, Field, validator
+from typing import Optional, List
+from datetime import datetime
+import logging
+import os
 
-# Create a thread pool for blocking ML operations
-# ThreadPoolExecutor shares memory, avoiding data reloading issues.
-# TensorFlow releases GIL during inference, so this should not block the event loop.
-ml_executor = ThreadPoolExecutor(max_workers=1)
-
-app = FastAPI(title="NYC Citi Bike Analytics Dashboard API")
-
-# Configure CORS
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],  # Allow all origins for cloud deployment
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+# ═══════════════════════════════════════════════════════════════
+# PROPER LOGGING CONFIGURATION
+# ═══════════════════════════════════════════════════════════════
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 )
+logger = logging.getLogger("CitiBikeAPI")
 
-@app.on_event("startup")
-async def startup_event():
-    print("DEBUG: Startup event triggered")
-    # Load data on startup
-    print("DEBUG: Loading core data...")
-    data_loader.load_core_data()
-    print("DEBUG: Core data loaded. Initializing Prediction Service with shared data...")
+# Lazy imports to avoid circular dependencies
+data_loader = None
+prediction_service = None
+
+# ═══════════════════════════════════════════════════════════════
+# PYDANTIC MODELS FOR INPUT VALIDATION
+# ═══════════════════════════════════════════════════════════════
+class PredictionRequest(BaseModel):
+    station_name: str = Field(..., min_length=1, max_length=200, description="Name of the station")
+    start_date: str = Field(..., description="Start datetime in ISO format")
+    end_date: Optional[str] = Field(None, description="End datetime in ISO format")
     
-    # Initialize PredictionService with shared data to check memory
-    # We import inside function to avoid circular/early imports if needed, 
-    # but here we need to set the global in the module.
+    @validator('station_name')
+    def validate_station_name(cls, v):
+        # Prevent injection attacks
+        if any(c in v for c in ['<', '>', '{', '}', ';', '--']):
+            raise ValueError('Invalid characters in station name')
+        return v.strip()
+
+class FilterParams(BaseModel):
+    start_date: Optional[str] = None
+    end_date: Optional[str] = None
+    days_of_week: Optional[str] = None
+
+# ═══════════════════════════════════════════════════════════════
+# LIFESPAN CONTEXT MANAGER (Replaces deprecated @app.on_event)
+# ═══════════════════════════════════════════════════════════════
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    """Modern lifespan handler for startup/shutdown events"""
+    global data_loader, prediction_service
+    
+    # ─── STARTUP ───
+    logger.info("🚀 Starting CitiBike API...")
+    
+    # Import here to avoid circular imports
+    from data_loader import data_loader as dl
     import prediction_service as ps_module
     from prediction_service import PredictionService
     
-    # Inject data (pass None if not loaded)
-    robust = getattr(data_loader, 'robust_features', None)
+    data_loader = dl
     
-    # Instantiate globally
+    logger.info("📊 Loading core data...")
+    data_loader.load_core_data()
+    logger.info("✅ Core data loaded")
+    
+    # Initialize PredictionService with shared data
+    robust = getattr(data_loader, 'robust_features', None)
     ps_module.prediction_service = PredictionService(
-        reference_data=None, # It will load recent ref data if needed, or we could pass robust here too? 
-                             # prediction_service logic falls back to ref if hist is missing. 
-                             # But robust contains ALL history.
-                             # Actually robust features IS the historical data.
+        reference_data=None,
         historical_data=robust
     )
-    print("DEBUG: Prediction Service initialized with shared memory.")
+    prediction_service = ps_module.prediction_service
     
-    # data_loader.load_advanced_model()
-    print("DEBUG: Startup complete.")
+    logger.info("🎉 Startup complete!")
+    
+    yield  # Application runs here
+    
+    # ─── SHUTDOWN ───
+    logger.info("👋 Shutting down CitiBike API...")
+
+# ═══════════════════════════════════════════════════════════════
+# FASTAPI APP WITH LIFESPAN
+# ═══════════════════════════════════════════════════════════════
+app = FastAPI(
+    title="NYC Citi Bike Analytics Dashboard API",
+    description="Production-grade API for bike demand prediction and analytics",
+    version="3.0.0",
+    lifespan=lifespan
+)
+
+# ═══════════════════════════════════════════════════════════════
+# SECURITY: CORS WITH WHITELISTED ORIGINS
+# ═══════════════════════════════════════════════════════════════
+ALLOWED_ORIGINS = [
+    "https://citibike-capstone-project.vercel.app",
+    "https://18.218.154.66.nip.io",
+    "http://localhost:5173",  # Vite dev server
+    "http://localhost:3000",  # React dev server
+    "http://127.0.0.1:5173",
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=ALLOWED_ORIGINS,
+    allow_credentials=True,
+    allow_methods=["GET", "POST", "OPTIONS"],
+    allow_headers=["*"],
+)
+
+# ═══════════════════════════════════════════════════════════════
+# IMPORT DEPENDENCIES AFTER APP CREATION
+# ═══════════════════════════════════════════════════════════════
+import pandas as pd
+import numpy as np
 
 @app.get("/")
 async def root():
-    return {"message": "Backend is running"}
+    """Health check endpoint"""
+    return {"message": "Backend is running", "version": "3.0.0"}
 
 @app.get("/api/system-overview")
 async def get_system_overview(

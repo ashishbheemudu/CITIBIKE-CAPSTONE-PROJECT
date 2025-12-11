@@ -4,11 +4,8 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Responsi
 import { Activity, TrendingUp, Calendar, Zap, Target } from 'lucide-react';
 import ChartErrorBoundary from '../components/ChartErrorBoundary';
 
-// Use centralized API configuration
-// Use centralized API configuration
-// FORCE AWS BACKEND
-const API_BASE_URL = 'https://18.218.154.66.nip.io/api';
-// const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api';
+// API Configuration - Uses environment variable with fallback
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://18.218.154.66.nip.io/api';
 
 const Prediction = () => {
     const [stations, setStations] = useState([]);
