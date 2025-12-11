@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import DeckGL from '@deck.gl/react';
-import { ScatterplotLayer, ArcLayer } from '@deck.gl/layers';
+import { ScatterplotLayer, ArcLayer, ColumnLayer } from '@deck.gl/layers';
 import { HeatmapLayer, HexagonLayer } from '@deck.gl/aggregation-layers';
 import { Map } from 'react-map-gl/maplibre';
 import { fetchMapData } from '../api';
@@ -100,6 +100,28 @@ function MapExplorer() {
         getLineColor: [59, 130, 246]
     }) : null;
 
+    // Vertical glowing column/beacon for selected station
+    const beaconLayer = selectedStation ? new ColumnLayer({
+        id: 'beacon-layer',
+        data: [selectedStation],
+        diskResolution: 12,
+        radius: 50,
+        extruded: true,
+        elevationScale: 1,
+        getPosition: d => [d.lon, d.lat],
+        getElevation: 2000, // Tall column reaching above all hexagons
+        getFillColor: [59, 130, 246, 180], // Blue with transparency
+        getLineColor: [255, 255, 255],
+        wireframe: true,
+        lineWidthMinPixels: 2,
+        material: {
+            ambient: 0.8,
+            diffuse: 0.9,
+            shininess: 100,
+            specularColor: [255, 255, 255]
+        }
+    }) : null;
+
     const layers = [
         activeLayer === 'heatmap' && new HeatmapLayer({
             id: 'heatmap-layer',
@@ -157,7 +179,8 @@ function MapExplorer() {
         }),
         // Add highlight layers on top
         highlightLayer,
-        centerMarkerLayer
+        centerMarkerLayer,
+        beaconLayer
     ].filter(Boolean);
 
     const flyToStation = (station) => {
