@@ -18,7 +18,7 @@ const INITIAL_VIEW_STATE = {
 function MapExplorer() {
     const [data, setData] = useState(null);
     const [loading, setLoading] = useState(true);
-    const [hoverInfo, setHoverInfo] = useState(null);
+    const [_hoverInfo, setHoverInfo] = useState(null);
 
     // Controls
     const [activeLayer, setActiveLayer] = useState('heatmap'); // 'heatmap', 'points', 'hexagon'

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { styled, createTheme, ThemeProvider, alpha } from '@mui/material/styles';
+import { styled, createTheme, ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import Box from '@mui/material/Box';
 import MuiAppBar from '@mui/material/AppBar';
@@ -26,7 +26,8 @@ import PsychologyIcon from '@mui/icons-material/Psychology';
 import LocalShippingIcon from '@mui/icons-material/LocalShipping';
 import AnalyticsIcon from '@mui/icons-material/Analytics';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
+// eslint-disable-next-line no-unused-vars
+import { motion } from 'framer-motion';
 
 // --- Professional Enterprise Theme ---
 const professionalTheme = createTheme({

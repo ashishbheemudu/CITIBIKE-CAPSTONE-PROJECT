@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import DateSelector from '../components/DateSelector';
 import ChartErrorBoundary from '../components/ChartErrorBoundary';
 
-import { motion } from 'framer-motion';
+
 import {
     AreaChart, Area, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
     ComposedChart, Bar, Legend
@@ -68,7 +68,6 @@ const SystemOverview = () => {
     const [selectedDays, setSelectedDays] = useState(['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']);
 
     // Chart Controls
-    const [timeScale, setTimeScale] = useState('Daily');
     const [activeOverlays, setActiveOverlays] = useState({
         temp: true,
         precip: false,

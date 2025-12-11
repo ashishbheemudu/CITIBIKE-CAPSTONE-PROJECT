@@ -17,7 +17,7 @@ const INITIAL_VIEW_STATE = {
 function RouteAnalysis() {
     const [routes, setRoutes] = useState(null);
     const [loading, setLoading] = useState(true);
-    const [hoverInfo, setHoverInfo] = useState(null);
+    const [_hoverInfo, setHoverInfo] = useState(null);
     const [viewState, setViewState] = useState(INITIAL_VIEW_STATE);
 
     // Filters
