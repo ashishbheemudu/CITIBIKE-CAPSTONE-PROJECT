@@ -1,6 +1,17 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { ChevronDown } from 'lucide-react';
 
+/**
+ * DateSelector Component
+ * 
+ * A customizable date picker with separate dropdowns for year, month, and day.
+ * Used for filtering data by date range in the dashboard.
+ * 
+ * @component
+ * @example
+ * <DateSelector value="2024-01-15" onChange={(date) => setDate(date)} />
+ */
 const DateSelector = ({ value, onChange, className = "" }) => {
     // Value is expected to be YYYY-MM-DD string
     const date = value ? new Date(value) : new Date();
@@ -70,4 +81,18 @@ const DateSelector = ({ value, onChange, className = "" }) => {
     );
 };
 
+DateSelector.propTypes = {
+    /** Current date value in YYYY-MM-DD format */
+    value: PropTypes.string,
+    /** Callback function when date changes, receives new date string */
+    onChange: PropTypes.func.isRequired,
+    /** Additional CSS classes to apply */
+    className: PropTypes.string
+};
+
+DateSelector.defaultProps = {
+    className: ''
+};
+
 export default DateSelector;
+

@@ -1,6 +1,19 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { AlertCircle, RefreshCw } from 'lucide-react';
 
+/**
+ * ChartErrorBoundary Component
+ * 
+ * Error boundary wrapper for chart components. Catches rendering errors
+ * and displays a user-friendly error message with retry option.
+ * 
+ * @component
+ * @example
+ * <ChartErrorBoundary>
+ *   <LineChart data={data} />
+ * </ChartErrorBoundary>
+ */
 class ChartErrorBoundary extends React.Component {
     constructor(props) {
         super(props);
@@ -45,4 +58,10 @@ class ChartErrorBoundary extends React.Component {
     }
 }
 
+ChartErrorBoundary.propTypes = {
+    /** Child components to wrap with error boundary */
+    children: PropTypes.node.isRequired
+};
+
 export default ChartErrorBoundary;
+
