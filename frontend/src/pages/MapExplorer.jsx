@@ -126,6 +126,7 @@ function MapExplorer() {
         activeLayer === 'heatmap' && new HeatmapLayer({
             id: 'heatmap-layer',
             data: filteredData,
+            pickable: true, // Enable hover detection
             getPosition: d => [d.lon, d.lat],
             getWeight: d => d.trip_count,
             radiusPixels: 40,
@@ -142,6 +143,7 @@ function MapExplorer() {
         activeLayer === 'hexagon' && new HexagonLayer({
             id: 'hexagon-layer',
             data: filteredData,
+            pickable: true, // Enable hover detection
             getPosition: d => [d.lon, d.lat],
             getElevationWeight: d => d.trip_count,
             elevationScale: 5,
@@ -311,17 +313,73 @@ function MapExplorer() {
                     onViewStateChange={({ viewState }) => setViewState(viewState)}
                     controller={true}
                     layers={layers}
-                    getTooltip={({ object }) => {
+                    getTooltip={({ object, layer }) => {
                         if (!object) return null;
-                        if (activeLayer === 'hexagon') {
+
+                        // For hexagon bars - show all stations in the hexagon
+                        if (layer && layer.id === 'hexagon-layer') {
                             const points = object.points || [];
-                            const stationNames = [...new Set(points.map(p => p.station_name))];
+                            const stationNames = [...new Set(points.map(p => p.source?.station_name || p.station_name).filter(Boolean))];
+                            const totalTrips = object.elevationValue || points.reduce((sum, p) => sum + (p.source?.trip_count || p.trip_count || 0), 0);
+
+                            if (stationNames.length === 0) {
+                                return `Total Trips: ${totalTrips.toLocaleString()}`;
+                            }
+
                             const stationLabel = stationNames.length === 1
-                                ? `Station: ${stationNames[0]}`
-                                : `Stations: ${stationNames.slice(0, 3).join(', ')}${stationNames.length > 3 ? '...' : ''}`;
-                            return `${stationLabel}\nTotal Trips: ${object.elevationValue.toLocaleString()}`;
+                                ? `📍 ${stationNames[0]}`
+                                : `📍 Stations:\n${stationNames.slice(0, 5).map(s => `  • ${s}`).join('\n')}${stationNames.length > 5 ? `\n  + ${stationNames.length - 5} more...` : ''}`;
+
+                            return {
+                                html: `<div style="padding: 8px; min-width: 200px;">
+                                    <div style="font-weight: bold; color: #60a5fa; margin-bottom: 4px;">STATION INFO</div>
+                                    <div style="font-size: 13px; margin-bottom: 6px;">${stationNames.length === 1 ? stationNames[0] : `${stationNames.length} stations in area`}</div>
+                                    ${stationNames.length > 1 ? `<div style="font-size: 11px; color: #9ca3af; margin-bottom: 6px;">${stationNames.slice(0, 3).join('<br/>')}</div>` : ''}
+                                    <div style="font-size: 14px; font-weight: bold; color: #22c55e;">🚴 ${totalTrips.toLocaleString()} trips</div>
+                                </div>`,
+                                style: {
+                                    backgroundColor: 'rgba(15, 23, 42, 0.95)',
+                                    borderRadius: '8px',
+                                    border: '1px solid #334155',
+                                    color: 'white'
+                                }
+                            };
                         }
-                        return `${object.station_name}\nTrips: ${object.trip_count.toLocaleString()}`;
+
+                        // For heatmap - show nearest station
+                        if (layer && layer.id === 'heatmap-layer') {
+                            return {
+                                html: `<div style="padding: 8px;">
+                                    <div style="font-weight: bold; color: #f97316;">🔥 HEAT ZONE</div>
+                                    <div style="font-size: 11px; color: #9ca3af;">High activity area</div>
+                                </div>`,
+                                style: {
+                                    backgroundColor: 'rgba(15, 23, 42, 0.95)',
+                                    borderRadius: '8px',
+                                    border: '1px solid #f97316',
+                                    color: 'white'
+                                }
+                            };
+                        }
+
+                        // For points layer
+                        if (object.station_name) {
+                            return {
+                                html: `<div style="padding: 8px;">
+                                    <div style="font-weight: bold; color: #60a5fa; margin-bottom: 4px;">📍 STATION</div>
+                                    <div style="font-size: 13px; font-weight: bold; margin-bottom: 4px;">${object.station_name}</div>
+                                    <div style="font-size: 14px; color: #22c55e;">🚴 ${object.trip_count.toLocaleString()} trips</div>
+                                </div>`,
+                                style: {
+                                    backgroundColor: 'rgba(15, 23, 42, 0.95)',
+                                    borderRadius: '8px',
+                                    border: '1px solid #60a5fa',
+                                    color: 'white'
+                                }
+                            };
+                        }
+
+                        return null;
                     }}
                 >
                     <Map
