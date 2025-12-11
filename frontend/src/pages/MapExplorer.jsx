@@ -316,32 +316,47 @@ function MapExplorer() {
                     getTooltip={({ object, layer }) => {
                         if (!object) return null;
 
-                        // For hexagon bars - show all stations in the hexagon
+                        // For hexagon bars - find stations near this hexagon's position
                         if (layer && layer.id === 'hexagon-layer') {
-                            const points = object.points || [];
-                            const stationNames = [...new Set(points.map(p => p.source?.station_name || p.station_name).filter(Boolean))];
-                            const totalTrips = object.elevationValue || points.reduce((sum, p) => sum + (p.source?.trip_count || p.trip_count || 0), 0);
+                            const totalTrips = object.elevationValue || 0;
 
-                            if (stationNames.length === 0) {
-                                return `Total Trips: ${totalTrips.toLocaleString()}`;
+                            // Get the hexagon's center position
+                            const hexPosition = object.position;
+
+                            // Find stations within this hexagon (radius ~200m = ~0.002 degrees)
+                            let stationNames = [];
+                            if (hexPosition && filteredData) {
+                                const [hexLon, hexLat] = hexPosition;
+                                const radius = 0.003; // ~300m in degrees
+
+                                for (const station of filteredData) {
+                                    const dLon = Math.abs(station.lon - hexLon);
+                                    const dLat = Math.abs(station.lat - hexLat);
+                                    if (dLon < radius && dLat < radius) {
+                                        stationNames.push(station.station_name);
+                                    }
+                                }
+                                stationNames = [...new Set(stationNames)];
                             }
 
-                            const stationLabel = stationNames.length === 1
-                                ? `📍 ${stationNames[0]}`
-                                : `📍 Stations:\n${stationNames.slice(0, 5).map(s => `  • ${s}`).join('\n')}${stationNames.length > 5 ? `\n  + ${stationNames.length - 5} more...` : ''}`;
+                            // Build tooltip HTML
+                            const stationHTML = stationNames.length > 0
+                                ? `<div style="font-size: 13px; font-weight: bold; margin-bottom: 6px; color: #fff;">${stationNames.length === 1 ? stationNames[0] : `${stationNames.length} stations:`}</div>
+                                   ${stationNames.length > 1 ? `<div style="font-size: 11px; color: #9ca3af; margin-bottom: 6px;">${stationNames.slice(0, 5).map(s => `• ${s}`).join('<br/>')}</div>` : ''}`
+                                : `<div style="font-size: 11px; color: #9ca3af; margin-bottom: 4px;">Station area</div>`;
 
                             return {
-                                html: `<div style="padding: 8px; min-width: 200px;">
-                                    <div style="font-weight: bold; color: #60a5fa; margin-bottom: 4px;">STATION INFO</div>
-                                    <div style="font-size: 13px; margin-bottom: 6px;">${stationNames.length === 1 ? stationNames[0] : `${stationNames.length} stations in area`}</div>
-                                    ${stationNames.length > 1 ? `<div style="font-size: 11px; color: #9ca3af; margin-bottom: 6px;">${stationNames.slice(0, 3).join('<br/>')}</div>` : ''}
-                                    <div style="font-size: 14px; font-weight: bold; color: #22c55e;">🚴 ${totalTrips.toLocaleString()} trips</div>
+                                html: `<div style="padding: 10px; min-width: 220px;">
+                                    <div style="font-weight: bold; color: #60a5fa; margin-bottom: 6px; font-size: 11px; letter-spacing: 0.5px;">📍 STATION INFO</div>
+                                    ${stationHTML}
+                                    <div style="font-size: 16px; font-weight: bold; color: #22c55e;">🚴 ${totalTrips.toLocaleString()} trips</div>
                                 </div>`,
                                 style: {
                                     backgroundColor: 'rgba(15, 23, 42, 0.95)',
-                                    borderRadius: '8px',
-                                    border: '1px solid #334155',
-                                    color: 'white'
+                                    borderRadius: '10px',
+                                    border: '1px solid #3b82f6',
+                                    color: 'white',
+                                    boxShadow: '0 4px 20px rgba(59, 130, 246, 0.3)'
                                 }
                             };
                         }
