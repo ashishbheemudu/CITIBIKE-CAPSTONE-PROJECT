@@ -1,10 +1,30 @@
 # NYC Citi Bike Analytics Dashboard 🚴
 
-A production-grade analytics dashboard for NYC Citi Bike demand prediction and visualization.
+A production-grade, full-stack analytics dashboard for NYC Citi Bike demand prediction and visualization, featuring a 3-model ML ensemble achieving **R² = 0.781**.
 
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
 ![Python](https://img.shields.io/badge/python-3.11-green.svg)
 ![React](https://img.shields.io/badge/react-18-blue.svg)
+![Models](https://img.shields.io/badge/ML%20Models-3-orange.svg)
+![Endpoints](https://img.shields.io/badge/API%20Endpoints-17-blue.svg)
+
+## 🌐 Live Demo
+
+| Component | URL |
+|-----------|-----|
+| **Dashboard** | [citibike-capstone-project.vercel.app](https://citibike-capstone-project.vercel.app) |
+| **API** | [18.218.154.66.nip.io/api](https://18.218.154.66.nip.io/api) |
+
+## 📚 Documentation
+
+| Document | Description |
+|----------|-------------|
+| [API Documentation](docs/API.md) | All 17 API endpoints |
+| [Architecture](docs/ARCHITECTURE.md) | System design and diagrams |
+| [Data Dictionary](docs/DATA_DICTIONARY.md) | Data sources and 54 features |
+| [Methodology](docs/METHODOLOGY.md) | ML approach and results |
+| [Model Evaluation](docs/MODEL_EVALUATION.md) | Performance metrics |
+| [Requirements](docs/REQUIREMENTS.md) | Functional requirements |
 
 ## 🏗️ Architecture
 
