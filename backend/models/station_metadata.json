@@ -1,1 +1,1002 @@
-[{"station_name":"1 Ave & E 110 St","historical_mean":0.0194861183,"historical_std":2.0412462988},{"station_name":"1 Ave & E 16 St","historical_mean":-0.1003621314,"historical_std":4.3971396965},{"station_name":"1 Ave & E 18 St","historical_mean":-0.0714950854,"historical_std":5.0255680774},{"station_name":"1 Ave & E 30 St","historical_mean":0.0246421797,"historical_std":4.2145584582},{"station_name":"1 Ave & E 39 St","historical_mean":0.0012588377,"historical_std":2.9680709281},{"station_name":"1 Ave & E 44 St","historical_mean":-0.0386618382,"historical_std":4.4042626158},{"station_name":"1 Ave & E 6 St","historical_mean":-0.0288498017,"historical_std":4.7159329617},{"station_name":"1 Ave & E 62 St","historical_mean":0.0093119503,"historical_std":3.3579627614},{"station_name":"1 Ave & E 68 St","historical_mean":0.0143300569,"historical_std":10.7353804552},{"station_name":"1 Ave & E 78 St","historical_mean":-0.009001552,"historical_std":3.6187236938},{"station_name":"1 Ave & E 94 St","historical_mean":0.0083462666,"historical_std":2.1712296573},{"station_name":"10 Ave & W 14 St","historical_mean":0.0582514227,"historical_std":4.6832616269},{"station_name":"10 Ave & W 28 St","historical_mean":-0.0004655975,"historical_std":4.2552972475},{"station_name":"10 St & 7 Ave","historical_mean":-0.0036902914,"historical_std":2.1477572575},{"station_name":"11 Ave & W 27 St","historical_mean":0.0248318676,"historical_std":4.0443194812},{"station_name":"11 Ave & W 41 St","historical_mean":-0.0142438351,"historical_std":5.7674684209},{"station_name":"11 Ave & W 59 St","historical_mean":0.0366614934,"historical_std":3.1065287574},{"station_name":"12 Ave & W 40 St","historical_mean":0.0780996724,"historical_std":5.6698885694},{"station_name":"2 Ave & E 29 St","historical_mean":-0.0675116399,"historical_std":3.3883547588},{"station_name":"2 Ave & E 31 St","historical_mean":0.0008104846,"historical_std":3.2970690726},{"station_name":"2 Ave & E 72 St","historical_mean":-0.0068287636,"historical_std":3.0989902053},{"station_name":"2 Ave & E 96 St","historical_mean":0.0142610795,"historical_std":2.4300850153},{"station_name":"3 Ave & E 62 St","historical_mean":-0.0371615796,"historical_std":3.1104422021},{"station_name":"3 Ave & Schermerhorn St","historical_mean":0.0187963442,"historical_std":2.1425895128},{"station_name":"3 St & 7 Ave","historical_mean":-0.0130884635,"historical_std":2.2917499681},{"station_name":"3 St & Prospect Park West","historical_mean":-0.0968787722,"historical_std":2.667208243},{"station_name":"31 Ave & 34 St","historical_mean":-0.0030522504,"historical_std":1.9374874958},{"station_name":"31 St & Broadway","historical_mean":-0.0212277979,"historical_std":2.1750898109},{"station_name":"31 St & Newtown Ave","historical_mean":-0.0045869978,"historical_std":2.5192725891},{"station_name":"4 Ave & E 12 St","historical_mean":0.1038282462,"historical_std":3.1330821785},{"station_name":"44 Dr & Jackson Ave","historical_mean":0.0023107432,"historical_std":2.4099276553},{"station_name":"46 Ave & 5 St","historical_mean":0.0096051043,"historical_std":2.9623562996},{"station_name":"5 Ave & 3 St","historical_mean":0.0186928781,"historical_std":2.2607290431},{"station_name":"5 Ave & E 103 St","historical_mean":0.0183997241,"historical_std":3.5037182317},{"station_name":"5 Ave & E 29 St","historical_mean":-0.0399034316,"historical_std":3.1575616291},{"station_name":"5 Ave & E 63 St","historical_mean":-0.0302983273,"historical_std":3.6983785447},{"station_name":"5 Ave & E 72 St","historical_mean":0.017761683,"historical_std":3.4569299702},{"station_name":"5 Ave & E 78 St","historical_mean":-0.0336437317,"historical_std":3.6137453391},{"station_name":"5 Ave & E 87 St","historical_mean":0.007535782,"historical_std":3.1995320615},{"station_name":"6 Ave & 9 St","historical_mean":0.0120882911,"historical_std":2.1820699672},{"station_name":"6 Ave & Broome St","historical_mean":0.0749094671,"historical_std":3.9800078807},{"station_name":"6 Ave & Canal St","historical_mean":0.0756509743,"historical_std":3.3585947413},{"station_name":"6 Ave & W 33 St","historical_mean":-0.0736678738,"historical_std":5.4419999174},{"station_name":"6 Ave & W 34 St","historical_mean":-0.2471977927,"historical_std":4.3537695281},{"station_name":"6 Ave & W 45 St","historical_mean":0.0343162614,"historical_std":6.2249248122},{"station_name":"6 St & 7 Ave","historical_mean":0.0037592688,"historical_std":2.2194336231},{"station_name":"7 Ave & Central Park South","historical_mean":-0.0971029488,"historical_std":4.6496904404},{"station_name":"7 Ave & Park Pl","historical_mean":0.0061907225,"historical_std":2.7054456301},{"station_name":"7 Ave S & Bleecker St","historical_mean":0.0239351612,"historical_std":3.5562424316},{"station_name":"8 Ave & W 16 St","historical_mean":-0.0230212106,"historical_std":3.7596444964},{"station_name":"8 Ave & W 27 St","historical_mean":-0.0221934816,"historical_std":2.611022487},{"station_name":"8 Ave & W 31 St","historical_mean":0.1176754613,"historical_std":7.7602384172},{"station_name":"8 Ave & W 33 St","historical_mean":-0.0575271599,"historical_std":5.0173474943},{"station_name":"8 Ave & W 38 St","historical_mean":-0.0143990343,"historical_std":4.3346074353},{"station_name":"8 Ave & W 49 St","historical_mean":-0.107535782,"historical_std":3.470819041},{"station_name":"8 Ave & W 52 St","historical_mean":-0.0338506639,"historical_std":3.1603699545},{"station_name":"9 Ave & W 18 St","historical_mean":0.1134678393,"historical_std":3.6251752454},{"station_name":"9 Ave & W 22 St","historical_mean":0.0576133816,"historical_std":5.1064518825},{"station_name":"9 Ave & W 33 St","historical_mean":0.0179513709,"historical_std":5.9245520944},{"station_name":"9 Ave & W 39 St","historical_mean":0.0163993792,"historical_std":2.8344974082},{"station_name":"9 Ave & W 45 St","historical_mean":0.0044317986,"historical_std":3.5906864303},{"station_name":"Adelphi St & Myrtle Ave","historical_mean":-0.0143473013,"historical_std":2.7678148104},{"station_name":"Albany St & Greenwich St","historical_mean":0.0103638558,"historical_std":2.6115651085},{"station_name":"Allen St & Hester St","historical_mean":0.0821520952,"historical_std":3.5883390293},{"station_name":"Allen St & Rivington St","historical_mean":0.0286946025,"historical_std":3.53668421},{"station_name":"Allen St & Stanton St","historical_mean":0.0132264183,"historical_std":3.6398384485},{"station_name":"Amsterdam Ave & W 66 St","historical_mean":-0.0055354371,"historical_std":2.4437002451},{"station_name":"Amsterdam Ave & W 73 St","historical_mean":-0.0765304363,"historical_std":4.3111459467},{"station_name":"Amsterdam Ave & W 79 St","historical_mean":-0.0471460597,"historical_std":3.7042241421},{"station_name":"Amsterdam Ave & W 82 St","historical_mean":-0.0484393861,"historical_std":3.4098660931},{"station_name":"Atlantic Ave & Fort Greene Pl","historical_mean":0.020106915,"historical_std":2.9799972216},{"station_name":"Atlantic Ave & Furman St","historical_mean":0.0318848077,"historical_std":2.7098505531},{"station_name":"Ave A & E 11 St","historical_mean":0.0972926367,"historical_std":3.2910542708},{"station_name":"Ave A & E 14 St","historical_mean":-0.0481979652,"historical_std":3.2793990874},{"station_name":"Avenue D & E 3 St","historical_mean":-0.006949474,"historical_std":2.5822255375},{"station_name":"Bank St & Hudson St","historical_mean":0.0072081393,"historical_std":2.8030814845},{"station_name":"Bank St & Washington St","historical_mean":0.0083807553,"historical_std":2.9356686562},{"station_name":"Barrow St & Hudson St","historical_mean":0.009932747,"historical_std":3.2041708071},{"station_name":"Bayard St & Baxter St","historical_mean":0.0381272633,"historical_std":2.8492164652},{"station_name":"Bedford Ave & Bergen St","historical_mean":-0.0235730298,"historical_std":2.2918466949},{"station_name":"Bedford Ave & Nassau Ave","historical_mean":0.0713053975,"historical_std":2.7874831772},{"station_name":"Bergen St & Flatbush Ave","historical_mean":0.0198999828,"historical_std":2.3793990561},{"station_name":"Bergen St & Smith St","historical_mean":0.112622866,"historical_std":2.3244016335},{"station_name":"Bergen St & Vanderbilt Ave","historical_mean":0.0113122952,"historical_std":2.7704008345},{"station_name":"Berkeley Pl & 7 Ave","historical_mean":0.01291602,"historical_std":2.5831507267},{"station_name":"Berry St & N 8 St","historical_mean":0.0205035351,"historical_std":2.8621631952},{"station_name":"Bialystoker Pl & Delancey St","historical_mean":-0.0276082083,"historical_std":2.4665056932},{"station_name":"Bleecker St & Crosby St","historical_mean":0.0572857389,"historical_std":3.4833326453},{"station_name":"Broad St & Bridge St","historical_mean":0.0225211243,"historical_std":2.9830049329},{"station_name":"Broadway & Battery Pl","historical_mean":0.1123986894,"historical_std":3.9035196264},{"station_name":"Broadway & Berry St","historical_mean":0.008363511,"historical_std":3.0633151036},{"station_name":"Broadway & E 14 St","historical_mean":-0.0818589412,"historical_std":5.2584916296},{"station_name":"Broadway & E 19 St","historical_mean":0.0394895672,"historical_std":4.6245499687},{"station_name":"Broadway & E 21 St","historical_mean":-0.0036902914,"historical_std":5.03633046},{"station_name":"Broadway & Roebling St","historical_mean":0.0021210554,"historical_std":2.1009082235},{"station_name":"Broadway & W 25 St","historical_mean":0.0262114158,"historical_std":7.3513435594},{"station_name":"Broadway & W 29 St","historical_mean":-0.0175375065,"historical_std":4.388493992},{"station_name":"Broadway & W 36 St","historical_mean":-0.1721503708,"historical_std":3.1428217978},{"station_name":"Broadway & W 38 St","historical_mean":0.0137782376,"historical_std":4.6564943591},{"station_name":"Broadway & W 41 St","historical_mean":-0.0399551647,"historical_std":4.7144402332},{"station_name":"Broadway & W 48 St","historical_mean":0.0044662873,"historical_std":5.4997469575},{"station_name":"Broadway & W 51 St","historical_mean":0.0645456113,"historical_std":5.5030908711},{"station_name":"Broadway & W 53 St","historical_mean":-0.3312467667,"historical_std":4.6964159122},{"station_name":"Broadway & W 56 St","historical_mean":-0.7251077772,"historical_std":4.6407933509},{"station_name":"Broadway & W 58 St","historical_mean":-0.2431971029,"historical_std":4.2559135979},{"station_name":"Broadway & W 61 St","historical_mean":-0.1604242111,"historical_std":3.1611829339},{"station_name":"Canal St & Rutgers St","historical_mean":0.0249353337,"historical_std":3.5504604047},{"station_name":"Carmine St & 6 Ave","historical_mean":0.0478358338,"historical_std":4.3578154119},{"station_name":"Carroll St & Smith St","historical_mean":0.0111915848,"historical_std":2.3393630708},{"station_name":"Cathedral Pkwy & Broadway","historical_mean":-0.0319710295,"historical_std":2.3546202282},{"station_name":"Catherine St & Monroe St","historical_mean":0.0252974651,"historical_std":2.3848170952},{"station_name":"Center Blvd & 51 Ave","historical_mean":0.0051733057,"historical_std":2.1250238173},{"station_name":"Central Park North & Adam Clayton Powell Blvd","historical_mean":0.0701500259,"historical_std":2.9389760212},{"station_name":"Central Park S & 6 Ave","historical_mean":-0.0196068288,"historical_std":5.3845238497},{"station_name":"Central Park W & W 103 St","historical_mean":-0.0245732023,"historical_std":2.5253614802},{"station_name":"Central Park W & W 91 St","historical_mean":-0.0187618555,"historical_std":3.7398032276},{"station_name":"Central Park W & W 97 St","historical_mean":-0.0282634937,"historical_std":3.2601766199},{"station_name":"Central Park West & W 68 St","historical_mean":-0.0667356441,"historical_std":3.6063899219},{"station_name":"Central Park West & W 72 St","historical_mean":-0.0284186929,"historical_std":4.0901209534},{"station_name":"Central Park West & W 76 St","historical_mean":-0.0275219865,"historical_std":2.9863083349},{"station_name":"Central Park West & W 85 St","historical_mean":-0.0239006725,"historical_std":3.0016719021},{"station_name":"Centre St & Chambers St","historical_mean":0.0280048284,"historical_std":4.0532644116},{"station_name":"Centre St & Worth St","historical_mean":0.033660976,"historical_std":4.5339341521},{"station_name":"Cherry St","historical_mean":-0.0258147957,"historical_std":2.9852348812},{"station_name":"Christopher St & Greenwich St","historical_mean":0.0800655285,"historical_std":5.7856503032},{"station_name":"Clark St & Henry St","historical_mean":-0.0430936368,"historical_std":2.8025841162},{"station_name":"Classon Ave & St Marks Ave","historical_mean":-0.0622866011,"historical_std":2.3137516509},{"station_name":"Cleveland Pl & Spring St","historical_mean":0.0574064494,"historical_std":3.8391944815},{"station_name":"Cliff St & Fulton St","historical_mean":0.0468873944,"historical_std":2.7337284101},{"station_name":"Clinton Ave & Myrtle Ave","historical_mean":-0.0451112261,"historical_std":3.1202372913},{"station_name":"Clinton St & Grand St","historical_mean":0.0280738058,"historical_std":4.5221127965},{"station_name":"Clinton St & Joralemon St","historical_mean":0.0216589067,"historical_std":2.9073858925},{"station_name":"Columbia St & Rivington St","historical_mean":0.0117606484,"historical_std":2.5692766735},{"station_name":"Columbus Ave & W 72 St","historical_mean":-0.218347991,"historical_std":4.9794266727},{"station_name":"Columbus Ave & W 95 St","historical_mean":-0.0840144853,"historical_std":3.0876549275},{"station_name":"Cooper Square & Astor Pl","historical_mean":0.0524918089,"historical_std":4.6065314133},{"station_name":"Court St & State St","historical_mean":0.0259182618,"historical_std":2.4114168431},{"station_name":"Crescent St & Broadway","historical_mean":0.005087084,"historical_std":1.9012575779},{"station_name":"DeKalb Ave & Hudson Ave","historical_mean":0.1148818762,"historical_std":2.9393281343},{"station_name":"DeKalb Ave & S Portland Ave","historical_mean":0.0142438351,"historical_std":2.2866394198},{"station_name":"DeKalb Ave & Vanderbilt Ave","historical_mean":-0.0140713916,"historical_std":2.5280250495},{"station_name":"Delancey St & Eldridge St","historical_mean":-0.003569581,"historical_std":2.0640900401},{"station_name":"Devoe St & Lorimer St","historical_mean":0.0059148129,"historical_std":2.1478044721},{"station_name":"Division St & Bowery","historical_mean":0.0604242111,"historical_std":2.6587721866},{"station_name":"Dock 72 Way & Market St","historical_mean":0.0521814106,"historical_std":6.7582089373},{"station_name":"Driggs Ave & N 9 St","historical_mean":0.1024314537,"historical_std":3.0784170819},{"station_name":"Driggs Ave & N Henry St","historical_mean":-0.0578030695,"historical_std":3.3490184339},{"station_name":"Duffield St & Willoughby St","historical_mean":0.0173995516,"historical_std":2.547950009},{"station_name":"E 1 St & 1 Ave","historical_mean":0.0768063459,"historical_std":3.7880523321},{"station_name":"E 10 St & 2 Ave","historical_mean":0.0208311778,"historical_std":3.0400785459},{"station_name":"E 10 St & Avenue A","historical_mean":0.1464045525,"historical_std":4.3646396071},{"station_name":"E 102 St & 1 Ave","historical_mean":0.0072081393,"historical_std":2.1435610493},{"station_name":"E 11 St & 1 Ave","historical_mean":0.0067425418,"historical_std":4.2350541587},{"station_name":"E 11 St & 3 Ave","historical_mean":0.0353509226,"historical_std":3.1123671159},{"station_name":"E 11 St & Ave B","historical_mean":-0.0424383514,"historical_std":2.897165346},{"station_name":"E 11 St & Avenue B","historical_mean":-0.0834109329,"historical_std":3.2280029092},{"station_name":"E 12 St & 3 Ave","historical_mean":-0.0562683221,"historical_std":2.9909858899},{"station_name":"E 12 St & Ave C","historical_mean":-0.006311433,"historical_std":2.8309126247},{"station_name":"E 13 St & 2 Ave","historical_mean":0.0061045008,"historical_std":3.8380398083},{"station_name":"E 13 St & Avenue A","historical_mean":-0.0205207794,"historical_std":3.5016362094},{"station_name":"E 14 St & 1 Ave","historical_mean":0.1017761683,"historical_std":2.9263886132},{"station_name":"E 14 St & Avenue B","historical_mean":-0.0100362131,"historical_std":2.5637743635},{"station_name":"E 15 St & 3 Ave","historical_mean":-0.0412312468,"historical_std":3.4077653655},{"station_name":"E 16 St & 5 Ave","historical_mean":0.0405414727,"historical_std":4.8244308463},{"station_name":"E 16 St & Irving Pl","historical_mean":0.0162269357,"historical_std":3.6329263168},{"station_name":"E 17 St & 2 Ave","historical_mean":-0.000931195,"historical_std":2.4368339743},{"station_name":"E 17 St & Broadway","historical_mean":0.1474219693,"historical_std":5.5328913551},{"station_name":"E 19 St & 3 Ave","historical_mean":-0.0062596999,"historical_std":3.0257556335},{"station_name":"E 2 St & 2 Ave","historical_mean":0.0881531298,"historical_std":2.8366866171},{"station_name":"E 2 St & Ave B","historical_mean":-0.0178823935,"historical_std":3.5503742219},{"station_name":"E 2 St & Ave C","historical_mean":-0.0193654078,"historical_std":3.2746181852},{"station_name":"E 2 St & Avenue A","historical_mean":0.0416106225,"historical_std":2.9460144397},{"station_name":"E 2 St & Avenue B","historical_mean":-0.0139679255,"historical_std":3.7322312616},{"station_name":"E 2 St & Avenue C","historical_mean":-0.1204345577,"historical_std":3.4169640617},{"station_name":"E 20 St & 2 Ave","historical_mean":-0.0832729781,"historical_std":4.3603503774},{"station_name":"E 20 St & FDR Dr","historical_mean":-0.050146577,"historical_std":4.7614500096},{"station_name":"E 20 St & Park Ave","historical_mean":0.0280220728,"historical_std":3.5517461175},{"station_name":"E 22 St & 2 Ave","historical_mean":-0.0215037075,"historical_std":2.8256705443},{"station_name":"E 23 St & 1 Ave","historical_mean":0.0097258148,"historical_std":3.3629495427},{"station_name":"E 25 St & 1 Ave","historical_mean":-0.0014830143,"historical_std":3.0466374185},{"station_name":"E 25 St & 2 Ave","historical_mean":-0.1108639421,"historical_std":3.8260344097},{"station_name":"E 26 St & 3 Ave","historical_mean":-0.0347128815,"historical_std":2.6246802806},{"station_name":"E 27 St & 1 Ave","historical_mean":0.0316606311,"historical_std":6.9628957167},{"station_name":"E 27 St & Park Ave S","historical_mean":-0.0538023797,"historical_std":4.1003554906},{"station_name":"E 3 St & 1 Ave","historical_mean":-0.0004828419,"historical_std":3.0335003392},{"station_name":"E 30 St & Park Ave S","historical_mean":-0.0304190378,"historical_std":3.0886535355},{"station_name":"E 31 St & 3 Ave","historical_mean":-0.0953095361,"historical_std":3.6633549868},{"station_name":"E 32 St & Park Ave","historical_mean":-0.1084324884,"historical_std":3.6812180367},{"station_name":"E 33 St & 1 Ave","historical_mean":0.0032936713,"historical_std":6.7977844762},{"station_name":"E 33 St & 5 Ave","historical_mean":-0.0628901535,"historical_std":4.1267858696},{"station_name":"E 39 St & Lexington Ave","historical_mean":-0.1344542162,"historical_std":3.6833921342},{"station_name":"E 4 St & 2 Ave","historical_mean":0.0611139852,"historical_std":3.5936137481},{"station_name":"E 4 St & Ave B","historical_mean":0.0451112261,"historical_std":2.8009613136},{"station_name":"E 40 St & 5 Ave","historical_mean":-0.0624590447,"historical_std":6.0645697212},{"station_name":"E 40 St & Park Ave","historical_mean":-0.0610967408,"historical_std":6.0240118809},{"station_name":"E 41 St & Madison Ave (SE corner)","historical_mean":-0.1328849802,"historical_std":4.7115854601},{"station_name":"E 43 St & Madison Ave","historical_mean":-0.0183307467,"historical_std":3.8268799967},{"station_name":"E 44 St & 2 Ave","historical_mean":-0.1553198827,"historical_std":2.6797613962},{"station_name":"E 44 St & Lexington Ave","historical_mean":-0.0029315399,"historical_std":4.085493904},{"station_name":"E 45 St & 3 Ave","historical_mean":-0.020106915,"historical_std":3.5749105009},{"station_name":"E 47 St & 1 Ave","historical_mean":-0.0035178479,"historical_std":2.8225902738},{"station_name":"E 47 St & 2 Ave","historical_mean":-0.1016727022,"historical_std":5.3615211795},{"station_name":"E 47 St & Park Ave","historical_mean":-0.0043973099,"historical_std":11.7533351308},{"station_name":"E 48 St & 3 Ave","historical_mean":-0.0280048284,"historical_std":5.9784320374},{"station_name":"E 48 St & 5 Ave","historical_mean":-0.0425418176,"historical_std":5.2204337109},{"station_name":"E 5 St & Ave A","historical_mean":0.0082255561,"historical_std":3.0217359597},{"station_name":"E 5 St & Avenue C","historical_mean":-0.0007932402,"historical_std":2.603811999},{"station_name":"E 5 St & Cooper Sq","historical_mean":0.0316951198,"historical_std":2.5086092063},{"station_name":"E 51 St & 1 Ave","historical_mean":0.0025866529,"historical_std":2.6916899868},{"station_name":"E 51 St & 2 Ave","historical_mean":-0.0671495085,"historical_std":2.8403352836},{"station_name":"E 51 St & Lexington Ave","historical_mean":-0.0879289533,"historical_std":6.123289475},{"station_name":"E 53 St & Lexington Ave","historical_mean":-0.0556992585,"historical_std":5.5660840032},{"station_name":"E 53 St & Madison Ave","historical_mean":-0.0441972754,"historical_std":6.2253043423},{"station_name":"E 54 St & 1 Ave","historical_mean":-0.0364718055,"historical_std":2.7275215959},{"station_name":"E 55 St & 2 Ave","historical_mean":-0.0052767719,"historical_std":2.7179341931},{"station_name":"E 56 St & 3 Ave","historical_mean":-0.0462148646,"historical_std":5.8187932539},{"station_name":"E 56 St & Madison Ave","historical_mean":-0.0066563201,"historical_std":3.6190480346},{"station_name":"E 58 St & 1 Ave (NW Corner)","historical_mean":-0.033660976,"historical_std":2.5839215616},{"station_name":"E 58 St & 3 Ave","historical_mean":-0.0030522504,"historical_std":4.5565656398},{"station_name":"E 58 St & Madison Ave","historical_mean":-0.0928263494,"historical_std":5.7987055491},{"station_name":"E 6 St & Avenue B","historical_mean":-0.0283497155,"historical_std":3.8679361941},{"station_name":"E 6 St & Avenue D","historical_mean":-0.0028453182,"historical_std":3.0333199686},{"station_name":"E 63 St & 3 Ave","historical_mean":-0.2206242456,"historical_std":2.6204792581},{"station_name":"E 65 St & 2 Ave","historical_mean":-0.0342645284,"historical_std":2.3344528368},{"station_name":"E 68 St & 3 Ave","historical_mean":-0.0329539576,"historical_std":2.2775557257},{"station_name":"E 7 St & Ave B","historical_mean":-0.0363683394,"historical_std":3.8027924692},{"station_name":"E 7 St & Ave C","historical_mean":-0.0593205725,"historical_std":3.2448254696},{"station_name":"E 7 St & Avenue A","historical_mean":-0.0056561476,"historical_std":3.1533712831},{"station_name":"E 72 St & Park Ave","historical_mean":0.0006897741,"historical_std":2.7356090274},{"station_name":"E 72 St & York Ave","historical_mean":-0.0040696672,"historical_std":4.372936731},{"station_name":"E 74 St & 1 Ave","historical_mean":-0.0118123814,"historical_std":3.4389127087},{"station_name":"E 75 St & 3 Ave","historical_mean":-0.0098982583,"historical_std":2.4498780382},{"station_name":"E 76 St & Park Ave","historical_mean":0.004500776,"historical_std":2.4439705124},{"station_name":"E 77 St & 1 Ave","historical_mean":0.0021900328,"historical_std":3.3365612613},{"station_name":"E 77 St & 3 Ave","historical_mean":-0.019227453,"historical_std":2.5359086671},{"station_name":"E 78 St & 2 Ave","historical_mean":-0.0103811002,"historical_std":2.290186881},{"station_name":"E 81 St & York Ave","historical_mean":-0.0436109674,"historical_std":3.4824043082},{"station_name":"E 82 St & East End Ave","historical_mean":-0.0041041559,"historical_std":2.4013877328},{"station_name":"E 84 St & 1 Ave","historical_mean":0.0201241593,"historical_std":3.261490366},{"station_name":"E 84 St & Park Ave","historical_mean":-0.0163648905,"historical_std":2.6128151173},{"station_name":"E 85 St & 3 Ave","historical_mean":0.0052077944,"historical_std":3.4274290335},{"station_name":"E 85 St & York Ave","historical_mean":-0.035713054,"historical_std":3.1911165859},{"station_name":"E 88 St & 1 Ave","historical_mean":0.0110708743,"historical_std":3.4780839956},{"station_name":"E 88 St & Park Ave","historical_mean":-0.0179513709,"historical_std":2.3805340207},{"station_name":"E 89 St & 3 Ave","historical_mean":-0.0133988619,"historical_std":2.7226639179},{"station_name":"E 89 St & York Ave","historical_mean":-0.0005173306,"historical_std":3.0958632369},{"station_name":"E 9 St & 5 Ave","historical_mean":0.0178306605,"historical_std":2.7445821965},{"station_name":"E 91 St & 2 Ave","historical_mean":-0.0122434903,"historical_std":3.8212832548},{"station_name":"E 93 St & 2 Ave","historical_mean":0.0129332644,"historical_std":2.2707093582},{"station_name":"E 97 St & Madison Ave","historical_mean":0.0083979997,"historical_std":2.715555531},{"station_name":"E Houston St & Columbia St","historical_mean":0.0144852561,"historical_std":2.4874023677},{"station_name":"Emerson Pl & Myrtle Ave","historical_mean":-0.0607173651,"historical_std":2.7143051951},{"station_name":"FDR Drive & E 35 St","historical_mean":-0.1389549922,"historical_std":6.4217893277},{"station_name":"Flushing Ave & Vanderbilt Ave","historical_mean":0.0488877393,"historical_std":2.4281014852},{"station_name":"Forsyth St & Broome St","historical_mean":0.0988446284,"historical_std":2.6758568879},{"station_name":"Forsyth St & Canal St","historical_mean":0.0512847043,"historical_std":2.4426635827},{"station_name":"Forsyth St & Grand St","historical_mean":0.0105018107,"historical_std":2.6917636377},{"station_name":"Franklin Ave & St Marks Ave","historical_mean":-0.0644766339,"historical_std":2.2565763485},{"station_name":"Franklin St & Dupont St","historical_mean":0.0274702535,"historical_std":3.1912089965},{"station_name":"Franklin St & W Broadway","historical_mean":0.025193999,"historical_std":2.361112811},{"station_name":"Frederick Douglass Blvd & W 112 St","historical_mean":0.0112778065,"historical_std":3.1507465551},{"station_name":"Frederick Douglass Blvd & W 115 St","historical_mean":0.0104500776,"historical_std":2.4556549794},{"station_name":"Frederick Douglass Blvd & W 117 St","historical_mean":0.0389377479,"historical_std":2.80680435},{"station_name":"Fulton St & Adams St","historical_mean":0.0074323159,"historical_std":3.6004032068},{"station_name":"Fulton St & Broadway","historical_mean":0.0289532678,"historical_std":4.1547983753},{"station_name":"Fulton St & Waverly Ave","historical_mean":-0.032729781,"historical_std":2.4408570233},{"station_name":"Fulton St & William St","historical_mean":-0.0095533713,"historical_std":2.7427316354},{"station_name":"Gansevoort St & Hudson St","historical_mean":0.0404035178,"historical_std":3.0569737417},{"station_name":"Graham Ave & Conselyea St","historical_mean":-0.0029315399,"historical_std":2.7770932967},{"station_name":"Graham Ave & Grand St","historical_mean":0.0082428005,"historical_std":2.2885308909},{"station_name":"Gramercy Park N & Gramercy Park E","historical_mean":0.0075875151,"historical_std":2.352759025},{"station_name":"Grand Army Plaza & Central Park S","historical_mean":-0.0288325573,"historical_std":6.4949633298},{"station_name":"Grand Army Plaza & Plaza St West","historical_mean":-0.0134850836,"historical_std":2.6751995681},{"station_name":"Grand St & Elizabeth St","historical_mean":0.0424900845,"historical_std":3.9605900236},{"station_name":"Grand St & Greene St","historical_mean":0.0379720641,"historical_std":3.2769637674},{"station_name":"Grand St & Havemeyer St","historical_mean":0.0260907053,"historical_std":2.5271074297},{"station_name":"Grand St & Samuel Dickstein Plaza","historical_mean":-0.0341610623,"historical_std":4.5345864621},{"station_name":"Great Jones St","historical_mean":0.0304017934,"historical_std":3.0185279247},{"station_name":"Greene Ave & Throop Ave","historical_mean":-0.0091912399,"historical_std":2.0277273227},{"station_name":"Greenpoint Ave & Manhattan Ave","historical_mean":0.0273150543,"historical_std":2.2233211709},{"station_name":"Greenwich Ave & 8 Ave","historical_mean":0.0726332126,"historical_std":3.9793741028},{"station_name":"Greenwich Ave & Charles St","historical_mean":0.0413864459,"historical_std":3.4297382696},{"station_name":"Greenwich St & Hubert St","historical_mean":0.1548715296,"historical_std":9.3237760217},{"station_name":"Greenwich St & Perry St","historical_mean":-0.0109501638,"historical_std":3.1749746992},{"station_name":"Greenwich St & W Houston St","historical_mean":0.1210553544,"historical_std":5.4469012821},{"station_name":"Hanson Pl & Ashland Pl","historical_mean":0.0302638386,"historical_std":3.0953950312},{"station_name":"Henry St & Atlantic Ave","historical_mean":0.0069667184,"historical_std":2.2899814395},{"station_name":"Henry St & Grand St","historical_mean":-0.0769443007,"historical_std":4.2289588666},{"station_name":"Hope St & Union Ave","historical_mean":0.008070357,"historical_std":2.6193829752},{"station_name":"Howard St & Lafayette St","historical_mean":-0.0113640283,"historical_std":2.8699636989},{"station_name":"Hudson St & Reade St","historical_mean":0.0348508364,"historical_std":2.5958544189},{"station_name":"Hudson St & W 13 St","historical_mean":0.0261769271,"historical_std":3.0680045256},{"station_name":"Huron St & Franklin St","historical_mean":0.01917572,"historical_std":2.8533592872},{"station_name":"India St & Manhattan Ave","historical_mean":0.0548370409,"historical_std":2.6253454125},{"station_name":"Jay St & York St","historical_mean":0.0779617175,"historical_std":2.7138836909},{"station_name":"Kent Ave & N 7 St","historical_mean":0.2065183652,"historical_std":2.9649778684},{"station_name":"Kingsland Ave & Nassau Ave","historical_mean":-0.0059320573,"historical_std":2.4442602642},{"station_name":"Kosciuszko St & Tompkins Ave","historical_mean":-0.000344887,"historical_std":2.0209716027},{"station_name":"LaGuardia Pl & W 3 St","historical_mean":0.0992929815,"historical_std":3.376106843},{"station_name":"Lafayette Ave & Ft Greene Pl","historical_mean":0.0123642007,"historical_std":2.5798066764},{"station_name":"Lafayette Ave & St James Pl","historical_mean":-0.0580789791,"historical_std":2.3985256685},{"station_name":"Lafayette St & E 8 St","historical_mean":0.0596999483,"historical_std":5.3772980452},{"station_name":"Lafayette St & Jersey St","historical_mean":0.0220727712,"historical_std":4.358560175},{"station_name":"Lawrence St & Willoughby St","historical_mean":0.021331264,"historical_std":3.026860767},{"station_name":"Lenox Ave & W 111 St","historical_mean":0.0171753751,"historical_std":2.6703587913},{"station_name":"Lenox Ave & W 117 St","historical_mean":0.0160200034,"historical_std":2.1700862824},{"station_name":"Lenox Ave & W 126 St","historical_mean":0.0150888084,"historical_std":2.3257675724},{"station_name":"Leonard St & Church St","historical_mean":0.0224521469,"historical_std":2.6705456541},{"station_name":"Leonard St & Maujer St","historical_mean":-0.0033109157,"historical_std":2.1204863845},{"station_name":"Leonard St & Nassau Ave","historical_mean":0.046576996,"historical_std":2.1306997969},{"station_name":"Lexington Ave & Classon Ave","historical_mean":-0.0051905501,"historical_std":2.0448481652},{"station_name":"Lexington Ave & E 24 St","historical_mean":-0.0150025867,"historical_std":3.3707871075},{"station_name":"Lexington Ave & E 26 St","historical_mean":-0.1019831005,"historical_std":2.9008483779},{"station_name":"Lexington Ave & E 29 St","historical_mean":-0.082876358,"historical_std":2.7409107935},{"station_name":"Lexington Ave & E 36 St","historical_mean":-0.0238316951,"historical_std":2.7016513236},{"station_name":"Lispenard St & Broadway","historical_mean":0.0880324194,"historical_std":3.5024388851},{"station_name":"Little West St & 1 Pl","historical_mean":0.0295050871,"historical_std":3.0430768806},{"station_name":"MacDougal St & Prince St","historical_mean":0.0909812037,"historical_std":3.4091910042},{"station_name":"MacDougal St & Washington Sq","historical_mean":0.0529401621,"historical_std":2.7381215059},{"station_name":"Macon St & Nostrand Ave","historical_mean":-0.0095016382,"historical_std":2.074671189},{"station_name":"Madison Ave & E 26 St","historical_mean":0.0088463528,"historical_std":5.1252105212},{"station_name":"Madison Ave & E 82 St","historical_mean":-0.0127608208,"historical_std":2.8760831465},{"station_name":"Madison Ave & E 99 St","historical_mean":-0.0101051906,"historical_std":3.6733535067},{"station_name":"Madison St & Clinton St","historical_mean":0.0167442663,"historical_std":2.3610417814},{"station_name":"Madison St & Montgomery St","historical_mean":-0.0021555441,"historical_std":2.2903411613},{"station_name":"Market St & Cherry St","historical_mean":0.0376271771,"historical_std":2.3942854241},{"station_name":"Market St & Henry St","historical_mean":0.0063976548,"historical_std":2.6941458537},{"station_name":"McGuinness Blvd & Eagle St","historical_mean":0.0141748577,"historical_std":2.4061416853},{"station_name":"Mercer St & Bleecker St","historical_mean":0.1144507674,"historical_std":3.5653969718},{"station_name":"Mercer St & Spring St","historical_mean":0.1949646491,"historical_std":3.4853866277},{"station_name":"Meserole Ave & Manhattan Ave","historical_mean":0.0307811692,"historical_std":2.2363342415},{"station_name":"Metropolitan Ave & Bedford Ave","historical_mean":0.0579410243,"historical_std":3.4190538805},{"station_name":"Metropolitan Ave & Meeker Ave","historical_mean":0.0150715641,"historical_std":2.5333139735},{"station_name":"Milton St & Franklin St","historical_mean":0.071477841,"historical_std":2.3895012148},{"station_name":"Monroe St & Bedford Ave","historical_mean":-0.0136402828,"historical_std":2.212418139},{"station_name":"Monroe St & Tompkins Ave","historical_mean":-0.0003966201,"historical_std":2.0888909324},{"station_name":"Montague St & Clinton St","historical_mean":0.0006207967,"historical_std":2.910809754},{"station_name":"Montrose Ave & Bushwick Ave","historical_mean":-0.0158648043,"historical_std":2.5028615067},{"station_name":"Mott St & Prince St","historical_mean":0.0215726849,"historical_std":3.1250363776},{"station_name":"Murray St & Greenwich St","historical_mean":0.1542852216,"historical_std":3.304528578},{"station_name":"Murray St & West St","historical_mean":-0.0404552509,"historical_std":4.4548915359},{"station_name":"N 12 St & Bedford Ave","historical_mean":0.0217623728,"historical_std":2.7081079036},{"station_name":"N 6 St & Bedford Ave","historical_mean":0.027884118,"historical_std":3.2703990107},{"station_name":"N 7 St & Driggs Ave","historical_mean":-0.0049318848,"historical_std":3.8128740802},{"station_name":"Nassau Ave & Newell St","historical_mean":0.0379893085,"historical_std":2.5069642417},{"station_name":"Nassau Ave & Russell St","historical_mean":0.0081565787,"historical_std":2.9032973597},{"station_name":"Norfolk St & Broome St","historical_mean":0.0414726677,"historical_std":3.7863569966},{"station_name":"North Moore St & Greenwich St","historical_mean":0.0143300569,"historical_std":13.330703396},{"station_name":"Orchard St & Grand St","historical_mean":0.0085876875,"historical_std":2.5281996902},{"station_name":"Park Ave & E 124 St","historical_mean":0.0149336092,"historical_std":2.8050005096},{"station_name":"Pearl St & Hanover Square","historical_mean":0.0242800483,"historical_std":2.8914492815},{"station_name":"Perry St & Bleecker St","historical_mean":0.0576133816,"historical_std":4.5248084861},{"station_name":"Perry St & Greenwich Ave","historical_mean":0.0216416624,"historical_std":3.2084239163},{"station_name":"Pier 40 - Hudson River Park","historical_mean":0.0534574927,"historical_std":3.369153032},{"station_name":"Pike St & E Broadway","historical_mean":0.0284704259,"historical_std":2.2963088774},{"station_name":"Pike St & Monroe St","historical_mean":0.0140369029,"historical_std":2.3777226252},{"station_name":"Prospect Park West & 8 St","historical_mean":-0.0635971719,"historical_std":2.3646278403},{"station_name":"Queens Plaza North & Crescent St","historical_mean":0.0121917572,"historical_std":2.7264229048},{"station_name":"Reade St & Broadway","historical_mean":0.0096223487,"historical_std":2.9939457057},{"station_name":"Riverside Blvd & W 67 St","historical_mean":-0.0632350405,"historical_std":5.6340349401},{"station_name":"Riverside Dr & W 104 St","historical_mean":-0.0808070357,"historical_std":3.0462906131},{"station_name":"Riverside Dr & W 72 St","historical_mean":-0.0394723228,"historical_std":3.4975932922},{"station_name":"Riverside Dr & W 82 St","historical_mean":-0.1267977237,"historical_std":3.2419190431},{"station_name":"Riverside Dr & W 91 St","historical_mean":-0.1127263321,"historical_std":2.5897739356},{"station_name":"Rivington St & Chrystie St","historical_mean":0.152595275,"historical_std":2.9098163876},{"station_name":"Rivington St & Ridge St","historical_mean":-0.045990688,"historical_std":3.8447253251},{"station_name":"Roebling St & N 4 St","historical_mean":0.0342127953,"historical_std":2.1443860311},{"station_name":"S 3 St & Bedford Ave","historical_mean":0.0132264183,"historical_std":2.8994450418},{"station_name":"S 4 St & Rodney St","historical_mean":-0.0003276427,"historical_std":2.2212425339},{"station_name":"S 4 St & Wythe Ave","historical_mean":0.0330919124,"historical_std":2.9321172386},{"station_name":"S 5 Pl & S 5 St","historical_mean":0.1148301431,"historical_std":2.6205483964},{"station_name":"Scholes St & Manhattan Ave","historical_mean":-0.0056044146,"historical_std":2.7109166866},{"station_name":"South St & Whitehall St","historical_mean":0.0476461459,"historical_std":3.0368052569},{"station_name":"Spring St & Hudson St","historical_mean":0.0226073461,"historical_std":3.7185496466},{"station_name":"Spruce St & Nassau St","historical_mean":-0.0071736506,"historical_std":2.66904147},{"station_name":"St James Pl & Oliver St","historical_mean":0.0320400069,"historical_std":2.4231820758},{"station_name":"St Marks Pl & 1 Ave","historical_mean":-0.1796344197,"historical_std":4.1751801565},{"station_name":"St Marks Pl & 2 Ave","historical_mean":0.2850836351,"historical_std":4.2606877488},{"station_name":"St Nicholas Ave & Manhattan Ave","historical_mean":0.0242800483,"historical_std":2.1682327432},{"station_name":"Stagg St & Union Ave","historical_mean":-0.000638041,"historical_std":2.6975500409},{"station_name":"Stanton St & Chrystie St","historical_mean":0.129108467,"historical_std":2.8081135692},{"station_name":"Stanton St & Mangin St","historical_mean":0.0054147267,"historical_std":2.2842402157},{"station_name":"Stanton St & Norfolk St","historical_mean":0.0194516296,"historical_std":3.2564119904},{"station_name":"Steinway St & Broadway","historical_mean":-0.0095188826,"historical_std":2.0028982156},{"station_name":"Suffolk St & Stanton St","historical_mean":-0.0220900155,"historical_std":4.9368648464},{"station_name":"Sullivan St & Washington Sq","historical_mean":0.0318675634,"historical_std":3.4167476079},{"station_name":"Thompson St & Bleecker St","historical_mean":0.023728229,"historical_std":3.3603816588},{"station_name":"Union Ave & N 12 St","historical_mean":0.0417658217,"historical_std":2.573142701},{"station_name":"University Pl & E 14 St","historical_mean":0.1857906536,"historical_std":4.5373293688},{"station_name":"University Pl & E 8 St","historical_mean":-0.0080531126,"historical_std":3.768346944},{"station_name":"Vernon Blvd & 50 Ave","historical_mean":0.0175202621,"historical_std":4.1100004458},{"station_name":"Vesey Pl & River Terrace","historical_mean":-0.0127780652,"historical_std":4.3876222745},{"station_name":"Vesey St & Church St","historical_mean":-0.0050698396,"historical_std":4.3991170431},{"station_name":"W 10 St & Washington St","historical_mean":-0.0052422832,"historical_std":2.9880584741},{"station_name":"W 100 St & Broadway","historical_mean":-0.0833074668,"historical_std":3.4267550519},{"station_name":"W 100 St & Manhattan Ave","historical_mean":-0.0205897569,"historical_std":2.7283546227},{"station_name":"W 104 St & Amsterdam Ave","historical_mean":-0.0765304363,"historical_std":2.3260439748},{"station_name":"W 106 St & Amsterdam Ave","historical_mean":-0.0528539403,"historical_std":2.5107916992},{"station_name":"W 106 St & Central Park West","historical_mean":-0.0514054147,"historical_std":3.1186943258},{"station_name":"W 11 St & 6 Ave","historical_mean":-0.0186239007,"historical_std":3.2474390192},{"station_name":"W 110 St & Amsterdam Ave","historical_mean":-0.0469908605,"historical_std":2.4943846985},{"station_name":"W 12 St & Hudson St","historical_mean":0.0098465253,"historical_std":2.9265361082},{"station_name":"W 13 St & 5 Ave","historical_mean":-0.0107777203,"historical_std":3.4562179444},{"station_name":"W 13 St & 7 Ave","historical_mean":0.0198482497,"historical_std":3.3574933051},{"station_name":"W 15 St & 10 Ave","historical_mean":0.0793757544,"historical_std":3.7266801418},{"station_name":"W 15 St & 6 Ave","historical_mean":-0.0204173133,"historical_std":3.8448183554},{"station_name":"W 15 St & 7 Ave","historical_mean":-0.0037075358,"historical_std":3.6146252812},{"station_name":"W 16 St & The High Line","historical_mean":0.0143990343,"historical_std":4.4708728851},{"station_name":"W 17 St & 8 Ave","historical_mean":-0.0066908088,"historical_std":3.3304535652},{"station_name":"W 18 St & 6 Ave","historical_mean":0.0387825487,"historical_std":5.5495301885},{"station_name":"W 20 St & 10 Ave","historical_mean":0.0303500604,"historical_std":3.9370851526},{"station_name":"W 20 St & 7 Ave","historical_mean":0.0106052768,"historical_std":3.5905774496},{"station_name":"W 20 St & 8 Ave","historical_mean":0.028522159,"historical_std":4.0267279098},{"station_name":"W 21 St & 6 Ave","historical_mean":0.064235213,"historical_std":5.8625517989},{"station_name":"W 22 St & 10 Ave","historical_mean":0.0156923608,"historical_std":4.5764051889},{"station_name":"W 22 St & 8 Ave","historical_mean":0.0349715468,"historical_std":4.1029137052},{"station_name":"W 24 St & 7 Ave","historical_mean":-0.0504224866,"historical_std":3.8416297367},{"station_name":"W 25 St & 6 Ave","historical_mean":0.0066390757,"historical_std":3.6145256681},{"station_name":"W 25 St & 9 Ave","historical_mean":0.0019313675,"historical_std":2.675864496},{"station_name":"W 26 St & 10 Ave","historical_mean":0.0456285566,"historical_std":3.8057773464},{"station_name":"W 26 St & 8 Ave","historical_mean":-0.0253319538,"historical_std":2.9029012911},{"station_name":"W 27 St & 6 Ave","historical_mean":-0.0272805656,"historical_std":2.8372746562},{"station_name":"W 27 St & 7 Ave","historical_mean":0.017761683,"historical_std":4.1711924467},{"station_name":"W 29 St & 9 Ave","historical_mean":0.0121572685,"historical_std":2.9284477558},{"station_name":"W 30 St & 10 Ave","historical_mean":0.014433523,"historical_std":4.7726799425},{"station_name":"W 30 St & 8 Ave","historical_mean":-0.010174168,"historical_std":3.2906741557},{"station_name":"W 31 St & 7 Ave","historical_mean":-0.004500776,"historical_std":6.6415451004},{"station_name":"W 33 St & 10 Ave","historical_mean":-0.001172616,"historical_std":4.8601648785},{"station_name":"W 33 St & 7 Ave","historical_mean":-0.0506294189,"historical_std":4.3124077551},{"station_name":"W 34 St & 11 Ave","historical_mean":0.0083290222,"historical_std":5.5617028449},{"station_name":"W 34 St & Hudson Blvd E","historical_mean":0.0681669253,"historical_std":5.136253378},{"station_name":"W 35 St & 9 Ave","historical_mean":-0.0305225039,"historical_std":2.6468427474},{"station_name":"W 35 St & Dyer Ave","historical_mean":-0.0699948267,"historical_std":2.8335040059},{"station_name":"W 36 St & 7 Ave","historical_mean":0.0002759096,"historical_std":2.4697797386},{"station_name":"W 36 St & 9 Ave","historical_mean":-0.0878427315,"historical_std":2.519887714},{"station_name":"W 37 St & 10 Ave","historical_mean":-0.046576996,"historical_std":3.5678623504},{"station_name":"W 37 St & 5 Ave","historical_mean":-0.0658734265,"historical_std":4.0095085288},{"station_name":"W 4 St & 7 Ave S","historical_mean":0.0326263149,"historical_std":4.2991731017},{"station_name":"W 41 St & 8 Ave","historical_mean":-0.1166235558,"historical_std":8.818227251},{"station_name":"W 42 St & 6 Ave","historical_mean":-0.0028108295,"historical_std":5.1291558969},{"station_name":"W 42 St & 8 Ave","historical_mean":0.0240041386,"historical_std":4.5696039976},{"station_name":"W 42 St & Dyer Ave","historical_mean":-0.0319882738,"historical_std":3.4970386088},{"station_name":"W 43 St & 10 Ave","historical_mean":-0.1359372306,"historical_std":6.89302003},{"station_name":"W 44 St & 11 Ave","historical_mean":-0.2251767546,"historical_std":5.8773492992},{"station_name":"W 44 St & 5 Ave","historical_mean":0.0403172961,"historical_std":7.4537179744},{"station_name":"W 45 St & 8 Ave","historical_mean":-0.0893774789,"historical_std":4.8448585541},{"station_name":"W 46 St & 11 Ave","historical_mean":0.0127953095,"historical_std":2.8179836801},{"station_name":"W 47 St & 10 Ave","historical_mean":-0.0249870667,"historical_std":3.9401898471},{"station_name":"W 47 St & 6 Ave","historical_mean":-0.0460596655,"historical_std":5.788985693},{"station_name":"W 47 St & 9 Ave","historical_mean":-0.0947922056,"historical_std":3.0053666991},{"station_name":"W 48 St &  Rockefeller Plaza","historical_mean":-0.0070356958,"historical_std":4.4740927071},{"station_name":"W 49 St & 8 Ave","historical_mean":-0.5013967926,"historical_std":3.6080814169},{"station_name":"W 50 St & 10 Ave","historical_mean":-0.2209001552,"historical_std":3.5472249471},{"station_name":"W 50 St & 9 Ave","historical_mean":-0.0740817382,"historical_std":2.8035697838},{"station_name":"W 51 St & 6 Ave","historical_mean":-0.0113295396,"historical_std":7.2665273961},{"station_name":"W 51 St & Rockefeller Plaza","historical_mean":0.0052940162,"historical_std":4.7090838572},{"station_name":"W 52 St & 11 Ave","historical_mean":-0.0508018624,"historical_std":3.0039617501},{"station_name":"W 52 St & 6 Ave","historical_mean":-0.0167615106,"historical_std":6.1660946336},{"station_name":"W 53 St & 10 Ave","historical_mean":-0.0117606484,"historical_std":3.3672220702},{"station_name":"W 54 St & 11 Ave","historical_mean":-0.1333333333,"historical_std":4.0431058402},{"station_name":"W 54 St & 9 Ave","historical_mean":-0.1681669253,"historical_std":3.2994299005},{"station_name":"W 55 St & 6 Ave","historical_mean":0.0090877738,"historical_std":6.304343608},{"station_name":"W 56 St & 10 Ave","historical_mean":-0.1604069667,"historical_std":3.0055387385},{"station_name":"W 56 St & 6 Ave","historical_mean":0.0067770305,"historical_std":3.9308863333},{"station_name":"W 56 St & 8 Ave","historical_mean":-0.0501120883,"historical_std":2.4759944373},{"station_name":"W 59 St & 10 Ave","historical_mean":-0.3072081393,"historical_std":4.6317086796},{"station_name":"W 63 St & Broadway","historical_mean":-0.0320227625,"historical_std":3.400123484},{"station_name":"W 64 St & Thelonious Monk Circle","historical_mean":-0.0425935506,"historical_std":4.1725422357},{"station_name":"W 67 St & Broadway","historical_mean":-0.0482152095,"historical_std":3.316256103},{"station_name":"W 70 St & Amsterdam Ave","historical_mean":-0.0823417831,"historical_std":3.6921299526},{"station_name":"W 74 St & Columbus Ave","historical_mean":-0.0395240559,"historical_std":2.5246355917},{"station_name":"W 76 St & Columbus Ave","historical_mean":-0.2957406449,"historical_std":3.7859853145},{"station_name":"W 82 St & Central Park West","historical_mean":-0.1204173133,"historical_std":2.7153180685},{"station_name":"W 84 St & Columbus Ave","historical_mean":-0.081065701,"historical_std":2.8628598728},{"station_name":"W 87 St & Amsterdam Ave","historical_mean":-0.0643386791,"historical_std":2.8229374867},{"station_name":"W 87 St & West End Ave","historical_mean":-0.0902914296,"historical_std":3.1184329756},{"station_name":"W 89 St & Columbus Ave","historical_mean":-0.2428694603,"historical_std":3.3142280833},{"station_name":"W 90 St & Amsterdam Ave","historical_mean":-0.0363683394,"historical_std":2.2713699706},{"station_name":"W 92 St & Broadway","historical_mean":-0.031505432,"historical_std":2.259560536},{"station_name":"W 95 St & Broadway","historical_mean":-0.0353854113,"historical_std":2.747351127},{"station_name":"W Broadway & Spring St","historical_mean":0.1494568029,"historical_std":3.0841985853},{"station_name":"W Broadway & W Houston St","historical_mean":0.0839799966,"historical_std":2.5076785197},{"station_name":"Warren St & W Broadway","historical_mean":0.0347646146,"historical_std":2.6606253567},{"station_name":"Washington Ave & Park Ave","historical_mean":-0.0124159338,"historical_std":2.2088721213},{"station_name":"Washington Pl & 6 Ave","historical_mean":0.0024314537,"historical_std":3.898080435},{"station_name":"Washington Pl & Broadway","historical_mean":0.0221762373,"historical_std":3.0273873372},{"station_name":"Washington St & Gansevoort St","historical_mean":0.052836696,"historical_std":4.1219701629},{"station_name":"Watts St & Greenwich St","historical_mean":0.0188308329,"historical_std":2.5504732177},{"station_name":"West Drive & Prospect Park West","historical_mean":-0.0035350923,"historical_std":3.2255358288},{"station_name":"West End Ave & W 107 St","historical_mean":-0.0988446284,"historical_std":2.2766749739},{"station_name":"West End Ave & W 60 St","historical_mean":0.02583204,"historical_std":4.3839179251},{"station_name":"West End Ave & W 94 St","historical_mean":-0.0402828074,"historical_std":2.3793369587},{"station_name":"West St & Chambers St","historical_mean":0.0950853595,"historical_std":5.223484489},{"station_name":"West St & Liberty St","historical_mean":0.0214692188,"historical_std":4.2075322594},{"station_name":"West Thames St","historical_mean":0.0109501638,"historical_std":4.0039902467},{"station_name":"William St & Pine St","historical_mean":-0.0021555441,"historical_std":2.9951150125},{"station_name":"Willoughby Ave & Hall St","historical_mean":-0.0795654423,"historical_std":3.0467082061},{"station_name":"Willoughby St & Fleet St","historical_mean":0.0291774444,"historical_std":2.7146146365},{"station_name":"Wyckoff Ave & Gates Ave","historical_mean":-0.0413519572,"historical_std":2.220962425},{"station_name":"Wythe Ave & Metropolitan Ave","historical_mean":0.0676151061,"historical_std":2.8348577833}]
+{
+  "1 Ave & E 16 St": {
+    "mean_demand": 6.656321048736572,
+    "std_demand": 6.826653003692627,
+    "max_demand": 38.0
+  },
+  "1 Ave & E 18 St": {
+    "mean_demand": 6.694050312042236,
+    "std_demand": 7.251436233520508,
+    "max_demand": 40.0
+  },
+  "1 Ave & E 30 St": {
+    "mean_demand": 4.676966667175293,
+    "std_demand": 5.632115364074707,
+    "max_demand": 38.0
+  },
+  "1 Ave & E 39 St": {
+    "mean_demand": 3.981938362121582,
+    "std_demand": 6.175106525421143,
+    "max_demand": 39.0
+  },
+  "1 Ave & E 6 St": {
+    "mean_demand": 5.098464012145996,
+    "std_demand": 6.374415874481201,
+    "max_demand": 38.0
+  },
+  "1 Ave & E 62 St": {
+    "mean_demand": 6.279980659484863,
+    "std_demand": 7.431737899780273,
+    "max_demand": 40.0
+  },
+  "1 Ave & E 68 St": {
+    "mean_demand": 8.006186485290527,
+    "std_demand": 9.18961238861084,
+    "max_demand": 41.0
+  },
+  "10 Ave & W 14 St": {
+    "mean_demand": 4.9786248207092285,
+    "std_demand": 8.465874671936035,
+    "max_demand": 41.0
+  },
+  "10 Ave & W 28 St": {
+    "mean_demand": 6.733637809753418,
+    "std_demand": 7.299740791320801,
+    "max_demand": 39.0
+  },
+  "11 Ave & W 27 St": {
+    "mean_demand": 5.887469291687012,
+    "std_demand": 7.395707607269287,
+    "max_demand": 41.0
+  },
+  "11 Ave & W 41 St": {
+    "mean_demand": 8.7144775390625,
+    "std_demand": 9.316007614135742,
+    "max_demand": 39.0
+  },
+  "11 Ave & W 59 St": {
+    "mean_demand": 4.734447956085205,
+    "std_demand": 5.8004021644592285,
+    "max_demand": 40.0
+  },
+  "12 Ave & W 40 St": {
+    "mean_demand": 6.952154159545898,
+    "std_demand": 9.50532341003418,
+    "max_demand": 41.0
+  },
+  "2 Ave & E 29 St": {
+    "mean_demand": 5.776676177978516,
+    "std_demand": 7.51552677154541,
+    "max_demand": 40.0
+  },
+  "2 Ave & E 31 St": {
+    "mean_demand": 5.669456481933594,
+    "std_demand": 7.0433478355407715,
+    "max_demand": 41.0
+  },
+  "2 Ave & E 72 St": {
+    "mean_demand": 5.795001029968262,
+    "std_demand": 6.602828025817871,
+    "max_demand": 39.0
+  },
+  "4 Ave & E 12 St": {
+    "mean_demand": 5.675363540649414,
+    "std_demand": 6.708305358886719,
+    "max_demand": 40.0
+  },
+  "5 Ave & E 72 St": {
+    "mean_demand": 5.734218597412109,
+    "std_demand": 8.565780639648438,
+    "max_demand": 41.0
+  },
+  "6 Ave & Broome St": {
+    "mean_demand": 5.051032066345215,
+    "std_demand": 6.293211936950684,
+    "max_demand": 40.0
+  },
+  "6 Ave & W 33 St": {
+    "mean_demand": 8.756339073181152,
+    "std_demand": 9.16439151763916,
+    "max_demand": 42.0
+  },
+  "6 Ave & W 34 St": {
+    "mean_demand": 7.309309482574463,
+    "std_demand": 8.230229377746582,
+    "max_demand": 41.0
+  },
+  "6 Ave & W 45 St": {
+    "mean_demand": 4.526308536529541,
+    "std_demand": 6.939907550811768,
+    "max_demand": 41.0
+  },
+  "7 Ave & Central Park South": {
+    "mean_demand": 6.827227592468262,
+    "std_demand": 9.190390586853027,
+    "max_demand": 43.0
+  },
+  "7 Ave S & Bleecker St": {
+    "mean_demand": 3.85066819190979,
+    "std_demand": 6.157544136047363,
+    "max_demand": 41.0
+  },
+  "8 Ave & W 16 St": {
+    "mean_demand": 6.45831823348999,
+    "std_demand": 8.324631690979004,
+    "max_demand": 41.0
+  },
+  "8 Ave & W 31 St": {
+    "mean_demand": 7.665792465209961,
+    "std_demand": 8.504081726074219,
+    "max_demand": 41.0
+  },
+  "8 Ave & W 33 St": {
+    "mean_demand": 5.996279716491699,
+    "std_demand": 7.5986528396606445,
+    "max_demand": 41.0
+  },
+  "8 Ave & W 38 St": {
+    "mean_demand": 6.822226047515869,
+    "std_demand": 8.175281524658203,
+    "max_demand": 44.0
+  },
+  "8 Ave & W 49 St": {
+    "mean_demand": 5.055679798126221,
+    "std_demand": 7.314865589141846,
+    "max_demand": 42.0
+  },
+  "8 Ave & W 52 St": {
+    "mean_demand": 5.958163261413574,
+    "std_demand": 6.752295970916748,
+    "max_demand": 41.0
+  },
+  "9 Ave & W 18 St": {
+    "mean_demand": 5.041133403778076,
+    "std_demand": 6.277754783630371,
+    "max_demand": 39.0
+  },
+  "9 Ave & W 22 St": {
+    "mean_demand": 7.688959121704102,
+    "std_demand": 8.393904685974121,
+    "max_demand": 40.0
+  },
+  "9 Ave & W 45 St": {
+    "mean_demand": 6.30355167388916,
+    "std_demand": 6.6788249015808105,
+    "max_demand": 40.0
+  },
+  "Allen St & Hester St": {
+    "mean_demand": 5.214089870452881,
+    "std_demand": 5.9554643630981445,
+    "max_demand": 40.0
+  },
+  "Allen St & Rivington St": {
+    "mean_demand": 6.022314071655273,
+    "std_demand": 6.56927490234375,
+    "max_demand": 41.0
+  },
+  "Allen St & Stanton St": {
+    "mean_demand": 6.125164031982422,
+    "std_demand": 6.535382270812988,
+    "max_demand": 39.0
+  },
+  "Amsterdam Ave & W 73 St": {
+    "mean_demand": 7.147327423095703,
+    "std_demand": 7.745375633239746,
+    "max_demand": 38.0
+  },
+  "Amsterdam Ave & W 79 St": {
+    "mean_demand": 4.9578046798706055,
+    "std_demand": 6.1482696533203125,
+    "max_demand": 40.0
+  },
+  "Amsterdam Ave & W 82 St": {
+    "mean_demand": 4.463484287261963,
+    "std_demand": 5.370292663574219,
+    "max_demand": 38.0
+  },
+  "Ave A & E 11 St": {
+    "mean_demand": 3.513254165649414,
+    "std_demand": 5.3962531089782715,
+    "max_demand": 38.0
+  },
+  "Ave A & E 14 St": {
+    "mean_demand": 5.815104007720947,
+    "std_demand": 8.41059398651123,
+    "max_demand": 39.0
+  },
+  "Barrow St & Hudson St": {
+    "mean_demand": 4.614259243011475,
+    "std_demand": 5.478882789611816,
+    "max_demand": 39.0
+  },
+  "Berry St & N 8 St": {
+    "mean_demand": 4.118434906005859,
+    "std_demand": 5.278800964355469,
+    "max_demand": 38.0
+  },
+  "Bleecker St & Crosby St": {
+    "mean_demand": 4.866459846496582,
+    "std_demand": 7.206489562988281,
+    "max_demand": 41.0
+  },
+  "Broadway & E 14 St": {
+    "mean_demand": 8.84564208984375,
+    "std_demand": 9.870766639709473,
+    "max_demand": 41.0
+  },
+  "Broadway & E 21 St": {
+    "mean_demand": 6.111274242401123,
+    "std_demand": 8.976166725158691,
+    "max_demand": 40.0
+  },
+  "Broadway & W 25 St": {
+    "mean_demand": 8.037947654724121,
+    "std_demand": 9.795228004455566,
+    "max_demand": 42.0
+  },
+  "Broadway & W 29 St": {
+    "mean_demand": 6.492334365844727,
+    "std_demand": 7.8674187660217285,
+    "max_demand": 41.0
+  },
+  "Broadway & W 41 St": {
+    "mean_demand": 5.830859661102295,
+    "std_demand": 7.18912935256958,
+    "max_demand": 41.0
+  },
+  "Broadway & W 56 St": {
+    "mean_demand": 5.439012050628662,
+    "std_demand": 6.909146785736084,
+    "max_demand": 42.0
+  },
+  "Broadway & W 58 St": {
+    "mean_demand": 7.184336185455322,
+    "std_demand": 9.981616020202637,
+    "max_demand": 40.0
+  },
+  "Broadway & W 61 St": {
+    "mean_demand": 4.396940231323242,
+    "std_demand": 7.121629238128662,
+    "max_demand": 41.0
+  },
+  "Canal St & Rutgers St": {
+    "mean_demand": 7.232641220092773,
+    "std_demand": 7.870040416717529,
+    "max_demand": 40.0
+  },
+  "Carmine St & 6 Ave": {
+    "mean_demand": 7.484684467315674,
+    "std_demand": 8.465770721435547,
+    "max_demand": 39.0
+  },
+  "Central Park North & Adam Clayton Powell Blvd": {
+    "mean_demand": 4.776770114898682,
+    "std_demand": 6.899725914001465,
+    "max_demand": 42.0
+  },
+  "Central Park S & 6 Ave": {
+    "mean_demand": 6.600633144378662,
+    "std_demand": 9.21314525604248,
+    "max_demand": 42.0
+  },
+  "Central Park W & W 91 St": {
+    "mean_demand": 4.416535377502441,
+    "std_demand": 6.449090480804443,
+    "max_demand": 41.0
+  },
+  "Central Park West & W 68 St": {
+    "mean_demand": 5.002147197723389,
+    "std_demand": 7.746550559997559,
+    "max_demand": 42.0
+  },
+  "Central Park West & W 72 St": {
+    "mean_demand": 5.0855536460876465,
+    "std_demand": 7.81068754196167,
+    "max_demand": 41.0
+  },
+  "Centre St & Chambers St": {
+    "mean_demand": 5.514086723327637,
+    "std_demand": 7.172364711761475,
+    "max_demand": 40.0
+  },
+  "Christopher St & Greenwich St": {
+    "mean_demand": 7.3213019371032715,
+    "std_demand": 8.525954246520996,
+    "max_demand": 41.0
+  },
+  "Cleveland Pl & Spring St": {
+    "mean_demand": 8.133450508117676,
+    "std_demand": 9.396729469299316,
+    "max_demand": 41.0
+  },
+  "Clinton St & Grand St": {
+    "mean_demand": 7.5848541259765625,
+    "std_demand": 8.440347671508789,
+    "max_demand": 41.0
+  },
+  "Columbus Ave & W 72 St": {
+    "mean_demand": 7.281157493591309,
+    "std_demand": 8.31582260131836,
+    "max_demand": 43.0
+  },
+  "Columbus Ave & W 95 St": {
+    "mean_demand": 4.861416339874268,
+    "std_demand": 5.6499481201171875,
+    "max_demand": 38.0
+  },
+  "Cooper Square & Astor Pl": {
+    "mean_demand": 6.159308433532715,
+    "std_demand": 7.085301399230957,
+    "max_demand": 40.0
+  },
+  "E 1 St & 1 Ave": {
+    "mean_demand": 5.5483880043029785,
+    "std_demand": 7.037922382354736,
+    "max_demand": 38.0
+  },
+  "E 10 St & 2 Ave": {
+    "mean_demand": 3.8502519130706787,
+    "std_demand": 5.894647121429443,
+    "max_demand": 40.0
+  },
+  "E 11 St & 1 Ave": {
+    "mean_demand": 5.62247371673584,
+    "std_demand": 6.240423202514648,
+    "max_demand": 38.0
+  },
+  "E 11 St & 3 Ave": {
+    "mean_demand": 3.7411842346191406,
+    "std_demand": 5.046578884124756,
+    "max_demand": 37.0
+  },
+  "E 13 St & 2 Ave": {
+    "mean_demand": 5.598474025726318,
+    "std_demand": 6.997257232666016,
+    "max_demand": 39.0
+  },
+  "E 13 St & Avenue A": {
+    "mean_demand": 4.229739189147949,
+    "std_demand": 6.909326076507568,
+    "max_demand": 39.0
+  },
+  "E 14 St & 1 Ave": {
+    "mean_demand": 3.75543475151062,
+    "std_demand": 5.618910312652588,
+    "max_demand": 38.0
+  },
+  "E 15 St & 3 Ave": {
+    "mean_demand": 5.816093921661377,
+    "std_demand": 6.434609889984131,
+    "max_demand": 38.0
+  },
+  "E 16 St & 5 Ave": {
+    "mean_demand": 6.120293140411377,
+    "std_demand": 7.82125186920166,
+    "max_demand": 42.0
+  },
+  "E 16 St & Irving Pl": {
+    "mean_demand": 4.428354263305664,
+    "std_demand": 5.634893417358398,
+    "max_demand": 42.0
+  },
+  "E 17 St & Broadway": {
+    "mean_demand": 7.565613746643066,
+    "std_demand": 9.782776832580566,
+    "max_demand": 41.0
+  },
+  "E 19 St & 3 Ave": {
+    "mean_demand": 4.00037956237793,
+    "std_demand": 4.525862216949463,
+    "max_demand": 37.0
+  },
+  "E 2 St & Avenue B": {
+    "mean_demand": 3.875509023666382,
+    "std_demand": 5.974400997161865,
+    "max_demand": 38.0
+  },
+  "E 20 St & 2 Ave": {
+    "mean_demand": 5.21311616897583,
+    "std_demand": 6.375189781188965,
+    "max_demand": 41.0
+  },
+  "E 20 St & FDR Dr": {
+    "mean_demand": 3.907658100128174,
+    "std_demand": 6.199587821960449,
+    "max_demand": 40.0
+  },
+  "E 20 St & Park Ave": {
+    "mean_demand": 4.978093147277832,
+    "std_demand": 6.114184856414795,
+    "max_demand": 40.0
+  },
+  "E 23 St & 1 Ave": {
+    "mean_demand": 5.603503227233887,
+    "std_demand": 6.407447814941406,
+    "max_demand": 40.0
+  },
+  "E 25 St & 2 Ave": {
+    "mean_demand": 5.773653984069824,
+    "std_demand": 6.358017921447754,
+    "max_demand": 40.0
+  },
+  "E 27 St & 1 Ave": {
+    "mean_demand": 5.576050758361816,
+    "std_demand": 7.146955966949463,
+    "max_demand": 43.0
+  },
+  "E 31 St & 3 Ave": {
+    "mean_demand": 5.863619804382324,
+    "std_demand": 6.905598163604736,
+    "max_demand": 39.0
+  },
+  "E 32 St & Park Ave": {
+    "mean_demand": 5.792356491088867,
+    "std_demand": 7.167081356048584,
+    "max_demand": 40.0
+  },
+  "E 33 St & 1 Ave": {
+    "mean_demand": 8.673828125,
+    "std_demand": 9.284534454345703,
+    "max_demand": 42.0
+  },
+  "E 33 St & 5 Ave": {
+    "mean_demand": 5.3256916999816895,
+    "std_demand": 6.404702186584473,
+    "max_demand": 44.0
+  },
+  "E 39 St & Lexington Ave": {
+    "mean_demand": 5.044067859649658,
+    "std_demand": 6.691349983215332,
+    "max_demand": 41.0
+  },
+  "E 4 St & 2 Ave": {
+    "mean_demand": 5.098390579223633,
+    "std_demand": 5.4037957191467285,
+    "max_demand": 38.0
+  },
+  "E 40 St & Park Ave": {
+    "mean_demand": 4.270473003387451,
+    "std_demand": 7.477987766265869,
+    "max_demand": 41.0
+  },
+  "E 44 St & Lexington Ave": {
+    "mean_demand": 4.539458274841309,
+    "std_demand": 6.8014960289001465,
+    "max_demand": 41.0
+  },
+  "E 55 St & 2 Ave": {
+    "mean_demand": 4.131223201751709,
+    "std_demand": 5.208446502685547,
+    "max_demand": 38.0
+  },
+  "E 58 St & 3 Ave": {
+    "mean_demand": 5.350521087646484,
+    "std_demand": 6.942978382110596,
+    "max_demand": 41.0
+  },
+  "E 7 St & Avenue A": {
+    "mean_demand": 4.104132652282715,
+    "std_demand": 6.2423624992370605,
+    "max_demand": 39.0
+  },
+  "E 72 St & York Ave": {
+    "mean_demand": 5.7836689949035645,
+    "std_demand": 6.891032695770264,
+    "max_demand": 41.0
+  },
+  "E 74 St & 1 Ave": {
+    "mean_demand": 4.59639310836792,
+    "std_demand": 5.6887383460998535,
+    "max_demand": 43.0
+  },
+  "E 84 St & 1 Ave": {
+    "mean_demand": 3.8145227432250977,
+    "std_demand": 4.509406566619873,
+    "max_demand": 36.0
+  },
+  "E 85 St & 3 Ave": {
+    "mean_demand": 6.160198211669922,
+    "std_demand": 6.923588275909424,
+    "max_demand": 39.0
+  },
+  "FDR Drive & E 35 St": {
+    "mean_demand": 5.890692710876465,
+    "std_demand": 7.952444076538086,
+    "max_demand": 43.0
+  },
+  "Forsyth St & Canal St": {
+    "mean_demand": 4.334615707397461,
+    "std_demand": 5.2400312423706055,
+    "max_demand": 40.0
+  },
+  "Forsyth St & Grand St": {
+    "mean_demand": 3.6534810066223145,
+    "std_demand": 6.625454902648926,
+    "max_demand": 39.0
+  },
+  "Fulton St & Broadway": {
+    "mean_demand": 4.319064140319824,
+    "std_demand": 5.687684059143066,
+    "max_demand": 40.0
+  },
+  "Grand Army Plaza & Central Park S": {
+    "mean_demand": 4.762789249420166,
+    "std_demand": 8.222525596618652,
+    "max_demand": 41.0
+  },
+  "Grand St & Elizabeth St": {
+    "mean_demand": 7.592148780822754,
+    "std_demand": 8.561322212219238,
+    "max_demand": 40.0
+  },
+  "Great Jones St": {
+    "mean_demand": 6.134823322296143,
+    "std_demand": 7.33163595199585,
+    "max_demand": 39.0
+  },
+  "Greenwich Ave & 8 Ave": {
+    "mean_demand": 7.413288116455078,
+    "std_demand": 8.561458587646484,
+    "max_demand": 41.0
+  },
+  "Greenwich Ave & Charles St": {
+    "mean_demand": 4.307106971740723,
+    "std_demand": 5.359358310699463,
+    "max_demand": 37.0
+  },
+  "Greenwich St & W Houston St": {
+    "mean_demand": 5.119167804718018,
+    "std_demand": 6.5463690757751465,
+    "max_demand": 41.0
+  },
+  "Hanson Pl & Ashland Pl": {
+    "mean_demand": 5.361749649047852,
+    "std_demand": 6.4406304359436035,
+    "max_demand": 39.0
+  },
+  "Henry St & Grand St": {
+    "mean_demand": 5.37314510345459,
+    "std_demand": 6.24891471862793,
+    "max_demand": 38.0
+  },
+  "Hudson St & W 13 St": {
+    "mean_demand": 4.5107011795043945,
+    "std_demand": 6.666332721710205,
+    "max_demand": 40.0
+  },
+  "Kent Ave & N 7 St": {
+    "mean_demand": 5.325531959533691,
+    "std_demand": 7.076568126678467,
+    "max_demand": 41.0
+  },
+  "LaGuardia Pl & W 3 St": {
+    "mean_demand": 5.044035911560059,
+    "std_demand": 5.8418169021606445,
+    "max_demand": 43.0
+  },
+  "Lafayette St & E 8 St": {
+    "mean_demand": 7.997745990753174,
+    "std_demand": 9.338577270507812,
+    "max_demand": 40.0
+  },
+  "Lafayette St & Jersey St": {
+    "mean_demand": 6.515632152557373,
+    "std_demand": 8.08087158203125,
+    "max_demand": 41.0
+  },
+  "Lexington Ave & E 24 St": {
+    "mean_demand": 4.986608982086182,
+    "std_demand": 6.789630889892578,
+    "max_demand": 39.0
+  },
+  "Lexington Ave & E 29 St": {
+    "mean_demand": 4.038383483886719,
+    "std_demand": 4.787973403930664,
+    "max_demand": 40.0
+  },
+  "Lexington Ave & E 36 St": {
+    "mean_demand": 4.281290054321289,
+    "std_demand": 4.862232685089111,
+    "max_demand": 39.0
+  },
+  "Little West St & 1 Pl": {
+    "mean_demand": 4.780331611633301,
+    "std_demand": 6.7244415283203125,
+    "max_demand": 41.0
+  },
+  "MacDougal St & Prince St": {
+    "mean_demand": 5.346283435821533,
+    "std_demand": 6.427862167358398,
+    "max_demand": 41.0
+  },
+  "Mercer St & Bleecker St": {
+    "mean_demand": 4.928032875061035,
+    "std_demand": 6.0407328605651855,
+    "max_demand": 39.0
+  },
+  "Metropolitan Ave & Bedford Ave": {
+    "mean_demand": 6.360201835632324,
+    "std_demand": 7.708089828491211,
+    "max_demand": 41.0
+  },
+  "Mott St & Prince St": {
+    "mean_demand": 5.899151802062988,
+    "std_demand": 6.891050815582275,
+    "max_demand": 40.0
+  },
+  "N 6 St & Bedford Ave": {
+    "mean_demand": 5.359925746917725,
+    "std_demand": 6.793241500854492,
+    "max_demand": 39.0
+  },
+  "Norfolk St & Broome St": {
+    "mean_demand": 7.283605098724365,
+    "std_demand": 7.9377827644348145,
+    "max_demand": 40.0
+  },
+  "North Moore St & Greenwich St": {
+    "mean_demand": 4.354773044586182,
+    "std_demand": 6.386667251586914,
+    "max_demand": 41.0
+  },
+  "Perry St & Bleecker St": {
+    "mean_demand": 4.755107402801514,
+    "std_demand": 5.660390377044678,
+    "max_demand": 38.0
+  },
+  "Pier 40 - Hudson River Park": {
+    "mean_demand": 6.4956865310668945,
+    "std_demand": 8.826857566833496,
+    "max_demand": 41.0
+  },
+  "Queens Plaza North & Crescent St": {
+    "mean_demand": 4.596887111663818,
+    "std_demand": 5.6397809982299805,
+    "max_demand": 39.0
+  },
+  "Riverside Blvd & W 67 St": {
+    "mean_demand": 5.410665035247803,
+    "std_demand": 7.338863849639893,
+    "max_demand": 41.0
+  },
+  "Riverside Dr & W 72 St": {
+    "mean_demand": 4.399517059326172,
+    "std_demand": 5.8986310958862305,
+    "max_demand": 41.0
+  },
+  "Rivington St & Chrystie St": {
+    "mean_demand": 3.9645161628723145,
+    "std_demand": 4.791543960571289,
+    "max_demand": 38.0
+  },
+  "Rivington St & Ridge St": {
+    "mean_demand": 4.434164524078369,
+    "std_demand": 4.871137619018555,
+    "max_demand": 36.0
+  },
+  "S 3 St & Bedford Ave": {
+    "mean_demand": 4.642576217651367,
+    "std_demand": 5.6662774085998535,
+    "max_demand": 40.0
+  },
+  "S 4 St & Wythe Ave": {
+    "mean_demand": 5.650609016418457,
+    "std_demand": 6.976552963256836,
+    "max_demand": 44.0
+  },
+  "S 5 Pl & S 5 St": {
+    "mean_demand": 4.547800540924072,
+    "std_demand": 6.00903844833374,
+    "max_demand": 42.0
+  },
+  "St Marks Pl & 1 Ave": {
+    "mean_demand": 5.235416889190674,
+    "std_demand": 5.913729667663574,
+    "max_demand": 38.0
+  },
+  "St Marks Pl & 2 Ave": {
+    "mean_demand": 5.8250837326049805,
+    "std_demand": 6.4136881828308105,
+    "max_demand": 40.0
+  },
+  "Stanton St & Chrystie St": {
+    "mean_demand": 4.560634136199951,
+    "std_demand": 5.438406944274902,
+    "max_demand": 38.0
+  },
+  "Stanton St & Norfolk St": {
+    "mean_demand": 4.666718482971191,
+    "std_demand": 5.233119010925293,
+    "max_demand": 37.0
+  },
+  "Suffolk St & Stanton St": {
+    "mean_demand": 5.866103649139404,
+    "std_demand": 6.711695194244385,
+    "max_demand": 41.0
+  },
+  "Sullivan St & Washington Sq": {
+    "mean_demand": 4.963241100311279,
+    "std_demand": 5.874301433563232,
+    "max_demand": 41.0
+  },
+  "Thompson St & Bleecker St": {
+    "mean_demand": 4.2220458984375,
+    "std_demand": 5.475738525390625,
+    "max_demand": 40.0
+  },
+  "University Pl & E 14 St": {
+    "mean_demand": 8.726034164428711,
+    "std_demand": 10.084251403808594,
+    "max_demand": 43.0
+  },
+  "University Pl & E 8 St": {
+    "mean_demand": 5.123289108276367,
+    "std_demand": 6.382296562194824,
+    "max_demand": 42.0
+  },
+  "Vesey Pl & River Terrace": {
+    "mean_demand": 5.867443561553955,
+    "std_demand": 7.897246360778809,
+    "max_demand": 42.0
+  },
+  "W 100 St & Broadway": {
+    "mean_demand": 4.1774396896362305,
+    "std_demand": 4.797260761260986,
+    "max_demand": 37.0
+  },
+  "W 11 St & 6 Ave": {
+    "mean_demand": 4.223060131072998,
+    "std_demand": 4.856619358062744,
+    "max_demand": 38.0
+  },
+  "W 13 St & 5 Ave": {
+    "mean_demand": 5.685214042663574,
+    "std_demand": 6.98338508605957,
+    "max_demand": 41.0
+  },
+  "W 13 St & 7 Ave": {
+    "mean_demand": 5.558684825897217,
+    "std_demand": 6.38710355758667,
+    "max_demand": 38.0
+  },
+  "W 15 St & 6 Ave": {
+    "mean_demand": 6.801408290863037,
+    "std_demand": 7.706421375274658,
+    "max_demand": 41.0
+  },
+  "W 15 St & 7 Ave": {
+    "mean_demand": 5.330318927764893,
+    "std_demand": 5.995940685272217,
+    "max_demand": 40.0
+  },
+  "W 16 St & The High Line": {
+    "mean_demand": 5.320568084716797,
+    "std_demand": 6.850869178771973,
+    "max_demand": 41.0
+  },
+  "W 17 St & 8 Ave": {
+    "mean_demand": 4.297088146209717,
+    "std_demand": 5.332554817199707,
+    "max_demand": 41.0
+  },
+  "W 18 St & 6 Ave": {
+    "mean_demand": 5.422747611999512,
+    "std_demand": 7.594594478607178,
+    "max_demand": 41.0
+  },
+  "W 20 St & 10 Ave": {
+    "mean_demand": 5.635537147521973,
+    "std_demand": 7.34382963180542,
+    "max_demand": 40.0
+  },
+  "W 20 St & 7 Ave": {
+    "mean_demand": 6.212658405303955,
+    "std_demand": 7.0138983726501465,
+    "max_demand": 38.0
+  },
+  "W 20 St & 8 Ave": {
+    "mean_demand": 5.432584285736084,
+    "std_demand": 6.0090107917785645,
+    "max_demand": 39.0
+  },
+  "W 21 St & 6 Ave": {
+    "mean_demand": 10.229094505310059,
+    "std_demand": 11.406355857849121,
+    "max_demand": 40.0
+  },
+  "W 22 St & 10 Ave": {
+    "mean_demand": 7.448904037475586,
+    "std_demand": 8.554571151733398,
+    "max_demand": 39.0
+  },
+  "W 22 St & 8 Ave": {
+    "mean_demand": 6.079174518585205,
+    "std_demand": 6.460021018981934,
+    "max_demand": 38.0
+  },
+  "W 24 St & 7 Ave": {
+    "mean_demand": 7.202003479003906,
+    "std_demand": 8.07649040222168,
+    "max_demand": 41.0
+  },
+  "W 25 St & 6 Ave": {
+    "mean_demand": 5.30927848815918,
+    "std_demand": 6.5275702476501465,
+    "max_demand": 41.0
+  },
+  "W 26 St & 10 Ave": {
+    "mean_demand": 4.376178741455078,
+    "std_demand": 5.967350006103516,
+    "max_demand": 40.0
+  },
+  "W 27 St & 7 Ave": {
+    "mean_demand": 6.685604095458984,
+    "std_demand": 7.88533878326416,
+    "max_demand": 40.0
+  },
+  "W 29 St & 9 Ave": {
+    "mean_demand": 4.044675827026367,
+    "std_demand": 5.351966381072998,
+    "max_demand": 40.0
+  },
+  "W 30 St & 10 Ave": {
+    "mean_demand": 7.1521124839782715,
+    "std_demand": 8.8131685256958,
+    "max_demand": 42.0
+  },
+  "W 31 St & 7 Ave": {
+    "mean_demand": 8.188251495361328,
+    "std_demand": 8.969863891601562,
+    "max_demand": 40.0
+  },
+  "W 34 St & 11 Ave": {
+    "mean_demand": 4.807229042053223,
+    "std_demand": 7.198832988739014,
+    "max_demand": 42.0
+  },
+  "W 37 St & 10 Ave": {
+    "mean_demand": 5.765935897827148,
+    "std_demand": 6.415042400360107,
+    "max_demand": 41.0
+  },
+  "W 4 St & 7 Ave S": {
+    "mean_demand": 7.0039472579956055,
+    "std_demand": 7.9067535400390625,
+    "max_demand": 41.0
+  },
+  "W 41 St & 8 Ave": {
+    "mean_demand": 7.326451778411865,
+    "std_demand": 8.233733177185059,
+    "max_demand": 42.0
+  },
+  "W 42 St & 6 Ave": {
+    "mean_demand": 5.619532108306885,
+    "std_demand": 7.407145023345947,
+    "max_demand": 42.0
+  },
+  "W 42 St & 8 Ave": {
+    "mean_demand": 4.908199787139893,
+    "std_demand": 5.502901554107666,
+    "max_demand": 38.0
+  },
+  "W 42 St & Dyer Ave": {
+    "mean_demand": 3.915724992752075,
+    "std_demand": 4.350736618041992,
+    "max_demand": 35.0
+  },
+  "W 43 St & 10 Ave": {
+    "mean_demand": 7.354072093963623,
+    "std_demand": 8.05225658416748,
+    "max_demand": 41.0
+  },
+  "W 44 St & 11 Ave": {
+    "mean_demand": 4.962820053100586,
+    "std_demand": 6.922488689422607,
+    "max_demand": 40.0
+  },
+  "W 45 St & 8 Ave": {
+    "mean_demand": 5.614743232727051,
+    "std_demand": 6.518178462982178,
+    "max_demand": 41.0
+  },
+  "W 47 St & 10 Ave": {
+    "mean_demand": 5.369577407836914,
+    "std_demand": 5.734286785125732,
+    "max_demand": 39.0
+  },
+  "W 49 St & 8 Ave": {
+    "mean_demand": 5.287240982055664,
+    "std_demand": 6.08221435546875,
+    "max_demand": 41.0
+  },
+  "W 50 St & 9 Ave": {
+    "mean_demand": 3.976280450820923,
+    "std_demand": 4.612915515899658,
+    "max_demand": 37.0
+  },
+  "W 53 St & 10 Ave": {
+    "mean_demand": 4.961280822753906,
+    "std_demand": 5.76931095123291,
+    "max_demand": 43.0
+  },
+  "W 54 St & 11 Ave": {
+    "mean_demand": 5.3883280754089355,
+    "std_demand": 7.527098655700684,
+    "max_demand": 41.0
+  },
+  "W 54 St & 9 Ave": {
+    "mean_demand": 5.0958333015441895,
+    "std_demand": 5.941701412200928,
+    "max_demand": 39.0
+  },
+  "W 56 St & 10 Ave": {
+    "mean_demand": 4.038763999938965,
+    "std_demand": 4.7169294357299805,
+    "max_demand": 37.0
+  },
+  "W 59 St & 10 Ave": {
+    "mean_demand": 5.158877372741699,
+    "std_demand": 6.238101482391357,
+    "max_demand": 41.0
+  },
+  "W 63 St & Broadway": {
+    "mean_demand": 5.285516738891602,
+    "std_demand": 6.6883673667907715,
+    "max_demand": 39.0
+  },
+  "W 64 St & Thelonious Monk Circle": {
+    "mean_demand": 4.6683349609375,
+    "std_demand": 5.692078113555908,
+    "max_demand": 38.0
+  },
+  "W 67 St & Broadway": {
+    "mean_demand": 5.176255226135254,
+    "std_demand": 6.3445281982421875,
+    "max_demand": 40.0
+  },
+  "W 70 St & Amsterdam Ave": {
+    "mean_demand": 5.7695746421813965,
+    "std_demand": 6.4906511306762695,
+    "max_demand": 38.0
+  },
+  "Washington Pl & 6 Ave": {
+    "mean_demand": 4.7350311279296875,
+    "std_demand": 5.447523593902588,
+    "max_demand": 38.0
+  },
+  "Washington Pl & Broadway": {
+    "mean_demand": 4.262933254241943,
+    "std_demand": 5.653130054473877,
+    "max_demand": 38.0
+  },
+  "Washington St & Gansevoort St": {
+    "mean_demand": 6.403017997741699,
+    "std_demand": 7.965336799621582,
+    "max_demand": 41.0
+  },
+  "West Drive & Prospect Park West": {
+    "mean_demand": 5.103903293609619,
+    "std_demand": 6.718710899353027,
+    "max_demand": 40.0
+  },
+  "West End Ave & W 60 St": {
+    "mean_demand": 6.229479789733887,
+    "std_demand": 7.753576278686523,
+    "max_demand": 40.0
+  },
+  "West St & Chambers St": {
+    "mean_demand": 7.755072593688965,
+    "std_demand": 9.746683120727539,
+    "max_demand": 41.0
+  },
+  "West St & Liberty St": {
+    "mean_demand": 7.120097637176514,
+    "std_demand": 9.264424324035645,
+    "max_demand": 41.0
+  },
+  "Wythe Ave & Metropolitan Ave": {
+    "mean_demand": 5.329319477081299,
+    "std_demand": 6.861701488494873,
+    "max_demand": 40.0
+  }
+}

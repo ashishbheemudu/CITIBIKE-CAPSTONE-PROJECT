@@ -72,6 +72,12 @@ class PredictionService:
                 self.models['cb'].load_model(cb_path)
                 logger.info("✅ Loaded CatBoost")
 
+            # RandomForest (optional, for 4-model ensemble)
+            rf_path = os.path.join(MODELS_DIR, "rf.pkl")
+            if os.path.exists(rf_path):
+                self.models['rf'] = joblib.load(rf_path)
+                logger.info("✅ Loaded RandomForest")
+
             # 4. Load scalers
             scaler_tree_path = os.path.join(MODELS_DIR, "scaler_tree.save")
             if os.path.exists(scaler_tree_path):
@@ -559,24 +565,18 @@ class PredictionService:
                 roll_max_168h = np.max(demands[-168:])
         
         # ═══════════════════════════════════════════════════════════════
-        # EMA AND CHANGE FEATURES (3)
+        # EMA FEATURE (1) - removed demand_change features to prevent leakage
         # ═══════════════════════════════════════════════════════════════
         ema_24h = 0.0
-        demand_change_1h = 0.0
-        demand_change_24h = 0.0
         
         if station_data is not None and 'pickups' in station_data.columns:
             demands = station_data['pickups'].values
             if len(demands) >= 24:
                 # Exponential moving average
                 ema_24h = pd.Series(demands).ewm(span=24, adjust=False).mean().iloc[-1]
-            if len(demands) >= 2:
-                demand_change_1h = demands[-1] - demands[-2]
-            if len(demands) >= 25:
-                demand_change_24h = demands[-1] - demands[-24]
         
         # ═══════════════════════════════════════════════════════════════
-        # RETURN ALL 56 FEATURES IN CORRECT ORDER
+        # RETURN ALL 54 FEATURES IN CORRECT ORDER
         # ═══════════════════════════════════════════════════════════════
         return [
             temp, prcp, wspd, is_holiday, day_of_week, is_weekend,
@@ -590,7 +590,7 @@ class PredictionService:
             roll_mean_12h, roll_std_12h, roll_min_12h, roll_max_12h,
             roll_mean_24h, roll_std_24h, roll_min_24h, roll_max_24h,
             roll_mean_168h, roll_std_168h, roll_min_168h, roll_max_168h,
-            ema_24h, demand_change_1h, demand_change_24h
+            ema_24h
         ]
 
 # Global instance
