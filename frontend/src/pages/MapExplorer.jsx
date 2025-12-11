@@ -180,7 +180,7 @@ function MapExplorer() {
             onHover: info => setHoverInfo(info)
         }),
         // Add highlight layers on top
-        stationMarkerPillar,
+        activeLayer === 'hexagon' && stationMarkerPillar, // Only show pillar in Hexagon mode
         highlightLayer,
         centerMarkerLayer
     ].filter(Boolean);
@@ -192,7 +192,7 @@ function MapExplorer() {
             ...viewState,
             longitude: station.lon,
             latitude: station.lat,
-            zoom: 12,
+            zoom: 12, // Zoom 12 is good for overview
             pitch: 50,
             bearing: 20,
             transitionDuration: 1500
@@ -313,6 +313,18 @@ function MapExplorer() {
                     onViewStateChange={({ viewState }) => setViewState(viewState)}
                     controller={true}
                     layers={layers}
+                    onClick={({ object, layer }) => {
+                        if (!object) return;
+
+                        // Handle clicking on points
+                        if (activeLayer === 'points' && object.station_name) {
+                            flyToStation(object);
+                            return;
+                        }
+
+                        // Handle clicking on hexagons (optional: zoom to area?)
+                        // For now we just focus on points being selectable
+                    }}
                     getTooltip={({ object, layer }) => {
                         if (!object) return null;
 
