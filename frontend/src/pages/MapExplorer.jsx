@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import DeckGL from '@deck.gl/react';
-import { ScatterplotLayer, ArcLayer, ColumnLayer } from '@deck.gl/layers';
+import { ScatterplotLayer, ArcLayer } from '@deck.gl/layers';
 import { HeatmapLayer, HexagonLayer } from '@deck.gl/aggregation-layers';
 import { Map } from 'react-map-gl/maplibre';
 import { fetchMapData } from '../api';
@@ -100,24 +100,29 @@ function MapExplorer() {
         getLineColor: [59, 130, 246]
     }) : null;
 
-    // Vertical glowing column/beacon for selected station
-    const beaconLayer = selectedStation ? new ColumnLayer({
-        id: 'beacon-layer',
+    // Highlight hexagon layer - creates a bright glowing hexagon at selected station
+    const highlightHexagonLayer = selectedStation ? new HexagonLayer({
+        id: 'highlight-hexagon-layer',
         data: [selectedStation],
-        diskResolution: 12,
-        radius: 50,
-        extruded: true,
-        elevationScale: 1,
         getPosition: d => [d.lon, d.lat],
-        getElevation: 2000, // Tall column reaching above all hexagons
-        getFillColor: [59, 130, 246, 180], // Blue with transparency
-        getLineColor: [255, 255, 255],
-        wireframe: true,
-        lineWidthMinPixels: 2,
+        getElevationWeight: d => d.trip_count || 100000, // Use station's trip count
+        elevationScale: 6, // Slightly taller than regular hexagons
+        extruded: true,
+        radius: 200, // Same as main hexagon layer
+        opacity: 1,
+        coverage: 0.95,
+        colorRange: [
+            [0, 255, 255],   // Cyan
+            [0, 255, 255],   // Cyan
+            [0, 255, 255],   // Cyan
+            [255, 255, 255], // White
+            [255, 255, 255], // White
+            [0, 255, 255]    // Cyan
+        ],
         material: {
-            ambient: 0.8,
-            diffuse: 0.9,
-            shininess: 100,
+            ambient: 1.0,
+            diffuse: 1.0,
+            shininess: 200,
             specularColor: [255, 255, 255]
         }
     }) : null;
@@ -178,9 +183,9 @@ function MapExplorer() {
             onHover: info => setHoverInfo(info)
         }),
         // Add highlight layers on top
+        highlightHexagonLayer,
         highlightLayer,
-        centerMarkerLayer,
-        beaconLayer
+        centerMarkerLayer
     ].filter(Boolean);
 
     const flyToStation = (station) => {
