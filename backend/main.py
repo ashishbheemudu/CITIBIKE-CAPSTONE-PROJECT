@@ -123,6 +123,29 @@ async def get_system_overview(
     end_date: str = None, 
     days_of_week: str = None # Comma separated: "Monday,Tuesday"
 ):
+    """
+    Get system-wide analytics and KPIs for the dashboard.
+    
+    This endpoint provides comprehensive analytics including total trips,
+    weekend share, peak hours, time series data, and anomaly detection.
+    
+    Args:
+        start_date: Optional filter start date in YYYY-MM-DD format
+        end_date: Optional filter end date in YYYY-MM-DD format
+        days_of_week: Optional comma-separated list of days to include
+                      (e.g., "Monday,Tuesday,Wednesday")
+    
+    Returns:
+        dict: Contains the following keys:
+            - kpis: {total_trips, weekend_share, peak_hour, weekend_effect}
+            - time_series: List of daily trip counts with weather data
+            - trend: 7-day moving average with confidence intervals
+            - anomalies: Statistical outliers (|z-score| > 2)
+            - heatmap: Member vs casual rider breakdown by day
+    
+    Raises:
+        HTTPException(503): If data has not been loaded yet
+    """
     if data_loader.hourly_demand is None:
         raise HTTPException(status_code=503, detail="Data not loaded yet")
 
@@ -252,6 +275,16 @@ async def get_system_overview(
 
 @app.get("/api/map-data")
 async def get_map_data():
+    """
+    Get station locations with coordinates for map visualization.
+    
+    Returns:
+        list: Array of station objects with:
+            - station_name: Station identifier
+            - lat: Latitude coordinate
+            - lon: Longitude coordinate
+            - trip_count: Total historical trips
+    """
     if data_loader.station_locations is None:
         raise HTTPException(status_code=503, detail="Data not loaded yet")
     
@@ -294,6 +327,15 @@ async def get_map_data():
 
 @app.get("/api/routes")
 async def get_routes(top_n: int = 50):
+    """
+    Get top routes between stations with flow data.
+    
+    Args:
+        top_n: Number of top routes to return (default: 50)
+    
+    Returns:
+        list: Array of route objects with start/end coords and trip count
+    """
     if data_loader.top_routes is None:
         raise HTTPException(status_code=503, detail="Data not loaded yet")
     
@@ -322,6 +364,12 @@ async def get_routes(top_n: int = 50):
 
 @app.get("/api/stations")
 async def get_stations():
+    """
+    Get list of all station names for dropdown selectors.
+    
+    Returns:
+        list: Array of station name strings (sorted alphabetically)
+    """
     if data_loader.station_locations is None:
         raise HTTPException(status_code=503, detail="Data not loaded yet")
     
