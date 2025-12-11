@@ -22,8 +22,8 @@ function MapExplorer() {
     const [selectedStation, setSelectedStation] = useState(null);
     const [pulseRadius, setPulseRadius] = useState(100);
 
-    // Controls
-    const [activeLayer, setActiveLayer] = useState('heatmap'); // 'heatmap', 'points', 'hexagon'
+    // Controls - Default to 'points' for individual station visibility
+    const [activeLayer, setActiveLayer] = useState('points'); // 'heatmap', 'points', 'hexagon'
     const [minTrips, setMinTrips] = useState(0);
     const [viewState, setViewState] = useState(INITIAL_VIEW_STATE);
 
