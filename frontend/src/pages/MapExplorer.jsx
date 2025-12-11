@@ -19,11 +19,24 @@ function MapExplorer() {
     const [data, setData] = useState(null);
     const [loading, setLoading] = useState(true);
     const [_hoverInfo, setHoverInfo] = useState(null);
+    const [selectedStation, setSelectedStation] = useState(null);
+    const [pulseRadius, setPulseRadius] = useState(100);
 
     // Controls
     const [activeLayer, setActiveLayer] = useState('heatmap'); // 'heatmap', 'points', 'hexagon'
     const [minTrips, setMinTrips] = useState(0);
     const [viewState, setViewState] = useState(INITIAL_VIEW_STATE);
+
+    // Pulsing animation effect
+    useEffect(() => {
+        if (!selectedStation) return;
+
+        const interval = setInterval(() => {
+            setPulseRadius(prev => prev >= 300 ? 100 : prev + 20);
+        }, 50);
+
+        return () => clearInterval(interval);
+    }, [selectedStation]);
 
     useEffect(() => {
         const loadData = async () => {
@@ -50,6 +63,42 @@ function MapExplorer() {
         if (!data) return [];
         return [...data].sort((a, b) => b.trip_count - a.trip_count).slice(0, 10);
     }, [data]);
+
+    // Highlight layer for selected station
+    const highlightLayer = selectedStation ? new ScatterplotLayer({
+        id: 'highlight-layer',
+        data: [selectedStation],
+        pickable: false,
+        opacity: 0.6,
+        stroked: true,
+        filled: true,
+        radiusScale: 1,
+        radiusMinPixels: pulseRadius,
+        radiusMaxPixels: 500,
+        lineWidthMinPixels: 3,
+        getPosition: d => [d.lon, d.lat],
+        getRadius: 100,
+        getFillColor: [59, 130, 246, 100],
+        getLineColor: [59, 130, 246, 255]
+    }) : null;
+
+    // Center marker for selected station
+    const centerMarkerLayer = selectedStation ? new ScatterplotLayer({
+        id: 'center-marker-layer',
+        data: [selectedStation],
+        pickable: false,
+        opacity: 1,
+        stroked: true,
+        filled: true,
+        radiusScale: 1,
+        radiusMinPixels: 12,
+        radiusMaxPixels: 30,
+        lineWidthMinPixels: 3,
+        getPosition: d => [d.lon, d.lat],
+        getRadius: 20,
+        getFillColor: [255, 255, 255],
+        getLineColor: [59, 130, 246]
+    }) : null;
 
     const layers = [
         activeLayer === 'heatmap' && new HeatmapLayer({
@@ -105,17 +154,27 @@ function MapExplorer() {
             getFillColor: [59, 130, 246],
             getLineColor: [0, 0, 0],
             onHover: info => setHoverInfo(info)
-        })
-    ];
+        }),
+        // Add highlight layers on top
+        highlightLayer,
+        centerMarkerLayer
+    ].filter(Boolean);
 
     const flyToStation = (station) => {
+        setSelectedStation(station);
+        setPulseRadius(100); // Reset pulse
         setViewState({
             ...viewState,
             longitude: station.lon,
             latitude: station.lat,
-            zoom: 15,
-            transitionDuration: 1000
+            zoom: 16,
+            pitch: 45,
+            bearing: 0,
+            transitionDuration: 1500
         });
+
+        // Clear selection after 5 seconds
+        setTimeout(() => setSelectedStation(null), 5000);
     };
 
     // Dynamic Max for Slider
@@ -246,6 +305,21 @@ function MapExplorer() {
                         mapStyle="https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json"
                     />
                 </DeckGL>
+
+                {/* Selected Station Popup */}
+                {selectedStation && (
+                    <div className="absolute top-6 left-1/2 transform -translate-x-1/2 z-50">
+                        <div className="bg-gradient-to-r from-blue-600 to-indigo-600 px-6 py-3 rounded-xl shadow-2xl border border-blue-400/30 animate-pulse">
+                            <div className="flex items-center gap-3">
+                                <div className="w-4 h-4 bg-white rounded-full animate-ping"></div>
+                                <div>
+                                    <div className="text-white font-bold text-sm">{selectedStation.station_name}</div>
+                                    <div className="text-blue-200 text-xs">{selectedStation.trip_count.toLocaleString()} total trips</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                )}
 
                 {/* Legend / Info Overlay */}
                 <div className="absolute bottom-6 right-6 glass-panel p-4 rounded-xl max-w-xs">
