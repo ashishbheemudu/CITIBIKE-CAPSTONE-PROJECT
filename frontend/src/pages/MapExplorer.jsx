@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import DeckGL from '@deck.gl/react';
-import { ScatterplotLayer, ArcLayer } from '@deck.gl/layers';
+import { ScatterplotLayer, ArcLayer, ColumnLayer } from '@deck.gl/layers';
 import { HeatmapLayer, HexagonLayer } from '@deck.gl/aggregation-layers';
 import { Map } from 'react-map-gl/maplibre';
 import { fetchMapData } from '../api';
@@ -100,29 +100,24 @@ function MapExplorer() {
         getLineColor: [59, 130, 246]
     }) : null;
 
-    // Highlight hexagon layer - creates a bright glowing hexagon at selected station
-    const highlightHexagonLayer = selectedStation ? new HexagonLayer({
-        id: 'highlight-hexagon-layer',
+    // Bright vertical pillar to mark selected station location
+    // This shoots up above the hexagon bars to show which one is selected
+    const stationMarkerPillar = selectedStation ? new ColumnLayer({
+        id: 'station-marker-pillar',
         data: [selectedStation],
-        getPosition: d => [d.lon, d.lat],
-        getElevationWeight: d => d.trip_count || 100000, // Use station's trip count
-        elevationScale: 6, // Slightly taller than regular hexagons
+        diskResolution: 6, // Hexagonal shape
+        radius: 30, // Thin pillar
         extruded: true,
-        radius: 200, // Same as main hexagon layer
-        opacity: 1,
-        coverage: 0.95,
-        colorRange: [
-            [0, 255, 255],   // Cyan
-            [0, 255, 255],   // Cyan
-            [0, 255, 255],   // Cyan
-            [255, 255, 255], // White
-            [255, 255, 255], // White
-            [0, 255, 255]    // Cyan
-        ],
+        elevationScale: 1,
+        getPosition: d => [d.lon, d.lat],
+        getElevation: 5000, // Very tall - shoots way above all hexagons
+        getFillColor: [0, 255, 255, 255], // Bright cyan
+        getLineColor: [255, 255, 255, 255], // White outline
+        wireframe: false,
         material: {
             ambient: 1.0,
             diffuse: 1.0,
-            shininess: 200,
+            shininess: 300,
             specularColor: [255, 255, 255]
         }
     }) : null;
@@ -183,7 +178,7 @@ function MapExplorer() {
             onHover: info => setHoverInfo(info)
         }),
         // Add highlight layers on top
-        highlightHexagonLayer,
+        stationMarkerPillar,
         highlightLayer,
         centerMarkerLayer
     ].filter(Boolean);
