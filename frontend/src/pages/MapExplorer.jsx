@@ -167,14 +167,14 @@ function MapExplorer() {
             ...viewState,
             longitude: station.lon,
             latitude: station.lat,
-            zoom: 14,
-            pitch: 45,
-            bearing: 0,
+            zoom: 12,
+            pitch: 50,
+            bearing: 20,
             transitionDuration: 1500
         });
 
-        // Clear selection after 5 seconds
-        setTimeout(() => setSelectedStation(null), 5000);
+        // Clear selection after 8 seconds
+        setTimeout(() => setSelectedStation(null), 8000);
     };
 
     // Dynamic Max for Slider
@@ -306,15 +306,51 @@ function MapExplorer() {
                     />
                 </DeckGL>
 
-                {/* Selected Station Popup */}
+                {/* Selected Station Popup - Premium Design */}
                 {selectedStation && (
                     <div className="absolute top-6 left-1/2 transform -translate-x-1/2 z-50">
-                        <div className="bg-gradient-to-r from-blue-600 to-indigo-600 px-6 py-3 rounded-xl shadow-2xl border border-blue-400/30 animate-pulse">
-                            <div className="flex items-center gap-3">
-                                <div className="w-4 h-4 bg-white rounded-full animate-ping"></div>
-                                <div>
-                                    <div className="text-white font-bold text-sm">{selectedStation.station_name}</div>
-                                    <div className="text-blue-200 text-xs">{selectedStation.trip_count.toLocaleString()} total trips</div>
+                        <div className="relative">
+                            {/* Glowing background effect */}
+                            <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl blur-xl opacity-50 animate-pulse"></div>
+
+                            {/* Main card */}
+                            <div className="relative bg-gradient-to-br from-slate-900/95 to-slate-800/95 backdrop-blur-xl px-6 py-4 rounded-2xl shadow-2xl border border-white/20">
+                                <div className="flex items-center gap-4">
+                                    {/* Cycling bicycle animation */}
+                                    <div className="relative w-14 h-14 flex items-center justify-center">
+                                        {/* Rotating circle track */}
+                                        <div className="absolute inset-0 rounded-full border-2 border-dashed border-blue-400/30 animate-spin" style={{ animationDuration: '3s' }}></div>
+                                        {/* Bicycle icon bouncing */}
+                                        <div className="animate-bounce" style={{ animationDuration: '0.8s' }}>
+                                            <svg className="w-8 h-8 text-blue-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                                <circle cx="5.5" cy="17.5" r="3.5" />
+                                                <circle cx="18.5" cy="17.5" r="3.5" />
+                                                <path d="M15 6a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm-3 11.5V14l-3-3 4-3 2 3h3" />
+                                            </svg>
+                                        </div>
+                                    </div>
+
+                                    {/* Station info */}
+                                    <div className="flex-1">
+                                        <div className="flex items-center gap-2 mb-1">
+                                            <span className="px-2 py-0.5 bg-blue-500/20 border border-blue-400/30 rounded-full text-blue-300 text-[10px] font-bold uppercase tracking-wider">Station</span>
+                                        </div>
+                                        <div className="text-white font-bold text-lg leading-tight">{selectedStation.station_name}</div>
+                                        <div className="flex items-center gap-2 mt-1">
+                                            <div className="text-2xl font-black bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+                                                {selectedStation.trip_count.toLocaleString()}
+                                            </div>
+                                            <span className="text-gray-400 text-sm">trips</span>
+                                        </div>
+                                    </div>
+
+                                    {/* Rank badge */}
+                                    <div className="flex flex-col items-center">
+                                        <div className="w-10 h-10 rounded-full bg-gradient-to-br from-yellow-400 to-orange-500 flex items-center justify-center shadow-lg">
+                                            <span className="text-white font-black text-sm">#{topStations.findIndex(s => s.station_name === selectedStation.station_name) + 1 || '?'}</span>
+                                        </div>
+                                        <span className="text-gray-500 text-[9px] mt-1">RANK</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
