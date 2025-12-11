@@ -318,32 +318,55 @@ function MapExplorer() {
 
                         // For hexagon bars - find stations near this hexagon's position
                         if (layer && layer.id === 'hexagon-layer') {
-                            const totalTrips = object.elevationValue || 0;
+                            const totalTrips = object.elevationValue || object.colorValue || 0;
 
-                            // Get the hexagon's center position
-                            const hexPosition = object.position;
-
-                            // Find stations within this hexagon (radius ~200m = ~0.002 degrees)
+                            // Try multiple ways to get station names
                             let stationNames = [];
-                            if (hexPosition && filteredData) {
-                                const [hexLon, hexLat] = hexPosition;
-                                const radius = 0.003; // ~300m in degrees
 
-                                for (const station of filteredData) {
-                                    const dLon = Math.abs(station.lon - hexLon);
-                                    const dLat = Math.abs(station.lat - hexLat);
-                                    if (dLon < radius && dLat < radius) {
+                            // Method 1: Try object.points (newer deck.gl versions)
+                            if (object.points && Array.isArray(object.points)) {
+                                for (const p of object.points) {
+                                    const name = p.source?.station_name || p.station_name;
+                                    if (name) stationNames.push(name);
+                                }
+                            }
+
+                            // Method 2: Check if object itself has position and search in data
+                            if (stationNames.length === 0 && object.position) {
+                                const [hexLon, hexLat] = object.position;
+                                const radius = 0.003;
+                                for (const station of (filteredData || [])) {
+                                    if (Math.abs(station.lon - hexLon) < radius && Math.abs(station.lat - hexLat) < radius) {
                                         stationNames.push(station.station_name);
                                     }
                                 }
-                                stationNames = [...new Set(stationNames)];
                             }
+
+                            // Method 3: Use colorValue.points if available
+                            if (stationNames.length === 0 && object.colorValue) {
+                                // Find closest station by trip count
+                                const targetTrips = totalTrips;
+                                let bestMatch = null;
+                                let smallestDiff = Infinity;
+                                for (const station of (filteredData || [])) {
+                                    const diff = Math.abs(station.trip_count - targetTrips);
+                                    if (diff < smallestDiff) {
+                                        smallestDiff = diff;
+                                        bestMatch = station;
+                                    }
+                                }
+                                if (bestMatch && smallestDiff < targetTrips * 0.1) {
+                                    stationNames.push(bestMatch.station_name);
+                                }
+                            }
+
+                            stationNames = [...new Set(stationNames)];
 
                             // Build tooltip HTML
                             const stationHTML = stationNames.length > 0
                                 ? `<div style="font-size: 13px; font-weight: bold; margin-bottom: 6px; color: #fff;">${stationNames.length === 1 ? stationNames[0] : `${stationNames.length} stations:`}</div>
                                    ${stationNames.length > 1 ? `<div style="font-size: 11px; color: #9ca3af; margin-bottom: 6px;">${stationNames.slice(0, 5).map(s => `• ${s}`).join('<br/>')}</div>` : ''}`
-                                : `<div style="font-size: 11px; color: #9ca3af; margin-bottom: 4px;">Station area</div>`;
+                                : `<div style="font-size: 11px; color: #9ca3af; margin-bottom: 4px;">Multiple stations aggregated</div>`;
 
                             return {
                                 html: `<div style="padding: 10px; min-width: 220px;">
