@@ -32,7 +32,7 @@ function MapExplorer() {
         if (!selectedStation) return;
 
         const interval = setInterval(() => {
-            setPulseRadius(prev => prev >= 300 ? 100 : prev + 20);
+            setPulseRadius(prev => prev >= 80 ? 30 : prev + 5);
         }, 50);
 
         return () => clearInterval(interval);
@@ -64,25 +64,25 @@ function MapExplorer() {
         return [...data].sort((a, b) => b.trip_count - a.trip_count).slice(0, 10);
     }, [data]);
 
-    // Highlight layer for selected station
+    // Highlight layer for selected station - SMALL pulsing ring
     const highlightLayer = selectedStation ? new ScatterplotLayer({
         id: 'highlight-layer',
         data: [selectedStation],
         pickable: false,
-        opacity: 0.6,
+        opacity: 0.8,
         stroked: true,
-        filled: true,
+        filled: false,
         radiusScale: 1,
         radiusMinPixels: pulseRadius,
-        radiusMaxPixels: 500,
-        lineWidthMinPixels: 3,
+        radiusMaxPixels: 100,
+        lineWidthMinPixels: 4,
         getPosition: d => [d.lon, d.lat],
-        getRadius: 100,
-        getFillColor: [59, 130, 246, 100],
+        getRadius: 50,
+        getFillColor: [59, 130, 246, 0],
         getLineColor: [59, 130, 246, 255]
     }) : null;
 
-    // Center marker for selected station
+    // Bright center marker for selected station
     const centerMarkerLayer = selectedStation ? new ScatterplotLayer({
         id: 'center-marker-layer',
         data: [selectedStation],
@@ -91,12 +91,12 @@ function MapExplorer() {
         stroked: true,
         filled: true,
         radiusScale: 1,
-        radiusMinPixels: 12,
-        radiusMaxPixels: 30,
+        radiusMinPixels: 10,
+        radiusMaxPixels: 20,
         lineWidthMinPixels: 3,
         getPosition: d => [d.lon, d.lat],
-        getRadius: 20,
-        getFillColor: [255, 255, 255],
+        getRadius: 15,
+        getFillColor: [255, 255, 255, 255],
         getLineColor: [59, 130, 246]
     }) : null;
 
