@@ -23,9 +23,61 @@ function MapExplorer() {
     const [pulseRadius, setPulseRadius] = useState(100);
 
     // Controls - Default to 'points' for individual station visibility
-    const [activeLayer, setActiveLayer] = useState('points'); // 'heatmap', 'points', 'hexagon'
+    const [activeLayer, setActiveLayer] = useState('points');
+    const [tooltipInfo, setTooltipInfo] = useState(null);
+    const [topStations, setTopStations] = useState([]);
     const [minTrips, setMinTrips] = useState(0);
     const [viewState, setViewState] = useState(INITIAL_VIEW_STATE);
+
+    // Live Data State
+    const [liveMode, setLiveMode] = useState(false);
+    const [liveData, setLiveData] = useState([]);
+
+    // API Base URL from environment
+    const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://18.218.154.66.nip.io';
+
+    // Base Activity Data Fetch
+    useEffect(() => {
+        const loadData = async () => {
+            try {
+                const result = await fetchMapData();
+                setData(result.locations);
+
+                // Process top stations
+                const sorted = [...result.locations].sort((a, b) => b.trip_count - a.trip_count);
+                setTopStations(sorted.slice(0, 50));
+            } catch (err) {
+                console.error("Failed to load map data", err);
+            } finally {
+                setLoading(false);
+            }
+        };
+        loadData();
+    }, []);
+
+    // Live Data Fetch Effect
+    useEffect(() => {
+        let intervalId;
+
+        const fetchLive = async () => {
+            try {
+                const res = await fetch(`${API_BASE_URL}/live/stations`);
+                if (res.ok) {
+                    const json = await res.json();
+                    setLiveData(json);
+                }
+            } catch (error) {
+                console.error("Live fetch error:", error);
+            }
+        };
+
+        if (liveMode) {
+            fetchLive(); // Initial fetch
+            intervalId = setInterval(fetchLive, 60000); // Poll every 60s
+        }
+
+        return () => clearInterval(intervalId);
+    }, [liveMode]);
 
     // Pulsing animation effect
     useEffect(() => {
@@ -38,31 +90,11 @@ function MapExplorer() {
         return () => clearInterval(interval);
     }, [selectedStation]);
 
-    useEffect(() => {
-        const loadData = async () => {
-            try {
-                const mapData = await fetchMapData();
-                setData(mapData);
-            } catch (error) {
-                console.error("Failed to fetch map data:", error);
-            } finally {
-                setLoading(false);
-            }
-        };
-        loadData();
-    }, []);
-
     // Filter Data
     const filteredData = useMemo(() => {
         if (!data) return [];
         return data.filter(d => d.trip_count >= minTrips);
     }, [data, minTrips]);
-
-    // Top Stations for Sidebar
-    const topStations = useMemo(() => {
-        if (!data) return [];
-        return [...data].sort((a, b) => b.trip_count - a.trip_count).slice(0, 10);
-    }, [data]);
 
     // Highlight layer for selected station - SMALL pulsing ring
     const highlightLayer = selectedStation ? new ScatterplotLayer({
@@ -174,8 +206,8 @@ function MapExplorer() {
             radiusMaxPixels: 30,
             lineWidthMinPixels: 1,
             getPosition: d => [d.lon, d.lat],
-            getRadius: d => Math.sqrt(d.trip_count),
-            getFillColor: [59, 130, 246],
+            getRadius: d => liveMode ? Math.max(5, d.bikes_available * 2) : Math.sqrt(d.trip_count),
+            getFillColor: d => liveMode ? (d.bikes_available < 3 ? [252, 165, 165] : [59, 130, 246]) : [59, 130, 246],
             getLineColor: [0, 0, 0],
             onHover: info => setHoverInfo(info)
         }),
@@ -190,9 +222,9 @@ function MapExplorer() {
         setPulseRadius(100); // Reset pulse
         setViewState({
             ...viewState,
-            longitude: station.lon,
-            latitude: station.lat,
-            zoom: 12, // Zoom 12 is good for overview
+            longitude: Number(station.lon), // Ensure number
+            latitude: Number(station.lat),
+            zoom: 14, // Zoom 14 is good for individual station
             pitch: 50,
             bearing: 20,
             transitionDuration: 1500
@@ -208,7 +240,14 @@ function MapExplorer() {
         return data.reduce((max, d) => (d.trip_count > max ? d.trip_count : max), 0);
     }, [data]);
 
-    if (loading) {
+    // Live Mode Toggle Handler
+    const toggleLiveMode = () => {
+        setLiveMode(!liveMode);
+        // Reset to points view when entering live mode for clarity
+        if (!liveMode) setActiveLayer('points');
+    };
+
+    if (loading && !data.length && !liveMode) { // Only show loading if historical data is not loaded and not in live mode
         return (
             <div className="flex justify-center items-center h-96">
                 <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-500"></div>
@@ -222,7 +261,15 @@ function MapExplorer() {
             <div className="w-72 border-r border-gray-800 bg-[#0a0b10] p-4 flex flex-col gap-6 overflow-y-auto z-10">
                 <div>
                     <h2 className="text-lg font-semibold text-foreground mb-1">Map Explorer</h2>
-                    <p className="text-xs text-muted-foreground">Geospatial Analysis</p>
+                    <div className="flex items-center justify-between">
+                        <p className="text-xs text-muted-foreground">Geospatial Analysis</p>
+                        <button
+                            onClick={toggleLiveMode}
+                            className={`text-[10px] px-2 py-0.5 rounded border border-primary/50 transition-all ${liveMode ? 'bg-green-500/20 text-green-400 animate-pulse' : 'bg-transparent text-muted-foreground hover:text-foreground'}`}
+                        >
+                            {liveMode ? '● LIVE' : '○ HISTORICAL'}
+                        </button>
+                    </div>
                 </div>
 
                 {/* Layer Control */}
@@ -233,14 +280,16 @@ function MapExplorer() {
                     <div className="grid grid-cols-3 gap-2">
                         <button
                             onClick={() => setActiveLayer('heatmap')}
-                            className={`flex flex-col items-center justify-center p-2 rounded border transition-all ${activeLayer === 'heatmap' ? 'bg-primary/20 border-primary text-primary' : 'bg-secondary/30 border-transparent text-muted-foreground hover:bg-secondary/50'}`}
+                            disabled={liveMode}
+                            className={`flex flex-col items-center justify-center p-2 rounded border transition-all ${activeLayer === 'heatmap' && !liveMode ? 'bg-primary/20 border-primary text-primary' : 'bg-secondary/30 border-transparent text-muted-foreground hover:bg-secondary/50'} ${liveMode ? 'opacity-50 cursor-not-allowed' : ''}`}
                         >
                             <Activity className="w-5 h-5 mb-1" />
                             <span className="text-[10px]">Heatmap</span>
                         </button>
                         <button
                             onClick={() => setActiveLayer('hexagon')}
-                            className={`flex flex-col items-center justify-center p-2 rounded border transition-all ${activeLayer === 'hexagon' ? 'bg-primary/20 border-primary text-primary' : 'bg-secondary/30 border-transparent text-muted-foreground hover:bg-secondary/50'}`}
+                            disabled={liveMode}
+                            className={`flex flex-col items-center justify-center p-2 rounded border transition-all ${activeLayer === 'hexagon' && !liveMode ? 'bg-primary/20 border-primary text-primary' : 'bg-secondary/30 border-transparent text-muted-foreground hover:bg-secondary/50'} ${liveMode ? 'opacity-50 cursor-not-allowed' : ''}`}
                         >
                             <Hexagon className="w-5 h-5 mb-1" />
                             <span className="text-[10px]">3D Hex</span>
@@ -255,51 +304,80 @@ function MapExplorer() {
                     </div>
                 </div>
 
-                {/* Filters */}
-                <div className="space-y-3">
-                    <label className="text-sm font-medium text-foreground flex items-center gap-2">
-                        <Filter className="w-4 h-4" /> Filter Stations
-                    </label>
-                    <div className="px-1">
-                        <div className="flex justify-between text-xs text-muted-foreground mb-2">
-                            <span>Min Trips</span>
-                            <span className="font-mono text-foreground">{minTrips}</span>
+                {/* Filters (Hidden in Live Mode for now to avoid confusion or adapted) */}
+                {!liveMode && (
+                    <div className="space-y-3">
+                        <label className="text-sm font-medium text-foreground flex items-center gap-2">
+                            <Filter className="w-4 h-4" /> Filter Stations
+                        </label>
+                        <div className="px-1">
+                            <div className="flex justify-between text-xs text-muted-foreground mb-2">
+                                <span>Min Trips</span>
+                                <span className="font-mono text-foreground">{minTrips}</span>
+                            </div>
+                            <input
+                                type="range"
+                                min="0"
+                                max={maxTrips}
+                                step={Math.ceil(maxTrips / 100)}
+                                value={minTrips}
+                                onChange={(e) => setMinTrips(Number(e.target.value))}
+                                className="w-full h-1 bg-secondary rounded-lg appearance-none cursor-pointer accent-primary"
+                            />
                         </div>
-                        <input
-                            type="range"
-                            min="0"
-                            max={maxTrips}
-                            step={Math.ceil(maxTrips / 100)}
-                            value={minTrips}
-                            onChange={(e) => setMinTrips(Number(e.target.value))}
-                            className="w-full h-1 bg-secondary rounded-lg appearance-none cursor-pointer accent-primary"
-                        />
                     </div>
-                </div>
+                )}
 
-                {/* Top Stations */}
+                {liveMode && (
+                    <div className="space-y-3 p-3 bg-green-900/10 border border-green-500/20 rounded font-mono text-xs">
+                        <div className="text-green-400 font-bold mb-1">REAL-TIME FEED</div>
+                        <div className="flex justify-between">
+                            <span>Stations Online:</span>
+                            <span>{liveData.length}</span>
+                        </div>
+                        <div className="flex justify-between text-muted-foreground">
+                            <span>Updates:</span>
+                            <span>Every 60s</span>
+                        </div>
+                    </div>
+                )}
+
+                {/* Top Stations / Interactions */}
                 <div className="flex-1 overflow-hidden flex flex-col">
                     <label className="text-sm font-medium text-foreground flex items-center gap-2 mb-3">
-                        <Navigation className="w-4 h-4" /> Top Locations
+                        <Navigation className="w-4 h-4" /> {liveMode ? 'Station Status' : 'Top Locations'}
                     </label>
                     <div className="flex-1 overflow-y-auto space-y-2 pr-1 custom-scrollbar">
-                        {topStations.map((station, idx) => (
+                        {(liveMode ? liveData.slice(0, 50) : topStations).map((station, idx) => (
                             <button
-                                key={idx}
+                                key={liveMode ? station.id : idx}
                                 onClick={() => flyToStation(station)}
                                 className="w-full text-left p-2 rounded bg-secondary/20 hover:bg-secondary/40 border border-transparent hover:border-border transition-all group"
                             >
                                 <div className="flex justify-between items-start">
                                     <span className="text-xs font-medium text-foreground line-clamp-1 group-hover:text-primary transition-colors">
-                                        {station.station_name}
+                                        {liveMode ? station.name : station.station_name}
                                     </span>
-                                    <span className="text-[10px] font-mono text-muted-foreground bg-secondary/50 px-1 rounded">
-                                        #{idx + 1}
-                                    </span>
+                                    {liveMode ? (
+                                        <span className={`text-[10px] font-mono px-1 rounded ${station.bikes_available < 3 ? 'bg-red-500/20 text-red-400' : 'bg-green-500/20 text-green-400'}`}>
+                                            {station.bikes_available} 🚲
+                                        </span>
+                                    ) : (
+                                        <span className="text-[10px] font-mono text-muted-foreground bg-secondary/50 px-1 rounded">
+                                            #{idx + 1}
+                                        </span>
+                                    )}
                                 </div>
-                                <div className="text-[10px] text-muted-foreground mt-1">
-                                    {station.trip_count.toLocaleString()} trips
-                                </div>
+                                {!liveMode && (
+                                    <div className="text-[10px] text-muted-foreground mt-1">
+                                        {station.trip_count.toLocaleString()} trips
+                                    </div>
+                                )}
+                                {liveMode && (
+                                    <div className="flex gap-2 text-[9px] text-muted-foreground mt-1">
+                                        <span>Docks: {station.docks_available}</span>
+                                    </div>
+                                )}
                             </button>
                         ))}
                     </div>
@@ -313,20 +391,34 @@ function MapExplorer() {
                     onViewStateChange={({ viewState }) => setViewState(viewState)}
                     controller={true}
                     layers={layers}
-                    onClick={({ object, layer }) => {
+                    onClick={({ object }) => {
                         if (!object) return;
-
-                        // Handle clicking on points
-                        if (activeLayer === 'points' && object.station_name) {
+                        if (activeLayer === 'points') {
                             flyToStation(object);
-                            return;
                         }
-
-                        // Handle clicking on hexagons (optional: zoom to area?)
-                        // For now we just focus on points being selectable
                     }}
                     getTooltip={({ object, layer }) => {
                         if (!object) return null;
+
+                        if (liveMode) {
+                            if (object.name) {
+                                return {
+                                    html: `<div style="padding: 8px;">
+                                        <div style="font-weight: bold; color: #60a5fa; margin-bottom: 4px;">📍 LIVE STATION</div>
+                                        <div style="font-size: 13px; font-weight: bold; margin-bottom: 4px;">${object.name}</div>
+                                        <div style="font-size: 14px; color: #22c55e;">🚲 ${object.bikes_available} bikes available</div>
+                                        <div style="font-size: 12px; color: #9ca3af;">🅿️ ${object.docks_available} docks available</div>
+                                    </div>`,
+                                    style: {
+                                        backgroundColor: 'rgba(15, 23, 42, 0.95)',
+                                        borderRadius: '8px',
+                                        border: '1px solid #60a5fa',
+                                        color: 'white'
+                                    }
+                                };
+                            }
+                            return null;
+                        }
 
                         // For hexagon bars - find stations near this hexagon's position
                         if (layer && layer.id === 'hexagon-layer') {
