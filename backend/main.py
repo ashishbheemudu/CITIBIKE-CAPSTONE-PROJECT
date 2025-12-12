@@ -111,11 +111,28 @@ app.add_middleware(
 # ═══════════════════════════════════════════════════════════════
 import pandas as pd
 import numpy as np
+from gbfs_service import gbfs_service
 
 @app.get("/")
 async def root():
     """Health check endpoint"""
     return {"message": "Backend is running", "version": "3.0.0"}
+
+# ═══════════════════════════════════════════════════════════════
+# LIVE GBFS DATA ENDPOINT
+# ═══════════════════════════════════════════════════════════════
+@app.get("/live/stations")
+async def get_live_stations():
+    """
+    Get real-time station status from Citi Bike GBFS feed.
+    Returns bike availability, dock availability, and station status.
+    """
+    try:
+        stations = gbfs_service.get_live_stations()
+        return stations
+    except Exception as e:
+        logger.error(f"Error fetching live stations: {e}")
+        raise HTTPException(status_code=500, detail="Failed to fetch live station data")
 
 @app.get("/api/system-overview")
 async def get_system_overview(
