@@ -62,25 +62,30 @@ function RouteAnalysis() {
     }, [filteredRoutes]);
 
     // Check if route matches selected
-    const isSelectedRoute = (route) => {
-        if (!selectedRoute) return false;
-        return route.start_station_name === selectedRoute.start_station_name &&
-            route.end_station_name === selectedRoute.end_station_name;
+    const isSelectedRoute = (route, currentSelected) => {
+        if (!currentSelected) return false;
+        return route.start_station_name === currentSelected.start_station_name &&
+            route.end_station_name === currentSelected.end_station_name;
     };
 
     // Layers with dynamic styling based on selection
     const layers = useMemo(() => {
         const baseLayers = [];
 
+        // Filter routes: non-selected ones for background
+        const nonSelectedRoutes = selectedRoute
+            ? filteredRoutes.filter(r => !isSelectedRoute(r, selectedRoute))
+            : filteredRoutes;
+
         // Background routes (dimmed when something is selected)
         baseLayers.push(
             new ArcLayer({
                 id: 'arc-layer-background',
-                data: selectedRoute ? filteredRoutes.filter(r => !isSelectedRoute(r)) : filteredRoutes,
+                data: nonSelectedRoutes,
                 getSourcePosition: d => [d.start_lon, d.start_lat],
                 getTargetPosition: d => [d.end_lon, d.end_lat],
-                getSourceColor: selectedRoute ? [59, 130, 246, 80] : [59, 130, 246, 200],
-                getTargetColor: selectedRoute ? [236, 72, 153, 80] : [236, 72, 153, 200],
+                getSourceColor: selectedRoute ? [59, 130, 246, 60] : [59, 130, 246, 200],
+                getTargetColor: selectedRoute ? [236, 72, 153, 60] : [236, 72, 153, 200],
                 getWidth: selectedRoute ? 1 : 3,
                 pickable: true,
                 onHover: info => setHoverInfo(info),
@@ -166,7 +171,7 @@ function RouteAnalysis() {
                 data: filteredRoutes,
                 getPosition: d => [d.start_lon, d.start_lat],
                 getRadius: 30,
-                getFillColor: d => isSelectedRoute(d) ? [0, 255, 255] : [59, 130, 246],
+                getFillColor: d => isSelectedRoute(d, selectedRoute) ? [0, 255, 255] : [59, 130, 246],
                 radiusMinPixels: 2,
                 opacity: selectedRoute ? 0.3 : 1
             }),
@@ -175,7 +180,7 @@ function RouteAnalysis() {
                 data: filteredRoutes,
                 getPosition: d => [d.end_lon, d.end_lat],
                 getRadius: 30,
-                getFillColor: d => isSelectedRoute(d) ? [255, 0, 255] : [236, 72, 153],
+                getFillColor: d => isSelectedRoute(d, selectedRoute) ? [255, 0, 255] : [236, 72, 153],
                 radiusMinPixels: 2,
                 opacity: selectedRoute ? 0.3 : 1
             })
@@ -292,26 +297,26 @@ function RouteAnalysis() {
                             <button
                                 key={idx}
                                 onClick={() => handleRouteClick(route)}
-                                className={`w-full text-left p-3 rounded border transition-all group ${isSelectedRoute(route)
-                                        ? 'bg-gradient-to-r from-cyan-500/30 to-pink-500/30 border-cyan-500/50 shadow-[0_0_15px_rgba(0,255,255,0.2)]'
-                                        : 'bg-secondary/20 hover:bg-secondary/40 border-transparent hover:border-border'
+                                className={`w-full text-left p-3 rounded border transition-all group ${isSelectedRoute(route, selectedRoute)
+                                    ? 'bg-gradient-to-r from-cyan-500/30 to-pink-500/30 border-cyan-500/50 shadow-[0_0_15px_rgba(0,255,255,0.2)]'
+                                    : 'bg-secondary/20 hover:bg-secondary/40 border-transparent hover:border-border'
                                     }`}
                             >
                                 <div className="flex justify-between items-start mb-1">
-                                    <span className={`text-[10px] font-mono px-1 rounded ${isSelectedRoute(route)
-                                            ? 'text-cyan-400 bg-cyan-500/20'
-                                            : 'text-muted-foreground bg-secondary/50'
+                                    <span className={`text-[10px] font-mono px-1 rounded ${isSelectedRoute(route, selectedRoute)
+                                        ? 'text-cyan-400 bg-cyan-500/20'
+                                        : 'text-muted-foreground bg-secondary/50'
                                         }`}>
                                         #{idx + 1}
                                     </span>
-                                    <span className={`text-xs font-bold ${isSelectedRoute(route) ? 'text-cyan-400' : 'text-primary'
+                                    <span className={`text-xs font-bold ${isSelectedRoute(route, selectedRoute) ? 'text-cyan-400' : 'text-primary'
                                         }`}>
                                         {route.trip_count.toLocaleString()} trips
                                     </span>
                                 </div>
                                 <div className="flex items-center gap-2 text-xs text-foreground">
                                     <span className="truncate max-w-[40%]">{route.start_station_name}</span>
-                                    <ArrowRight className={`w-3 h-3 flex-shrink-0 ${isSelectedRoute(route) ? 'text-pink-400' : 'text-muted-foreground'
+                                    <ArrowRight className={`w-3 h-3 flex-shrink-0 ${isSelectedRoute(route, selectedRoute) ? 'text-pink-400' : 'text-muted-foreground'
                                         }`} />
                                     <span className="truncate max-w-[40%]">{route.end_station_name}</span>
                                 </div>
