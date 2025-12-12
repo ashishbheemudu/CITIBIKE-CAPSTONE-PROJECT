@@ -41,13 +41,18 @@ function MapExplorer() {
         const loadData = async () => {
             try {
                 const result = await fetchMapData();
-                setData(result.locations);
+                // Handle both array and object response formats
+                const locations = Array.isArray(result) ? result : (result?.locations || []);
+                setData(locations);
 
                 // Process top stations
-                const sorted = [...result.locations].sort((a, b) => b.trip_count - a.trip_count);
-                setTopStations(sorted.slice(0, 50));
+                if (locations.length > 0) {
+                    const sorted = [...locations].sort((a, b) => b.trip_count - a.trip_count);
+                    setTopStations(sorted.slice(0, 50));
+                }
             } catch (err) {
                 console.error("Failed to load map data", err);
+                setData([]);
             } finally {
                 setLoading(false);
             }
