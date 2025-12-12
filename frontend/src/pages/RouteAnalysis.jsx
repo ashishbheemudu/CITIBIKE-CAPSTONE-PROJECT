@@ -23,6 +23,9 @@ function RouteAnalysis() {
     // Filters
     const [minTrips, setMinTrips] = useState(0);
 
+    // Animation state for flowing effects
+    const [animationTime, setAnimationTime] = useState(0);
+
     useEffect(() => {
         const loadData = async () => {
             try {
@@ -37,6 +40,14 @@ function RouteAnalysis() {
         loadData();
     }, []);
 
+    // Animation loop for flowing arc effects
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setAnimationTime(t => (t + 0.02) % 1);
+        }, 50); // 20 FPS
+        return () => clearInterval(interval);
+    }, []);
+
     // Filtered Routes
     const filteredRoutes = useMemo(() => {
         if (!routes) return [];
@@ -48,36 +59,72 @@ function RouteAnalysis() {
         return [...filteredRoutes].sort((a, b) => b.trip_count - a.trip_count).slice(0, 10);
     }, [filteredRoutes]);
 
-    // Layers
-    const layers = [
+    // Animated color function - creates flowing gradient effect
+    const getAnimatedSourceColor = (d) => {
+        const phase = (animationTime + d.start_lon * 0.1) % 1;
+        const pulse = Math.sin(phase * Math.PI * 2) * 0.3 + 0.7;
+        return [59 * pulse + 100, 130 * pulse, 246]; // Pulsing blue
+    };
+
+    const getAnimatedTargetColor = (d) => {
+        const phase = (animationTime + d.end_lon * 0.1) % 1;
+        const pulse = Math.sin(phase * Math.PI * 2) * 0.3 + 0.7;
+        return [236, 72 * pulse + 50, 153 * pulse + 50]; // Pulsing pink
+    };
+
+    // Animated arc width based on trip count and time
+    const getAnimatedWidth = (d) => {
+        const baseWidth = Math.min(Math.max(d.trip_count / 20000, 1), 6);
+        const pulse = Math.sin(animationTime * Math.PI * 2 + d.trip_count * 0.00001) * 0.5 + 1;
+        return baseWidth * pulse;
+    };
+
+    // Layers with animation
+    const layers = useMemo(() => [
         new ArcLayer({
             id: 'arc-layer',
             data: filteredRoutes,
             getSourcePosition: d => [d.start_lon, d.start_lat],
             getTargetPosition: d => [d.end_lon, d.end_lat],
-            getSourceColor: [59, 130, 246], // Blue start
-            getTargetColor: [236, 72, 153], // Pink end
-            getWidth: 3,
+            getSourceColor: getAnimatedSourceColor,
+            getTargetColor: getAnimatedTargetColor,
+            getWidth: getAnimatedWidth,
             pickable: true,
-            onHover: info => setHoverInfo(info)
+            onHover: info => setHoverInfo(info),
+            updateTriggers: {
+                getSourceColor: [animationTime],
+                getTargetColor: [animationTime],
+                getWidth: [animationTime]
+            },
+            transitions: {
+                getWidth: 100
+            }
         }),
         new ScatterplotLayer({
             id: 'start-points',
             data: filteredRoutes,
             getPosition: d => [d.start_lon, d.start_lat],
-            getRadius: 30,
-            getFillColor: [59, 130, 246],
-            radiusMinPixels: 2
+            getRadius: d => 30 + Math.sin(animationTime * Math.PI * 2 + d.start_lat) * 10,
+            getFillColor: [59, 130, 246, 200],
+            radiusMinPixels: 3,
+            radiusMaxPixels: 8,
+            updateTriggers: {
+                getRadius: [animationTime]
+            }
         }),
         new ScatterplotLayer({
             id: 'end-points',
             data: filteredRoutes,
             getPosition: d => [d.end_lon, d.end_lat],
-            getRadius: 30,
-            getFillColor: [236, 72, 153],
-            radiusMinPixels: 2
+            getRadius: d => 30 + Math.sin(animationTime * Math.PI * 2 + d.end_lat) * 10,
+            getFillColor: [236, 72, 153, 200],
+            radiusMinPixels: 3,
+            radiusMaxPixels: 8,
+            updateTriggers: {
+                getRadius: [animationTime]
+            }
         })
-    ];
+    ], [filteredRoutes, animationTime]);
 
     const flyToRoute = (route) => {
         const midLat = (route.start_lat + route.end_lat) / 2;
