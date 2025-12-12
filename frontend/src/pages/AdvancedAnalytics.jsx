@@ -14,8 +14,8 @@ const INITIAL_VIEW_STATE = {
     bearing: -10
 };
 
-// API Base URL
-const API_BASE = '/api';
+// API Base URL - use environment variable with fallback to production
+const API_BASE = import.meta.env.VITE_API_URL || 'https://18.218.154.66.nip.io/api';
 
 function AdvancedAnalytics() {
     const [viewState, setViewState] = useState(INITIAL_VIEW_STATE);
