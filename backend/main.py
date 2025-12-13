@@ -580,81 +580,54 @@ async def get_historical_demand(
     start_date: str,
     end_date: str
 ):
-    """Get historical hourly demand from the FULL 9.9M row dataset (2019-2025) including validation data"""
+    """Get historical hourly demand from the FULL 9.9M row dataset (2019-2025)"""
     try:
         # Validate inputs
         if not station:
             raise HTTPException(status_code=400, detail="Station name is required")
         
-        results = []
-        
-        # 1. Try Primary Parquet (Jan 2020 - Aug 2025)
+        # Use the FULL historical data file
         import os
         parquet_path = os.path.join(os.path.dirname(__file__), "data", "v1_core", "final_station_demand_robust_features.parquet")
         
-        # Parse dates
+        if not os.path.exists(parquet_path):
+            raise HTTPException(status_code=503, detail="Historical data file not found")
+        
+        df = pd.read_parquet(parquet_path, columns=['time', 'station_name', 'pickups'])
+        
+        # Filter by station
+        df_station = df[df['station_name'] == station].copy()
+        
+        if df_station.empty:
+            # Return empty list with 200 status - station exists but no data for this station
+            return []
+       
+        # Convert time to timezone-naive datetime
+        df_station['time'] = pd.to_datetime(df_station['time']).dt.tz_localize(None)
+        
+        # Filter by date range
         try:
+            # Parse dates and remove timezone to match data format
             start_dt = pd.to_datetime(start_date).tz_localize(None) if pd.to_datetime(start_date).tz is None else pd.to_datetime(start_date).tz_convert(None).tz_localize(None)
             end_dt = pd.to_datetime(end_date).tz_localize(None) if pd.to_datetime(end_date).tz is None else pd.to_datetime(end_date).tz_convert(None).tz_localize(None)
         except Exception as date_err:
             raise HTTPException(status_code=400, detail=f"Invalid date format: {str(date_err)}")
         
-        if os.path.exists(parquet_path):
-            try:
-                # Optimized: Read basic columns first
-                df = pd.read_parquet(parquet_path, columns=['time', 'station_name', 'pickups'])
-                df_station = df[df['station_name'] == station].copy()
-                
-                if not df_station.empty:
-                    df_station['time'] = pd.to_datetime(df_station['time']).dt.tz_localize(None)
-                    df_filtered = df_station[
-                        (df_station['time'] >= start_dt) & 
-                        (df_station['time'] <= end_dt)
-                    ].copy()
-                    
-                    for _, row in df_filtered.iterrows():
-                        results.append({
-                            'date': row['time'].isoformat() + '+00:00',
-                            'demand': float(row['pickups'])
-                        })
-            except Exception as e:
-                logger.error(f"Error reading parquet: {e}")
+        df_filtered = df_station[
+            (df_station['time'] >= start_dt) & 
+            (df_station['time'] <= end_dt)
+        ].copy()
         
-        # 2. Try Unseen Validation Data (Sep 2025 - Nov 2025)
-        # This is CRITICAL for the "Actual vs Predicted" comparison on new data
-        csv_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), "unseen_test_results.csv")
+        # Format response
+        result = []
+        for _, row in df_filtered.iterrows():
+            # Add Z suffix for UTC timezone to match prediction date format
+            result.append({
+                'date': row['time'].isoformat() + '+00:00',
+                'demand': float(row['pickups'])
+            })
         
-        if os.path.exists(csv_path):
-            try:
-                # Validation CSV has cols: time, station, actual, predicted
-                val_df = pd.read_csv(csv_path)
-                
-                # Filter by station
-                val_station = val_df[val_df['station'] == station].copy()
-                
-                if not val_station.empty:
-                    val_station['time'] = pd.to_datetime(val_station['time']).dt.tz_localize(None)
-                    
-                    # Filter by date range
-                    val_filtered = val_station[
-                        (val_station['time'] >= start_dt) & 
-                        (val_station['time'] <= end_dt)
-                    ].copy()
-                    
-                    for _, row in val_filtered.iterrows():
-                        # Use 'actual' column as demand
-                        results.append({
-                            'date': row['time'].isoformat() + '+00:00',
-                            'demand': float(row['actual'])
-                        })
-            except Exception as e:
-                logger.warning(f"Error reading validation CSV: {e}")
-
-        # Deduplicate results by date
-        unique_results = {r['date']: r for r in results}
-        final_results = sorted(unique_results.values(), key=lambda x: x['date'])
-        
-        return final_results
+        return result
         
     except HTTPException:
         raise  # Re-raise HTTP exceptions
