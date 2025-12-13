@@ -3,7 +3,7 @@ import axios from 'axios';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { Activity, TrendingUp, Calendar, Zap, Target, Sparkles } from 'lucide-react';
 import ChartErrorBoundary from '../components/ChartErrorBoundary';
-import confetti from 'canvas-confetti';
+
 
 // API Configuration - Uses environment variable with fallback
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://18.218.154.66.nip.io/api';
@@ -178,14 +178,6 @@ const Prediction = () => {
                     // Calculate total actual trips
                     const totalActualTrips = combined.reduce((sum, d) => sum + (d.actual || 0), 0);
                     setTotalTrips(Math.round(totalActualTrips));
-
-                    // 🎉 Celebration confetti on successful prediction!
-                    confetti({
-                        particleCount: 100,
-                        spread: 70,
-                        origin: { y: 0.6 },
-                        colors: ['#00ffff', '#a855f7', '#22d3ee', '#f472b6']
-                    });
                 }
             } catch (actualErr) {
                 console.error('Historical data error:', actualErr);
