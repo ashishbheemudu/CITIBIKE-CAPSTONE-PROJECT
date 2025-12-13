@@ -42,8 +42,8 @@ class DataLoader:
             # Try loading from new structure first, fall back to legacy
             self._load_core_csvs()
             
-            # Load Parquet (NUCLEAR OPTION: Disabled to prevent startup OOM)
-            # self._load_parquet()
+            # Load Parquet for historical data (REQUIRED for historical-demand endpoint)
+            self._load_parquet()
             
             # Load Scaler
             self._load_scaler()
