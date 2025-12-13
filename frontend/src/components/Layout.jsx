@@ -174,7 +174,7 @@ function Layout({ children }) {
         { text: 'Map Explorer', icon: <MapOutlinedIcon />, path: '/map' },
         { text: 'Route Explorer', icon: <TimelineOutlinedIcon />, path: '/routes' },
         { text: 'Station Intel', icon: <PlaceOutlinedIcon />, path: '/stations' },
-        { text: 'Neural Demand Lab', icon: <PsychologyIcon />, path: '/prediction' },
+        { text: 'Demand Forecaster', icon: <PsychologyIcon />, path: '/prediction' },
         { text: 'Deep Analytics', icon: <AnalyticsIcon />, path: '/advanced' },
         { text: 'Fleet Command', icon: <LocalShippingIcon />, path: '/rebalancing' },
         { text: 'Social Equity', icon: <PublicIcon />, path: '/equity' },
