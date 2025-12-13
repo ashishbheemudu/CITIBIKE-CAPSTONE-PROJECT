@@ -375,12 +375,12 @@ const Prediction = () => {
                                         />
                                         <Line
                                             type="monotone"
-                                            dataKey="actualDemand"
+                                            dataKey="actual"
                                             stroke="#06b6d4"
                                             strokeWidth={2}
                                             dot={false}
                                             name="📊 Actual Demand"
-                                            connectNulls={true}
+                                            connectNulls={false}
                                         />
                                     </LineChart>
                                 </ResponsiveContainer>

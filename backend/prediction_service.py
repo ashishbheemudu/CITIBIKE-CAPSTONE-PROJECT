@@ -220,8 +220,8 @@ class PredictionService:
                         # Calculate calibration factor based on variance ratio
                         if hist_std > 0 and pred_std > 0:
                             variance_ratio = hist_std / pred_std
-                            # Increased cap from 3.0 to 5.0 to allow more dynamic predictions
-                            cal_factor = min(max(variance_ratio, 1.0), 5.0)
+                            # Cap the calibration between 1.0 and 3.0 to avoid extreme values
+                            cal_factor = min(max(variance_ratio, 1.0), 3.0)
                             
                             # Center predictions around historical mean and scale
                             final_pred = hist_mean + (final_pred - pred_mean) * cal_factor

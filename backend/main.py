@@ -580,41 +580,36 @@ async def get_historical_demand(
     start_date: str,
     end_date: str
 ):
-    """Get historical hourly demand using CACHED data (prevents OOM crash)"""
+    """Get historical hourly demand from the FULL 9.9M row dataset (2019-2025)"""
     try:
-        import pandas as pd
-        
         # Validate inputs
         if not station:
             raise HTTPException(status_code=400, detail="Station name is required")
         
-        # Use CACHED data from data_loader (already in memory!)
-        if data_loader is None or not hasattr(data_loader, 'robust_features') or data_loader.robust_features is None:
-            raise HTTPException(status_code=503, detail="Historical data not loaded")
+        # Use the FULL historical data file
+        import os
+        parquet_path = os.path.join(os.path.dirname(__file__), "data", "v1_core", "final_station_demand_robust_features.parquet")
         
-        df = data_loader.robust_features
+        if not os.path.exists(parquet_path):
+            raise HTTPException(status_code=503, detail="Historical data file not found")
+        
+        df = pd.read_parquet(parquet_path, columns=['time', 'station_name', 'pickups'])
         
         # Filter by station
         df_station = df[df['station_name'] == station].copy()
         
         if df_station.empty:
+            # Return empty list with 200 status - station exists but no data for this station
             return []
        
-        # Convert time to timezone-naive datetime if needed
-        if 'time' in df_station.columns:
-            df_station['time'] = pd.to_datetime(df_station['time']).dt.tz_localize(None)
+        # Convert time to timezone-naive datetime
+        df_station['time'] = pd.to_datetime(df_station['time']).dt.tz_localize(None)
         
         # Filter by date range
         try:
-            start_dt = pd.to_datetime(start_date)
-            end_dt = pd.to_datetime(end_date)
-            
-            # Handle timezone-aware dates
-            if start_dt.tz is not None:
-                start_dt = start_dt.tz_convert(None)
-            if end_dt.tz is not None:
-                end_dt = end_dt.tz_convert(None)
-                
+            # Parse dates and remove timezone to match data format
+            start_dt = pd.to_datetime(start_date).tz_localize(None) if pd.to_datetime(start_date).tz is None else pd.to_datetime(start_date).tz_convert(None).tz_localize(None)
+            end_dt = pd.to_datetime(end_date).tz_localize(None) if pd.to_datetime(end_date).tz is None else pd.to_datetime(end_date).tz_convert(None).tz_localize(None)
         except Exception as date_err:
             raise HTTPException(status_code=400, detail=f"Invalid date format: {str(date_err)}")
         
@@ -626,15 +621,16 @@ async def get_historical_demand(
         # Format response
         result = []
         for _, row in df_filtered.iterrows():
+            # Add Z suffix for UTC timezone to match prediction date format
             result.append({
                 'date': row['time'].isoformat() + '+00:00',
-                'demand': float(row['pickups']) if 'pickups' in row else 0.0
+                'demand': float(row['pickups'])
             })
         
         return result
         
     except HTTPException:
-        raise
+        raise  # Re-raise HTTP exceptions
     except Exception as e:
         import traceback
         traceback.print_exc()
