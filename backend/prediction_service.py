@@ -205,7 +205,7 @@ class PredictionService:
                 
                 # ═══════════════════════════════════════════════════════════
                 # CALIBRATION: Scale predictions based on station's historical variance
-                # The model underestimates peaks, so we expand the range
+                # AND hourly patterns to make predictions more dynamic
                 # ═══════════════════════════════════════════════════════════
                 if station_cache is not None and not station_cache.empty and 'pickups' in station_cache.columns:
                     hist_demands = station_cache['pickups'].values
@@ -220,16 +220,36 @@ class PredictionService:
                         # Calculate calibration factor based on variance ratio
                         if hist_std > 0 and pred_std > 0:
                             variance_ratio = hist_std / pred_std
-                            # Cap the calibration between 1.0 and 3.0 to avoid extreme values
-                            cal_factor = min(max(variance_ratio, 1.0), 3.0)
+                            # Allow higher factor for more dynamic predictions
+                            cal_factor = min(max(variance_ratio, 1.0), 5.0)
                             
                             # Center predictions around historical mean and scale
                             final_pred = hist_mean + (final_pred - pred_mean) * cal_factor
                             
                             # Ensure non-negative
                             final_pred = np.maximum(final_pred, 0)
+                        
+                        # HOURLY PATTERN MATCHING: Blend with historical hourly averages
+                        # This makes predictions follow typical daily patterns
+                        if 'time' in station_cache.columns:
+                            try:
+                                station_cache_temp = station_cache.copy()
+                                station_cache_temp['hour'] = pd.to_datetime(station_cache_temp['time']).dt.hour
+                                hourly_avg = station_cache_temp.groupby('hour')['pickups'].mean().to_dict()
+                                
+                                # Blend: 70% model prediction, 30% hourly average
+                                for i, ts in enumerate(timestamps):
+                                    hour = ts.hour
+                                    if hour in hourly_avg:
+                                        hourly_val = hourly_avg[hour]
+                                        # Weighted blend
+                                        final_pred[i] = 0.7 * final_pred[i] + 0.3 * hourly_val
+                                
+                                logger.info(f"🕐 Applied hourly pattern blending")
+                            except Exception as hourly_err:
+                                logger.warning(f"⚠️ Hourly blending failed: {hourly_err}")
                             
-                            logger.info(f"🎯 Calibrated: factor={cal_factor:.2f}, new range=[{final_pred.min():.2f}, {final_pred.max():.2f}]")
+                        logger.info(f"🎯 Calibrated: factor={cal_factor:.2f}, new range=[{final_pred.min():.2f}, {final_pred.max():.2f}]")
 
                 # Format output
                 results = []
