@@ -15,6 +15,7 @@
     "@mui/icons-material": "^7.3.5",
     "@mui/material": "^7.3.5",
     "axios": "^1.13.2",
+    "canvas-confetti": "^1.9.4",
     "deck.gl": "^9.2.2",
     "framer-motion": "^12.23.25",
     "lucide-react": "^0.555.0",

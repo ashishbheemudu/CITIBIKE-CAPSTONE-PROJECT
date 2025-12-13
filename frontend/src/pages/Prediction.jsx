@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
-import { Activity, TrendingUp, Calendar, Zap, Target } from 'lucide-react';
+import { Activity, TrendingUp, Calendar, Zap, Target, Sparkles } from 'lucide-react';
 import ChartErrorBoundary from '../components/ChartErrorBoundary';
+import confetti from 'canvas-confetti';
 
 // API Configuration - Uses environment variable with fallback
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://18.218.154.66.nip.io/api';
@@ -177,6 +178,14 @@ const Prediction = () => {
                     // Calculate total actual trips
                     const totalActualTrips = combined.reduce((sum, d) => sum + (d.actual || 0), 0);
                     setTotalTrips(Math.round(totalActualTrips));
+
+                    // 🎉 Celebration confetti on successful prediction!
+                    confetti({
+                        particleCount: 100,
+                        spread: 70,
+                        origin: { y: 0.6 },
+                        colors: ['#00ffff', '#a855f7', '#22d3ee', '#f472b6']
+                    });
                 }
             } catch (actualErr) {
                 console.error('Historical data error:', actualErr);
@@ -287,13 +296,13 @@ const Prediction = () => {
                 {/* Stats Cards */}
                 {predictions.length > 0 && (
                     <div className={`grid ${accuracy ? 'grid-cols-4' : 'grid-cols-3'} gap-4 mb-8`}>
-                        <div className="bg-[#1a1a2e] border border-gray-800 rounded-lg p-6">
+                        <div className="bg-[#1a1a2e] border border-gray-800 rounded-lg p-6 animate-fade-in hover:border-cyan-500/50 transition-all duration-300">
                             <div className="text-gray-400 text-sm mb-2">Total Trips (48h)</div>
-                            <div className="text-4xl font-bold text-cyan-400">{totalTrips}</div>
+                            <div className="text-4xl font-bold text-cyan-400 glow-text animate-count">{totalTrips}</div>
                         </div>
-                        <div className="bg-[#1a1a2e] border border-gray-800 rounded-lg p-6">
+                        <div className="bg-[#1a1a2e] border border-gray-800 rounded-lg p-6 animate-fade-in hover:border-purple-500/50 transition-all duration-300" style={{ animationDelay: '0.1s' }}>
                             <div className="text-gray-400 text-sm mb-2">Peak Demand</div>
-                            <div className="text-4xl font-bold text-purple-400">
+                            <div className="text-4xl font-bold text-purple-400 glow-text animate-count">
                                 {(() => {
                                     const validPreds = predictions.filter(p => p.predicted !== null && p.predicted !== undefined);
                                     return validPreds.length > 0 ? Math.max(...validPreds.map(p => p.predicted)).toFixed(0) : '0';
@@ -326,90 +335,97 @@ const Prediction = () => {
                             </div>
                         )}
                     </div>
-                )}
+                )
+                }
 
                 {/* Chart */}
-                {combinedData.length > 0 && (
-                    <div className="bg-[#1a1a2e] border border-gray-800 rounded-lg p-6">
-                        <ChartErrorBoundary>
-                            <div className="h-[400px]">
-                                <ResponsiveContainer width="100%" height="100%">
-                                    <LineChart data={combinedData}>
-                                        <CartesianGrid strokeDasharray="3 3" stroke="#333" vertical={false} />
-                                        <XAxis
-                                            dataKey="date"
-                                            stroke="#666"
-                                            tick={{ fontSize: 12, fill: '#666' }}
-                                            tickLine={false}
-                                            axisLine={false}
-                                            tickFormatter={(value) => {
-                                                const date = new Date(value);
-                                                return `${date.getUTCMonth() + 1}/${date.getUTCDate()} ${date.getUTCHours()}:00`;
-                                            }}
-                                        />
-                                        <YAxis
-                                            stroke="#666"
-                                            tick={{ fontSize: 12, fill: '#666' }}
-                                            tickLine={false}
-                                            axisLine={false}
-                                            label={{ value: 'Bikes', angle: -90, position: 'insideLeft', fill: '#666' }}
-                                        />
-                                        <Tooltip
-                                            contentStyle={{
-                                                backgroundColor: '#1a1a2e',
-                                                borderColor: '#333',
-                                                borderRadius: '8px',
-                                                color: '#fff'
-                                            }}
-                                            labelFormatter={(value) => new Date(value).toLocaleString()}
-                                            formatter={(value) => value !== null ? value.toFixed(2) + ' bikes' : 'N/A'}
-                                        />
-                                        <Legend wrapperStyle={{ paddingTop: '20px' }} />
-                                        <Line
-                                            type="monotone"
-                                            dataKey="predicted"
-                                            stroke="#a855f7"
-                                            strokeWidth={2}
-                                            dot={false}
-                                            name="🤖 AI Prediction"
-                                        />
-                                        <Line
-                                            type="monotone"
-                                            dataKey="actual"
-                                            stroke="#06b6d4"
-                                            strokeWidth={2}
-                                            dot={false}
-                                            name="📊 Actual Demand"
-                                            connectNulls={false}
-                                        />
-                                    </LineChart>
-                                </ResponsiveContainer>
-                            </div>
-                        </ChartErrorBoundary>
-                    </div>
-                )}
+                {
+                    combinedData.length > 0 && (
+                        <div className="bg-[#1a1a2e] border border-gray-800 rounded-lg p-6">
+                            <ChartErrorBoundary>
+                                <div className="h-[400px]">
+                                    <ResponsiveContainer width="100%" height="100%">
+                                        <LineChart data={combinedData}>
+                                            <CartesianGrid strokeDasharray="3 3" stroke="#333" vertical={false} />
+                                            <XAxis
+                                                dataKey="date"
+                                                stroke="#666"
+                                                tick={{ fontSize: 12, fill: '#666' }}
+                                                tickLine={false}
+                                                axisLine={false}
+                                                tickFormatter={(value) => {
+                                                    const date = new Date(value);
+                                                    return `${date.getUTCMonth() + 1}/${date.getUTCDate()} ${date.getUTCHours()}:00`;
+                                                }}
+                                            />
+                                            <YAxis
+                                                stroke="#666"
+                                                tick={{ fontSize: 12, fill: '#666' }}
+                                                tickLine={false}
+                                                axisLine={false}
+                                                label={{ value: 'Bikes', angle: -90, position: 'insideLeft', fill: '#666' }}
+                                            />
+                                            <Tooltip
+                                                contentStyle={{
+                                                    backgroundColor: '#1a1a2e',
+                                                    borderColor: '#333',
+                                                    borderRadius: '8px',
+                                                    color: '#fff'
+                                                }}
+                                                labelFormatter={(value) => new Date(value).toLocaleString()}
+                                                formatter={(value) => value !== null ? value.toFixed(2) + ' bikes' : 'N/A'}
+                                            />
+                                            <Legend wrapperStyle={{ paddingTop: '20px' }} />
+                                            <Line
+                                                type="monotone"
+                                                dataKey="predicted"
+                                                stroke="#a855f7"
+                                                strokeWidth={2}
+                                                dot={false}
+                                                name="🤖 AI Prediction"
+                                            />
+                                            <Line
+                                                type="monotone"
+                                                dataKey="actual"
+                                                stroke="#06b6d4"
+                                                strokeWidth={2}
+                                                dot={false}
+                                                name="📊 Actual Demand"
+                                                connectNulls={false}
+                                            />
+                                        </LineChart>
+                                    </ResponsiveContainer>
+                                </div>
+                            </ChartErrorBoundary>
+                        </div>
+                    )
+                }
 
                 {/* Empty State */}
-                {predictions.length === 0 && !loading && !error && (
-                    <div className="bg-[#1a1a2e] border border-gray-800 rounded-lg p-12 text-center">
-                        <Activity className="w-16 h-16 text-gray-600 mx-auto mb-4" />
-                        <h3 className="text-xl font-medium text-gray-300 mb-2">No Predictions Yet</h3>
-                        <p className="text-gray-500">
-                            Select a station and date, then click Generate to see AI-powered forecasts
-                        </p>
-                    </div>
-                )}
+                {
+                    predictions.length === 0 && !loading && !error && (
+                        <div className="bg-[#1a1a2e] border border-gray-800 rounded-lg p-12 text-center">
+                            <Activity className="w-16 h-16 text-gray-600 mx-auto mb-4" />
+                            <h3 className="text-xl font-medium text-gray-300 mb-2">No Predictions Yet</h3>
+                            <p className="text-gray-500">
+                                Select a station and date, then click Generate to see AI-powered forecasts
+                            </p>
+                        </div>
+                    )
+                }
 
                 {/* Loading State */}
-                {loading && (
-                    <div className="bg-[#1a1a2e] border border-gray-800 rounded-lg p-12 text-center">
-                        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-500 mx-auto mb-4"></div>
-                        <h3 className="text-xl font-medium text-gray-300 mb-2">Generating Predictions...</h3>
-                        <p className="text-gray-500">Running ML models for {selectedStation}</p>
-                    </div>
-                )}
-            </div>
-        </div>
+                {
+                    loading && (
+                        <div className="bg-[#1a1a2e] border border-gray-800 rounded-lg p-12 text-center">
+                            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-500 mx-auto mb-4"></div>
+                            <h3 className="text-xl font-medium text-gray-300 mb-2">Generating Predictions...</h3>
+                            <p className="text-gray-500">Running ML models for {selectedStation}</p>
+                        </div>
+                    )
+                }
+            </div >
+        </div >
     );
 };
 
