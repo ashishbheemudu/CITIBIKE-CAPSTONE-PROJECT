@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { styled, createTheme, ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import Box from '@mui/material/Box';
@@ -96,12 +96,12 @@ const professionalTheme = createTheme({
 
 const drawerWidth = 260;
 
-const MainContent = styled(Box)(({ theme, open }) => ({
+const MainContent = styled(Box)(({ theme, open, ismobile }) => ({
     flexGrow: 1,
     height: '100vh',
     overflow: 'auto',
     paddingTop: 64,
-    paddingLeft: open ? drawerWidth : 72,
+    paddingLeft: ismobile === 'true' ? 0 : (open ? drawerWidth : 72),
     transition: theme.transitions.create('padding', {
         easing: theme.transitions.easing.sharp,
         duration: theme.transitions.duration.enteringScreen,
@@ -162,8 +162,22 @@ const NavItem = ({ item, selected, onClick, open }) => (
 
 function Layout({ children }) {
     const [open, setOpen] = useState(true);
+    const [isMobile, setIsMobile] = useState(false);
     const navigate = useNavigate();
     const location = useLocation();
+
+    // Detect mobile screen size
+    useEffect(() => {
+        const checkMobile = () => {
+            setIsMobile(window.innerWidth < 768);
+            if (window.innerWidth < 768) {
+                setOpen(false); // Close sidebar on mobile by default
+            }
+        };
+        checkMobile();
+        window.addEventListener('resize', checkMobile);
+        return () => window.removeEventListener('resize', checkMobile);
+    }, []);
 
     const toggleDrawer = () => {
         setOpen(!open);
@@ -210,19 +224,38 @@ function Layout({ children }) {
                     </Toolbar>
                 </MuiAppBar>
 
+                {/* Mobile Overlay - click to close sidebar */}
+                {isMobile && open && (
+                    <Box
+                        onClick={() => setOpen(false)}
+                        sx={{
+                            position: 'fixed',
+                            top: 0,
+                            left: 0,
+                            right: 0,
+                            bottom: 0,
+                            backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                            zIndex: 1199,
+                            backdropFilter: 'blur(4px)',
+                        }}
+                    />
+                )}
+
                 <Box
                     component="nav"
                     sx={{
-                        width: open ? drawerWidth : 72,
+                        width: open ? drawerWidth : (isMobile ? 0 : 72),
                         flexShrink: 0,
                         position: 'fixed',
                         height: '100%',
                         borderRight: '1px solid rgba(255, 255, 255, 0.05)',
-                        backgroundColor: 'rgba(5, 5, 7, 0.8)', // Glass effect base
-                        backdropFilter: 'blur(20px)', // Strong blur
-                        transition: 'width 0.2s ease-in-out',
+                        backgroundColor: 'rgba(5, 5, 7, 0.95)',
+                        backdropFilter: 'blur(20px)',
+                        transition: 'all 0.2s ease-in-out',
                         zIndex: 1200,
-                        pt: 8, // Toolbar height
+                        pt: 8,
+                        transform: isMobile && !open ? 'translateX(-100%)' : 'translateX(0)',
+                        boxShadow: isMobile && open ? '4px 0 20px rgba(0, 0, 0, 0.5)' : 'none',
                     }}
                 >
                     {/* Logo Area */}
@@ -252,8 +285,8 @@ function Layout({ children }) {
                     </List>
                 </Box>
 
-                <MainContent open={open}>
-                    <Box sx={{ mt: 4, mb: 4, width: '100%', px: 0 }}>
+                <MainContent open={open} ismobile={isMobile.toString()}>
+                    <Box sx={{ mt: isMobile ? 2 : 4, mb: 4, width: '100%', px: isMobile ? 2 : 0 }}>
                         <motion.div
                             initial={{ opacity: 0, y: 10 }}
                             animate={{ opacity: 1, y: 0 }}
