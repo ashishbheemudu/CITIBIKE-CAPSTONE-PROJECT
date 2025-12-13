@@ -26,8 +26,6 @@ import PublicIcon from '@mui/icons-material/Public';
 import PsychologyIcon from '@mui/icons-material/Psychology';
 import LocalShippingIcon from '@mui/icons-material/LocalShipping';
 import AnalyticsIcon from '@mui/icons-material/Analytics';
-import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
-import Tooltip from '@mui/material/Tooltip';
 import { useNavigate, useLocation } from 'react-router-dom';
 // eslint-disable-next-line no-unused-vars
 import { motion } from 'framer-motion';
@@ -159,16 +157,6 @@ const NavItem = ({ item, selected, onClick, open }) => (
                 }}
             />
         )}
-        {open && item.info && (
-            <Tooltip
-                title={item.info}
-                placement="right"
-                arrow
-                sx={{ ml: 1 }}
-            >
-                <InfoOutlinedIcon sx={{ fontSize: 16, color: '#6b7280', '&:hover': { color: '#a855f7' }, cursor: 'help', transition: 'color 0.2s' }} />
-            </Tooltip>
-        )}
     </ListItemButton>
 );
 
@@ -182,14 +170,14 @@ function Layout({ children }) {
     };
 
     const menuItems = [
-        { text: 'Mission Control', icon: <DashboardOutlinedIcon />, path: '/', info: 'System overview with KPIs, trends, and real-time metrics' },
-        { text: 'Map Explorer', icon: <MapOutlinedIcon />, path: '/map', info: '3D geospatial visualization of station activity and density' },
-        { text: 'Route Explorer', icon: <TimelineOutlinedIcon />, path: '/routes', info: 'Analyze popular bike routes and trip patterns' },
-        { text: 'Station Intel', icon: <PlaceOutlinedIcon />, path: '/stations', info: 'Deep dive into individual station performance metrics' },
-        { text: 'Demand Forecaster', icon: <PsychologyIcon />, path: '/prediction', info: 'ML-powered 48-hour demand predictions with accuracy metrics' },
-        { text: 'Deep Analytics', icon: <AnalyticsIcon />, path: '/advanced', info: 'Advanced analytics: Agent-Based Modeling, Urban Heat, Safety' },
-        { text: 'Fleet Command', icon: <LocalShippingIcon />, path: '/rebalancing', info: 'Real-time fleet rebalancing recommendations and alerts' },
-        { text: 'Social Equity', icon: <PublicIcon />, path: '/equity', info: 'Equity analysis across NYC neighborhoods and demographics' },
+        { text: 'Mission Control', icon: <DashboardOutlinedIcon />, path: '/' },
+        { text: 'Map Explorer', icon: <MapOutlinedIcon />, path: '/map' },
+        { text: 'Route Explorer', icon: <TimelineOutlinedIcon />, path: '/routes' },
+        { text: 'Station Intel', icon: <PlaceOutlinedIcon />, path: '/stations' },
+        { text: 'Demand Forecaster', icon: <PsychologyIcon />, path: '/prediction' },
+        { text: 'Deep Analytics', icon: <AnalyticsIcon />, path: '/advanced' },
+        { text: 'Fleet Command', icon: <LocalShippingIcon />, path: '/rebalancing' },
+        { text: 'Social Equity', icon: <PublicIcon />, path: '/equity' },
     ];
 
     return (
