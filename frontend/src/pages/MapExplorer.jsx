@@ -26,6 +26,7 @@ function MapExplorer() {
     const [activeLayer, setActiveLayer] = useState('points'); // 'heatmap', 'points', 'hexagon'
     const [minTrips, setMinTrips] = useState(0);
     const [viewState, setViewState] = useState(INITIAL_VIEW_STATE);
+    const [selectedHexPosition, setSelectedHexPosition] = useState(null); // For hex bar highlighting
 
     // Pulsing animation effect
     useEffect(() => {
@@ -149,9 +150,24 @@ function MapExplorer() {
             elevationScale: 5,
             extruded: true,
             radius: 200,
-            opacity: 0.8,
+            opacity: selectedHexPosition ? 0.3 : 0.8, // Fade when a bar is selected
             coverage: 0.9,
             upperPercentile: 99,
+            colorRange: selectedHexPosition ? [
+                // Faded colors when something is selected
+                [180, 180, 150, 100],
+                [180, 150, 120, 100],
+                [180, 120, 100, 100],
+                [180, 90, 80, 100],
+                [140, 60, 60, 100]
+            ] : [
+                // Normal bright colors
+                [255, 255, 178],
+                [254, 204, 92],
+                [253, 141, 60],
+                [240, 59, 32],
+                [189, 0, 38]
+            ],
             material: {
                 ambient: 0.64,
                 diffuse: 0.6,
@@ -160,6 +176,10 @@ function MapExplorer() {
             },
             transitions: {
                 elevationScale: 3000
+            },
+            updateTriggers: {
+                colorRange: selectedHexPosition,
+                opacity: selectedHexPosition
             }
         }),
         activeLayer === 'points' && new ScatterplotLayer({
@@ -314,7 +334,11 @@ function MapExplorer() {
                     controller={true}
                     layers={layers}
                     onClick={({ object, layer }) => {
-                        if (!object) return;
+                        if (!object) {
+                            // Clicking empty space clears selection
+                            setSelectedHexPosition(null);
+                            return;
+                        }
 
                         // Handle clicking on points
                         if (activeLayer === 'points' && object.station_name) {
@@ -322,8 +346,29 @@ function MapExplorer() {
                             return;
                         }
 
-                        // Handle clicking on hexagons (optional: zoom to area?)
-                        // For now we just focus on points being selectable
+                        // Handle clicking on hexagons - highlight selected, fade others
+                        if (layer && layer.id === 'hexagon-layer' && object.position) {
+                            setSelectedHexPosition(object.position);
+                            // Find closest station to this hexagon
+                            const [hexLon, hexLat] = object.position;
+                            let closestStation = null;
+                            let minDist = Infinity;
+                            for (const station of (filteredData || [])) {
+                                const dist = Math.sqrt(Math.pow(station.lon - hexLon, 2) + Math.pow(station.lat - hexLat, 2));
+                                if (dist < minDist) {
+                                    minDist = dist;
+                                    closestStation = station;
+                                }
+                            }
+                            if (closestStation) {
+                                setSelectedStation(closestStation);
+                            }
+                            // Auto-clear after 8 seconds
+                            setTimeout(() => {
+                                setSelectedHexPosition(null);
+                                setSelectedStation(null);
+                            }, 8000);
+                        }
                     }}
                     getTooltip={({ object, layer }) => {
                         if (!object) return null;
