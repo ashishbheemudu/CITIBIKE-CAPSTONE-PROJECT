@@ -30,7 +30,7 @@ const MetricCard = ({ title, value, subtext, icon: Icon, trend, color = "blue" }
     };
 
     return (
-        <GlassCard className="p-6 flex flex-col justify-between relative overflow-hidden group">
+        <GlassCard className="p-4 md:p-6 flex flex-col justify-between relative overflow-hidden group">
             {/* Ambient Glow */}
             <div className={`absolute -right-6 -top-6 w-24 h-24 rounded-full blur-[50px] opacity-20 transition-opacity group-hover:opacity-40 ${color === 'blue' ? 'bg-blue-500' : color === 'emerald' ? 'bg-emerald-500' : color === 'purple' ? 'bg-purple-500' : 'bg-orange-500'}`} />
 
@@ -42,7 +42,7 @@ const MetricCard = ({ title, value, subtext, icon: Icon, trend, color = "blue" }
             </div>
 
             <div className="relative z-10">
-                <div className="text-4xl font-bold font-sans tracking-tighter text-white mb-2 shadow-black drop-shadow-lg">
+                <div className="text-2xl md:text-4xl font-bold font-sans tracking-tighter text-white mb-2 shadow-black drop-shadow-lg">
                     {value}
                 </div>
                 {subtext && (
@@ -151,18 +151,18 @@ const SystemOverview = () => {
     }
 
     return (
-        <div className="p-8 space-y-8 min-h-screen bg-[#050505] text-white selection:bg-blue-500/30">
+        <div className="p-4 md:p-8 space-y-6 md:space-y-8 min-h-screen bg-[#050505] text-white selection:bg-blue-500/30">
             {/* Header */}
-            <div className="flex items-end justify-between border-b border-white/5 pb-6">
+            <div className="flex flex-col md:flex-row md:items-end justify-between border-b border-white/5 pb-4 md:pb-6 gap-4">
                 <div>
-                    <h1 className="text-4xl font-bold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-white via-gray-200 to-gray-500 mb-2">
-                        System Overhead
+                    <h1 className="text-2xl md:text-4xl font-bold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-white via-gray-200 to-gray-500 mb-1 md:mb-2">
+                        System Overview
                     </h1>
-                    <p className="text-gray-500 font-mono text-xs tracking-widest uppercase">
-                        Real-time Fleet Telemetry v2.4
+                    <p className="text-gray-500 font-mono text-[10px] md:text-xs tracking-widest uppercase">
+                        Real-time Fleet Telemetry
                     </p>
                 </div>
-                <div className="flex items-center gap-3 bg-emerald-500/5 border border-emerald-500/20 px-4 py-2 rounded-full">
+                <div className="flex items-center gap-3 bg-emerald-500/5 border border-emerald-500/20 px-3 md:px-4 py-1.5 md:py-2 rounded-full self-start md:self-auto">
                     <span className="relative flex h-2 w-2">
                         <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
                         <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>

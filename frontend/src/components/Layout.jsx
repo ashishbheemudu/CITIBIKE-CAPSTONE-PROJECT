@@ -286,7 +286,7 @@ function Layout({ children }) {
                 </Box>
 
                 <MainContent open={open} ismobile={isMobile.toString()}>
-                    <Box sx={{ mt: isMobile ? 2 : 4, mb: 4, width: '100%', px: isMobile ? 2 : 0 }}>
+                    <Box sx={{ mt: isMobile ? 2 : 4, mb: isMobile ? 10 : 4, width: '100%', px: isMobile ? 2 : 0 }}>
                         <motion.div
                             initial={{ opacity: 0, y: 10 }}
                             animate={{ opacity: 1, y: 0 }}
@@ -297,6 +297,58 @@ function Layout({ children }) {
                         </motion.div>
                     </Box>
                 </MainContent>
+
+                {/* Mobile Bottom Navigation */}
+                {isMobile && (
+                    <Box
+                        sx={{
+                            position: 'fixed',
+                            bottom: 0,
+                            left: 0,
+                            right: 0,
+                            height: 70,
+                            backgroundColor: 'rgba(10, 10, 15, 0.98)',
+                            backdropFilter: 'blur(20px)',
+                            borderTop: '1px solid rgba(255, 255, 255, 0.1)',
+                            display: 'flex',
+                            justifyContent: 'space-around',
+                            alignItems: 'center',
+                            zIndex: 1300,
+                            paddingBottom: 'env(safe-area-inset-bottom)',
+                        }}
+                    >
+                        {[
+                            { icon: <DashboardOutlinedIcon />, label: 'Home', path: '/' },
+                            { icon: <MapOutlinedIcon />, label: 'Map', path: '/map' },
+                            { icon: <PsychologyIcon />, label: 'Predict', path: '/prediction' },
+                            { icon: <TimelineOutlinedIcon />, label: 'Routes', path: '/routes' },
+                            { icon: <MenuIcon />, label: 'More', action: () => setOpen(true) },
+                        ].map((item, idx) => (
+                            <Box
+                                key={idx}
+                                onClick={() => item.action ? item.action() : navigate(item.path)}
+                                sx={{
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    alignItems: 'center',
+                                    gap: 0.5,
+                                    padding: '8px 16px',
+                                    cursor: 'pointer',
+                                    color: location.pathname === item.path ? '#a855f7' : '#888',
+                                    transition: 'color 0.2s',
+                                    '&:active': {
+                                        transform: 'scale(0.95)',
+                                    },
+                                }}
+                            >
+                                {React.cloneElement(item.icon, { sx: { fontSize: 24 } })}
+                                <Typography sx={{ fontSize: 10, fontWeight: location.pathname === item.path ? 600 : 400 }}>
+                                    {item.label}
+                                </Typography>
+                            </Box>
+                        ))}
+                    </Box>
+                )}
             </Box>
         </ThemeProvider>
     );

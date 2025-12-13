@@ -200,18 +200,17 @@ const Prediction = () => {
     };
 
     return (
-        <div className="min-h-full bg-[#0a0a0f] text-white p-8">
-            <div className="w-full mx-auto">{/* Changed from max-w-7xl to w-full */}
+        <div className="min-h-full bg-[#0a0a0f] text-white p-4 md:p-8">
+            <div className="w-full mx-auto">
                 {/* Header */}
-                <div className="mb-8">
-                    <div className="text-sm text-gray-400 mb-2 uppercase tracking-wider">Advanced Machine Learning</div>
-                    <h1 className="text-3xl font-bold mb-1">Urban Mobility Command</h1>
-                    <p className="text-gray-400">48-hour precision forecaster</p>
-
+                <div className="mb-6 md:mb-8">
+                    <div className="text-xs md:text-sm text-gray-400 mb-1 md:mb-2 uppercase tracking-wider">Advanced Machine Learning</div>
+                    <h1 className="text-2xl md:text-3xl font-bold mb-1">Demand Forecaster</h1>
+                    <p className="text-sm md:text-base text-gray-400">48-hour precision forecaster</p>
                 </div>
 
-                {/* Controls */}
-                <div className="grid grid-cols-3 gap-4 mb-8">
+                {/* Controls - Stack on mobile, grid on desktop */}
+                <div className="flex flex-col md:grid md:grid-cols-3 gap-4 mb-6 md:mb-8">
                     {/* Station Selector */}
                     <div>
                         <label className="block text-sm text-gray-400 mb-2 uppercase tracking-wider">Station</label>
@@ -264,22 +263,22 @@ const Prediction = () => {
                         </div>
                     </div>
 
-                    {/* Generate Button */}
-                    <div className="flex items-end">
+                    {/* Generate Button - Full width and taller on mobile */}
+                    <div className="flex items-end mt-4 md:mt-0">
                         <button
                             onClick={generatePredictions}
                             disabled={loading || !selectedStation}
-                            className="w-full px-6 py-3 bg-gradient-to-r from-purple-600 to-blue-600 text-white font-medium rounded-lg hover:from-purple-700 hover:to-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all flex items-center justify-center gap-2"
+                            className="w-full px-6 py-4 md:py-3 bg-gradient-to-r from-purple-600 to-blue-600 text-white font-semibold text-lg md:text-base rounded-xl md:rounded-lg hover:from-purple-700 hover:to-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all flex items-center justify-center gap-2 shadow-lg shadow-purple-500/25 active:scale-[0.98]"
                         >
                             {loading ? (
                                 <>
-                                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                                    <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
                                     Generating...
                                 </>
                             ) : (
                                 <>
-                                    <Zap className="w-4 h-4" />
-                                    Generate
+                                    <Zap className="w-5 h-5" />
+                                    Generate Prediction
                                 </>
                             )}
                         </button>
