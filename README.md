@@ -176,7 +176,8 @@ MIT License - see LICENSE for details.
 ## 👥 Contributors
 
 - Ashish B - Lead Developer
+- Venkata Krishna Ullam
 
 
-  ## Notion DashBoard
+## Notion DashBoard
   https://www.notion.so/NYC-City-Bike-Info-27ff707809b380aa9bf6eb521b19832d
