@@ -88,20 +88,12 @@ app = FastAPI(
 )
 
 # ═══════════════════════════════════════════════════════════════
-# SECURITY: CORS WITH WHITELISTED ORIGINS
+# SECURITY: CORS - Allow all origins for portfolio/demo purposes
 # ═══════════════════════════════════════════════════════════════
-ALLOWED_ORIGINS = [
-    "https://citibike-capstone-project.vercel.app",
-    "https://18.218.154.66.nip.io",
-    "http://localhost:5173",  # Vite dev server
-    "http://localhost:3000",  # React dev server
-    "http://127.0.0.1:5173",
-]
-
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=ALLOWED_ORIGINS,
-    allow_credentials=True,
+    allow_origins=["*"],  # Allow all origins for portfolio access
+    allow_credentials=False,  # Must be False when using "*"
     allow_methods=["GET", "POST", "OPTIONS"],
     allow_headers=["*"],
 )
