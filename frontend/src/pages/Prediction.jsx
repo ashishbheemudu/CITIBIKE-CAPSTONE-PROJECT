@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
-import { Activity, TrendingUp, Calendar, Zap, Target, Sparkles } from 'lucide-react';
+import { Activity, TrendingUp, Calendar, Zap, Target, Sparkles, RefreshCw, AlertCircle, CheckCircle } from 'lucide-react';
 import ChartErrorBoundary from '../components/ChartErrorBoundary';
 
 
@@ -18,9 +18,11 @@ const Prediction = () => {
     const [predictions, setPredictions] = useState([]);
     const [combinedData, setCombinedData] = useState([]);
     const [loading, setLoading] = useState(false);
+    const [stationsLoading, setStationsLoading] = useState(true);
     const [error, setError] = useState('');
     const [accuracy, setAccuracy] = useState(null);
     const [totalTrips, setTotalTrips] = useState(0);
+    const [backendStatus, setBackendStatus] = useState('checking'); // 'checking', 'online', 'offline'
 
     // Update startDate when year/month/day change
     useEffect(() => {
@@ -50,21 +52,38 @@ const Prediction = () => {
     ];
     const days = Array.from({ length: 31 }, (_, i) => i + 1);
 
-    const fetchStations = async () => {
+    const fetchStations = useCallback(async () => {
+        setStationsLoading(true);
+        setBackendStatus('checking');
+        setError('');
+
         try {
-            const response = await axios.get(`${API_BASE_URL}/stations`);
+            const response = await axios.get(`${API_BASE_URL}/stations`, { timeout: 10000 });
             const stationList = response.data || [];
             setStations(stationList);
+            setBackendStatus('online');
             if (stationList.length > 0) {
                 setSelectedStation(stationList[0]);
             } else {
-                setError('No stations available. Please check backend connection.');
+                setError('No stations available in the dataset.');
             }
         } catch (err) {
             console.error('Error fetching stations:', err);
-            setError('Failed to load stations. Backend may be offline.');
+            setBackendStatus('offline');
+
+            if (err.code === 'ECONNABORTED' || err.message.includes('timeout')) {
+                setError('Connection timed out. The backend server may be starting up, please try again.');
+            } else if (err.response?.status === 502) {
+                setError('Backend server is restarting (502). Please wait a moment and retry.');
+            } else if (err.message.includes('Network Error')) {
+                setError('Cannot reach backend server. It may be offline or blocked by CORS.');
+            } else {
+                setError(`Failed to load stations: ${err.message}`);
+            }
+        } finally {
+            setStationsLoading(false);
         }
-    };
+    }, []);
 
     const generatePredictions = async () => {
         if (!selectedStation || !startDate) {
@@ -277,12 +296,40 @@ const Prediction = () => {
                     </div>
                 </div>
 
-                {/* Error */}
+                {/* Error with Retry */}
                 {error && (
-                    <div className="mb-6 p-4 bg-red-900/20 border border-red-800 rounded-lg text-red-400">
-                        {error}
+                    <div className="mb-6 p-4 bg-red-900/20 border border-red-800 rounded-lg">
+                        <div className="flex items-center justify-between">
+                            <div className="flex items-center gap-3 text-red-400">
+                                <AlertCircle className="w-5 h-5" />
+                                <span>{error}</span>
+                            </div>
+                            {backendStatus === 'offline' && (
+                                <button
+                                    onClick={fetchStations}
+                                    disabled={stationsLoading}
+                                    className="px-4 py-2 bg-red-800/50 hover:bg-red-700/50 text-red-300 rounded-lg flex items-center gap-2 transition-colors"
+                                >
+                                    <RefreshCw className={`w-4 h-4 ${stationsLoading ? 'animate-spin' : ''}`} />
+                                    Retry
+                                </button>
+                            )}
+                        </div>
                     </div>
                 )}
+
+                {/* Backend Status Indicator */}
+                <div className="mb-4 flex items-center gap-2 text-sm">
+                    {backendStatus === 'checking' && (
+                        <><RefreshCw className="w-4 h-4 animate-spin text-gray-400" /><span className="text-gray-400">Connecting to backend...</span></>
+                    )}
+                    {backendStatus === 'online' && (
+                        <><CheckCircle className="w-4 h-4 text-green-500" /><span className="text-green-400">Backend connected • {stations.length} stations loaded</span></>
+                    )}
+                    {backendStatus === 'offline' && (
+                        <><AlertCircle className="w-4 h-4 text-red-500" /><span className="text-red-400">Backend offline</span></>
+                    )}
+                </div>
 
                 {/* Stats Cards */}
                 {predictions.length > 0 && (

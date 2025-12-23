@@ -628,6 +628,83 @@ async def get_historical_demand(
         traceback.print_exc()
         raise HTTPException(status_code=500, detail=f"Internal server error: {str(e)}")
 
+@app.get("/api/rebalancing")
+async def get_rebalancing_actions():
+    """
+    Calculate rebalancing actions needed based on live station data.
+    Uses GBFS feed to determine which stations need bikes added or removed.
+    """
+    try:
+        # Get live station data
+        stations = gbfs_service.get_live_stations()
+        
+        if not stations:
+            raise HTTPException(status_code=503, detail="Unable to fetch live station data")
+        
+        rebalancing_actions = []
+        
+        for station in stations:
+            capacity = station.get('capacity', 30)
+            if capacity == 0:
+                capacity = station.get('num_bikes_available', 0) + station.get('num_docks_available', 0)
+            if capacity == 0:
+                capacity = 30  # Default capacity
+                
+            available = station.get('num_bikes_available', 0)
+            docks = station.get('num_docks_available', 0)
+            fill_rate = available / capacity if capacity > 0 else 0.5
+            
+            action = 'HOLD'
+            quantity = 0
+            priority = 'LOW'
+            
+            # Station critically low (< 15% bikes)
+            if fill_rate < 0.15:
+                action = 'RESTOCK'
+                quantity = int(capacity * 0.4 - available)
+                priority = 'CRITICAL' if fill_rate < 0.05 else 'HIGH'
+            # Station critically full (> 85% bikes)
+            elif fill_rate > 0.85:
+                action = 'PICKUP'
+                quantity = int(available - capacity * 0.6)
+                priority = 'CRITICAL' if fill_rate > 0.95 else 'HIGH'
+            # Moderate low
+            elif fill_rate < 0.25:
+                action = 'RESTOCK'
+                quantity = int(capacity * 0.35 - available)
+                priority = 'MEDIUM'
+            # Moderate high
+            elif fill_rate > 0.75:
+                action = 'PICKUP'
+                quantity = int(available - capacity * 0.65)
+                priority = 'MEDIUM'
+            
+            if action != 'HOLD' and quantity > 0:
+                rebalancing_actions.append({
+                    'station': station.get('name', f"Station {station.get('station_id')}"),
+                    'station_id': station.get('station_id'),
+                    'action': action,
+                    'quantity': min(quantity, 15),  # Cap at 15 per trip
+                    'priority': priority,
+                    'current_bikes': available,
+                    'current_docks': docks,
+                    'capacity': capacity,
+                    'fill_rate': round(fill_rate * 100)
+                })
+        
+        # Sort by priority
+        priority_order = {'CRITICAL': 0, 'HIGH': 1, 'MEDIUM': 2, 'LOW': 3}
+        rebalancing_actions.sort(key=lambda x: priority_order.get(x['priority'], 4))
+        
+        # Return top 50 actions
+        return rebalancing_actions[:50]
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error calculating rebalancing: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
 if __name__ == "__main__":
     import uvicorn
     import os
@@ -635,3 +712,4 @@ if __name__ == "__main__":
     # Reload only if not in production/docker (optional logic, hardcoding false for safety or keeping true for dev if env var not set)
     # Better: defaults to data loaded. 
     uvicorn.run("main:app", host="0.0.0.0", port=port, reload=False)
+
