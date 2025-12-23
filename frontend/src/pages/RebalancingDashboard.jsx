@@ -25,7 +25,7 @@ import DirectionsBikeIcon from '@mui/icons-material/DirectionsBike';
 import WarningAmberIcon from '@mui/icons-material/WarningAmber';
 
 // API Configuration
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://18.116.202.251.nip.io/api';
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://3.22.236.184.nip.io/api';
 
 const RebalancingDashboard = () => {
     const [actions, setActions] = useState([]);

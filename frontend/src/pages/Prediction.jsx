@@ -6,7 +6,7 @@ import ChartErrorBoundary from '../components/ChartErrorBoundary';
 
 
 // API Configuration - Uses environment variable with fallback
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://18.116.202.251.nip.io/api';
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://3.22.236.184.nip.io/api';
 
 const Prediction = () => {
     const [stations, setStations] = useState([]);
