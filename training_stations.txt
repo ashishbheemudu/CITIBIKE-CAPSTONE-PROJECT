@@ -1,0 +1,200 @@
+1 Ave & E 16 St
+1 Ave & E 18 St
+1 Ave & E 30 St
+1 Ave & E 39 St
+1 Ave & E 6 St
+1 Ave & E 62 St
+1 Ave & E 68 St
+10 Ave & W 14 St
+10 Ave & W 28 St
+11 Ave & W 27 St
+11 Ave & W 41 St
+11 Ave & W 59 St
+12 Ave & W 40 St
+2 Ave & E 29 St
+2 Ave & E 31 St
+2 Ave & E 72 St
+4 Ave & E 12 St
+5 Ave & E 72 St
+6 Ave & Broome St
+6 Ave & W 33 St
+6 Ave & W 34 St
+6 Ave & W 45 St
+7 Ave & Central Park South
+7 Ave S & Bleecker St
+8 Ave & W 16 St
+8 Ave & W 31 St
+8 Ave & W 33 St
+8 Ave & W 38 St
+8 Ave & W 49 St
+8 Ave & W 52 St
+9 Ave & W 18 St
+9 Ave & W 22 St
+9 Ave & W 45 St
+Allen St & Hester St
+Allen St & Rivington St
+Allen St & Stanton St
+Amsterdam Ave & W 73 St
+Amsterdam Ave & W 79 St
+Amsterdam Ave & W 82 St
+Ave A & E 11 St
+Ave A & E 14 St
+Barrow St & Hudson St
+Berry St & N 8 St
+Bleecker St & Crosby St
+Broadway & E 14 St
+Broadway & E 21 St
+Broadway & W 25 St
+Broadway & W 29 St
+Broadway & W 41 St
+Broadway & W 56 St
+Broadway & W 58 St
+Broadway & W 61 St
+Canal St & Rutgers St
+Carmine St & 6 Ave
+Central Park North & Adam Clayton Powell Blvd
+Central Park S & 6 Ave
+Central Park W & W 91 St
+Central Park West & W 68 St
+Central Park West & W 72 St
+Centre St & Chambers St
+Christopher St & Greenwich St
+Cleveland Pl & Spring St
+Clinton St & Grand St
+Columbus Ave & W 72 St
+Columbus Ave & W 95 St
+Cooper Square & Astor Pl
+E 1 St & 1 Ave
+E 10 St & 2 Ave
+E 11 St & 1 Ave
+E 11 St & 3 Ave
+E 13 St & 2 Ave
+E 13 St & Avenue A
+E 14 St & 1 Ave
+E 15 St & 3 Ave
+E 16 St & 5 Ave
+E 16 St & Irving Pl
+E 17 St & Broadway
+E 19 St & 3 Ave
+E 2 St & Avenue B
+E 20 St & 2 Ave
+E 20 St & FDR Dr
+E 20 St & Park Ave
+E 23 St & 1 Ave
+E 25 St & 2 Ave
+E 27 St & 1 Ave
+E 31 St & 3 Ave
+E 32 St & Park Ave
+E 33 St & 1 Ave
+E 33 St & 5 Ave
+E 39 St & Lexington Ave
+E 4 St & 2 Ave
+E 40 St & Park Ave
+E 44 St & Lexington Ave
+E 55 St & 2 Ave
+E 58 St & 3 Ave
+E 7 St & Avenue A
+E 72 St & York Ave
+E 74 St & 1 Ave
+E 84 St & 1 Ave
+E 85 St & 3 Ave
+FDR Drive & E 35 St
+Forsyth St & Canal St
+Forsyth St & Grand St
+Fulton St & Broadway
+Grand Army Plaza & Central Park S
+Grand St & Elizabeth St
+Great Jones St
+Greenwich Ave & 8 Ave
+Greenwich Ave & Charles St
+Greenwich St & W Houston St
+Hanson Pl & Ashland Pl
+Henry St & Grand St
+Hudson St & W 13 St
+Kent Ave & N 7 St
+LaGuardia Pl & W 3 St
+Lafayette St & E 8 St
+Lafayette St & Jersey St
+Lexington Ave & E 24 St
+Lexington Ave & E 29 St
+Lexington Ave & E 36 St
+Little West St & 1 Pl
+MacDougal St & Prince St
+Mercer St & Bleecker St
+Metropolitan Ave & Bedford Ave
+Mott St & Prince St
+N 6 St & Bedford Ave
+Norfolk St & Broome St
+North Moore St & Greenwich St
+Perry St & Bleecker St
+Pier 40 - Hudson River Park
+Queens Plaza North & Crescent St
+Riverside Blvd & W 67 St
+Riverside Dr & W 72 St
+Rivington St & Chrystie St
+Rivington St & Ridge St
+S 3 St & Bedford Ave
+S 4 St & Wythe Ave
+S 5 Pl & S 5 St
+St Marks Pl & 1 Ave
+St Marks Pl & 2 Ave
+Stanton St & Chrystie St
+Stanton St & Norfolk St
+Suffolk St & Stanton St
+Sullivan St & Washington Sq
+Thompson St & Bleecker St
+University Pl & E 14 St
+University Pl & E 8 St
+Vesey Pl & River Terrace
+W 100 St & Broadway
+W 11 St & 6 Ave
+W 13 St & 5 Ave
+W 13 St & 7 Ave
+W 15 St & 6 Ave
+W 15 St & 7 Ave
+W 16 St & The High Line
+W 17 St & 8 Ave
+W 18 St & 6 Ave
+W 20 St & 10 Ave
+W 20 St & 7 Ave
+W 20 St & 8 Ave
+W 21 St & 6 Ave
+W 22 St & 10 Ave
+W 22 St & 8 Ave
+W 24 St & 7 Ave
+W 25 St & 6 Ave
+W 26 St & 10 Ave
+W 27 St & 7 Ave
+W 29 St & 9 Ave
+W 30 St & 10 Ave
+W 31 St & 7 Ave
+W 34 St & 11 Ave
+W 37 St & 10 Ave
+W 4 St & 7 Ave S
+W 41 St & 8 Ave
+W 42 St & 6 Ave
+W 42 St & 8 Ave
+W 42 St & Dyer Ave
+W 43 St & 10 Ave
+W 44 St & 11 Ave
+W 45 St & 8 Ave
+W 47 St & 10 Ave
+W 49 St & 8 Ave
+W 50 St & 9 Ave
+W 53 St & 10 Ave
+W 54 St & 11 Ave
+W 54 St & 9 Ave
+W 56 St & 10 Ave
+W 59 St & 10 Ave
+W 63 St & Broadway
+W 64 St & Thelonious Monk Circle
+W 67 St & Broadway
+W 70 St & Amsterdam Ave
+Washington Pl & 6 Ave
+Washington Pl & Broadway
+Washington St & Gansevoort St
+West Drive & Prospect Park West
+West End Ave & W 60 St
+West St & Chambers St
+West St & Liberty St
+Wythe Ave & Metropolitan Ave
