@@ -646,12 +646,12 @@ async def get_rebalancing_actions():
         for station in stations:
             capacity = station.get('capacity', 30)
             if capacity == 0:
-                capacity = station.get('num_bikes_available', 0) + station.get('num_docks_available', 0)
+                capacity = station.get('bikes_available', 0) + station.get('docks_available', 0)
             if capacity == 0:
                 capacity = 30  # Default capacity
                 
-            available = station.get('num_bikes_available', 0)
-            docks = station.get('num_docks_available', 0)
+            available = station.get('bikes_available', 0)
+            docks = station.get('docks_available', 0)
             fill_rate = available / capacity if capacity > 0 else 0.5
             
             action = 'HOLD'
