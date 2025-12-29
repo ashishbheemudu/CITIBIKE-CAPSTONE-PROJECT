@@ -451,7 +451,7 @@ class PredictionRequest(BaseModel):
 @app.post("/api/predict")
 async def predict_demand(request: PredictionRequest):
     try:
-        print(f"DEBUG: Received prediction request for {request.station_name}", flush=True)
+        logger.info(f"🎯 Prediction request: {request.station_name}, {request.start_date}")
         
         # Use new prediction service
         from prediction_service import get_prediction_service
@@ -464,20 +464,67 @@ async def predict_demand(request: PredictionRequest):
         hours_ahead = int((end_dt - start_dt).total_seconds() / 3600)
         hours_ahead = min(max(hours_ahead, 1), 168)  # 1-168 hours (1 week max)
         
-        # Get predictions - now can raise ValueError
+        logger.info(f"📊 Generating {hours_ahead} hours of predictions...")
+        
+        # CRITICAL FIX: Wrap in try-except to prevent 502 crashes
         try:
-            result = service.predict(request.station_name, request.start_date, hours_ahead)
+            # Import timeout utility
+            import signal
+            from contextlib import contextmanager
+            
+            class PredictionTimeout(Exception):
+                pass
+            
+            def timeout_handler(signum, frame):
+                raise PredictionTimeout("Prediction took too long")
+            
+            # Set 15-second timeout to prevent backend hang
+            old_handler = signal.signal(signal.SIGALRM, timeout_handler)
+            signal.alarm(15)
+            
+            try:
+                result = service.predict(request.station_name, request.start_date, hours_ahead)
+            finally:
+                signal.alarm(0)  # Cancel alarm
+                signal.signal(signal.SIGALRM, old_handler)
+                
+        except PredictionTimeout:
+            logger.error("❌ Prediction timed out after 15 seconds")
+            raise HTTPException(
+                status_code=504, 
+                detail="Prediction generation timed out. The ML models may be overloaded. Please try again."
+            )
         except ValueError as pred_err:
+            logger.error(f"❌ Prediction ValueError: {pred_err}")
             raise HTTPException(status_code=500, detail=str(pred_err))
+        except Exception as pred_err:
+            logger.error(f"❌ Prediction failed: {pred_err}")
+            import traceback
+            traceback.print_exc()
+            raise HTTPException(
+                status_code=500, 
+                detail=f"Prediction failed: {str(pred_err)}. Check server logs for details."
+            )
+        
+        # Validate result
+        if not result or not isinstance(result, list):
+            raise HTTPException(status_code=500, detail="Invalid prediction result format")
         
         # Legacy check for old error dict format (can be removed later)
         if isinstance(result, dict) and 'error' in result:
             raise HTTPException(status_code=500, detail=result['error'])
         
         # Calculate KPIs
-        predicted_total = sum([x['predicted'] for x in result])
-        peak_item = max(result, key=lambda x: x['predicted']) if result else None
-        peak_time = peak_item['date'].split('T')[1][:5] if peak_item else ""
+        try:
+            predicted_total = sum([x['predicted'] for x in result])
+            peak_item = max(result, key=lambda x: x['predicted']) if result else None
+            peak_time = peak_item['date'].split('T')[1][:5] if peak_item else ""
+        except Exception as kpi_err:
+            logger.warning(f"⚠️ KPI calculation failed: {kpi_err}")
+            predicted_total = 0
+            peak_time = "00:00"
+        
+        logger.info(f"✅ Generated {len(result)} predictions successfully")
         
         return {
             "kpis": {
@@ -489,10 +536,10 @@ async def predict_demand(request: PredictionRequest):
     except HTTPException:
         raise  # Re-raise HTTP exceptions
     except Exception as e:
-        print(f"ERROR: Prediction failed: {str(e)}", flush=True)
+        logger.error(f"❌ FATAL: Prediction endpoint crashed: {str(e)}")
         import traceback
         traceback.print_exc()
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=f"Internal server error: {str(e)}")
 
 @app.get("/api/advanced-analytics/abm")
 async def get_abm_simulation():
