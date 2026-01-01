@@ -654,14 +654,6 @@ class PredictionService:
             ema_24h
         ]
 
-# Global instance
-prediction_service = None
-
-def get_prediction_service():
-    global prediction_service
-    if prediction_service is None:
-        prediction_service = PredictionService()
-    return prediction_service
     def _predict_statistical_fallback(self, station_name, start_time, hours_ahead=48):
         """
         EMERGENCY FALLBACK: Statistical predictor when ML models unavailable
@@ -774,3 +766,12 @@ def get_prediction_service():
             })
         
         return results
+
+# Global instance
+prediction_service = None
+
+def get_prediction_service():
+    global prediction_service
+    if prediction_service is None:
+        prediction_service = PredictionService()
+    return prediction_service
