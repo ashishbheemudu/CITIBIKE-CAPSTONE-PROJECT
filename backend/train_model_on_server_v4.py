@@ -94,7 +94,11 @@ def train_v4():
     X = df[feature_cols].values.astype(np.float32)
     y = df['pickups'].values.astype(np.float32).reshape(-1, 1)
     
-    # Save Feature Names mostly for reference? No need.
+    # Save Feature Names for prediction service alignment
+    import json
+    with open(os.path.join(MODELS_DIR, "feature_names.json"), 'w') as f:
+        json.dump(feature_cols, f)
+    logger.info(f"✅ Saved {len(feature_cols)} feature names to feature_names.json")
     
     del df
     gc.collect()

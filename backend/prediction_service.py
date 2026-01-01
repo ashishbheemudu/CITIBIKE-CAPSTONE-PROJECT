@@ -63,11 +63,11 @@ class PredictionService:
                     self.xgb_is_booster = True  # Flag for predict method
                     logger.info("✅ Loaded XGBoost (Booster)")
 
-                # LightGBM (3MB)
-                lgb_path = os.path.join(MODELS_DIR, "lgb.pkl")
+                # LightGBM - Load from text format (.txt)
+                lgb_path = os.path.join(MODELS_DIR, "lgb.txt")
                 if os.path.exists(lgb_path):
-                    self.models['lgb'] = joblib.load(lgb_path)
-                    logger.info("✅ Loaded LightGBM")
+                    self.models['lgb'] = lgb.Booster(model_file=lgb_path)
+                    logger.info("✅ Loaded LightGBM (Booster)")
 
                 # CatBoost (16MB)
                 cb_path = os.path.join(MODELS_DIR, "cb.cbm")
