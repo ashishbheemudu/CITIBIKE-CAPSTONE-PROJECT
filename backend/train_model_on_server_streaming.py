@@ -196,8 +196,8 @@ def train_streaming():
     df_raw = pd.read_parquet(DATA_PATH, columns=['time', 'station_name', 'pickups', 'temp', 'prcp', 'wspd'])
     
     # Filter Top 200
-    # Filter Top 50 Stations (Strategic Subsample for 2GB RAM)
-    top_stations = df_raw['station_name'].value_counts().head(50).index
+    # Filter Top 15 Stations (verified safe for 2GB RAM)
+    top_stations = df_raw['station_name'].value_counts().head(15).index
     df_raw = df_raw[df_raw['station_name'].isin(top_stations)].copy()
     df_raw.sort_values(['station_name', 'time'], inplace=True)
     
