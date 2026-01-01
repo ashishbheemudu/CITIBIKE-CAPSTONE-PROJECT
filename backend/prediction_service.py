@@ -101,6 +101,15 @@ class PredictionService:
                 self.scalers['y'] = joblib.load(scaler_y_path)
                 logger.info("✅ Loaded target scaler")
             
+            # 5. Load LIGHTWEIGHT reference data for lag features (600KB - fits in memory!)
+            reference_path = os.path.join(MODELS_DIR, "reference_data_recent.parquet")
+            if os.path.exists(reference_path):
+                self.historical_data = pd.read_parquet(reference_path)
+                self.historical_data['time'] = pd.to_datetime(self.historical_data['time'])
+                logger.info(f"✅ Loaded reference data: {len(self.historical_data)} rows")
+            else:
+                logger.warning("⚠️ reference_data_recent.parquet not found - lag features will be zeros")
+            
             logger.info(f"🎉 Lazy Loaded {len(self.models)} models!")
             self.use_fallback = False
         except Exception as e:
@@ -162,14 +171,32 @@ class PredictionService:
             import time as time_module
             perf_start = time_module.time()
             station_cache = None
-            if hasattr(self, 'historical_data') and self.historical_data is not None:
-                ts_start = pd.Timestamp(start_dt).tz_localize(None) if pd.Timestamp(start_dt).tz else pd.Timestamp(start_dt)
+            if hasattr(self, 'historical_data') and self.historical_data is not None and not self.historical_data.empty:
                 hist_station = self.historical_data[self.historical_data['station_name'] == station_name].copy()
                 if not hist_station.empty:
                     hist_station['time'] = pd.to_datetime(hist_station['time']).dt.tz_localize(None)
+                    ts_start = pd.Timestamp(start_dt).tz_localize(None) if pd.Timestamp(start_dt).tz else pd.Timestamp(start_dt)
+                    
+                    # Try exact date match first
                     before_ts = hist_station[hist_station['time'] < ts_start]
-                    if not before_ts.empty:
-                        station_cache = before_ts.tail(168)  # Last week
+                    if len(before_ts) >= 168:
+                        station_cache = before_ts.tail(168)
+                        logger.info(f"📊 Using exact historical data: {len(station_cache)} rows")
+                    else:
+                        # FALLBACK: Use matching month/day patterns from any year (smart temporal matching)
+                        target_month = ts_start.month
+                        target_day = ts_start.day
+                        hist_station['month'] = hist_station['time'].dt.month
+                        hist_station['day'] = hist_station['time'].dt.day
+                        similar_data = hist_station[(hist_station['month'] == target_month) & 
+                                                    (hist_station['day'] <= target_day)]
+                        if len(similar_data) >= 168:
+                            station_cache = similar_data.tail(168)
+                            logger.info(f"📊 Using similar month/day pattern data: {len(station_cache)} rows")
+                        elif not hist_station.empty:
+                            # Ultimate fallback: use any available data
+                            station_cache = hist_station.tail(168)
+                            logger.info(f"📊 Using any available historical data: {len(station_cache)} rows")
             logger.info(f"⏱️ Station filter: {(time_module.time() - perf_start)*1000:.0f}ms")
 
             # Create features for all hours at once (VECTORIZED - 10x faster!)
