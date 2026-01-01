@@ -82,7 +82,22 @@ def retrain_smart():
         
     logger.info(f"✅ Harvested {len(mock_scaler.captured_features)} total feature vectors.")
     
-    X = np.array(mock_scaler.captured_features)
+    # DEBUG: Print first vector
+    if mock_scaler.captured_features:
+        logger.info(f"🔍 Sample Vector [0]: {mock_scaler.captured_features[0]}")
+
+    # Robust Convert to Numpy (Coerce errors)
+    try:
+        df_features = pd.DataFrame(mock_scaler.captured_features)
+        # Convert all to numeric, coerce errors to NaN
+        df_features = df_features.apply(pd.to_numeric, errors='coerce')
+        # Fill NaN with 0
+        df_features = df_features.fillna(0.0)
+        
+        X = df_features.values
+    except Exception as e:
+        logger.error(f"❌ Error converting features to numpy: {e}")
+        return
     
     logger.info("🔄 Retraining Feature Scaler (tree)...")
     real_scaler = StandardScaler()
