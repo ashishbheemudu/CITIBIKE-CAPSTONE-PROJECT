@@ -18,14 +18,12 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DATA_PATH = os.path.join(BASE_DIR, "data", "v1_core", "final_station_demand_robust_features.parquet")
 MODELS_DIR = os.path.join(BASE_DIR, "models")
 
-class FeatureIterator:
-    def __init__(self, df_raw, scaler_tree=None, scaler_y=None, fit_scalers=False):
+class FeatureGenerator:
+    """Core logic to prevent code duplication"""
+    def __init__(self, df_raw, chunk_size=20):
         self.df_raw = df_raw
         self.unique_stations = df_raw['station_name'].unique()
-        self.chunk_size = 20 # Process 20 stations at a time
-        self.scaler_tree = scaler_tree
-        self.scaler_y = scaler_y
-        self.fit_scalers = fit_scalers
+        self.chunk_size = chunk_size
         self.current_idx = 0
 
     def __iter__(self):
@@ -36,35 +34,105 @@ class FeatureIterator:
         if self.current_idx >= len(self.unique_stations):
             raise StopIteration
         
-        # Select batch
         stations_batch = self.unique_stations[self.current_idx : self.current_idx + self.chunk_size]
         self.current_idx += self.chunk_size
         
-        # Filter raw data
         chunk = self.df_raw[self.df_raw['station_name'].isin(stations_batch)].copy()
-        
-        # Engineer Features (Vectorized on small chunk)
         chunk = engineer_features_vectorized(chunk)
         
-        # Prepare X, y
         feature_cols = [c for c in chunk.columns if c not in ['pickups', 'station_name', 'time']]
         X = chunk[feature_cols].values.astype(np.float32)
         y = chunk['pickups'].values.astype(np.float32).reshape(-1, 1)
         
-        # Create/Update Scalers
-        if self.fit_scalers:
-             self.scaler_tree.partial_fit(X)
-             self.scaler_y.partial_fit(y)
-             # Return raw for scaler fitting loop, or just continue
-             return X, y # Not used really
-        
-        # Transform
-        if self.scaler_tree:
-            X = self.scaler_tree.transform(X)
-        if self.scaler_y:
-            y = self.scaler_y.transform(y)
+        return X, y
+
+class ScalingIter:
+    """Standard Python Iterator for sklearn partial_fit"""
+    def __init__(self, df_raw):
+        self.gen = FeatureGenerator(df_raw)
+
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        X, y = next(self.gen)
+        return X, y # Return raw batch for scaler fitting
+
+class XGBTrainingIter(xgb.DataIter):
+    """XGBoost-compatible Iterator for QuantileDMatrix"""
+    def __init__(self, df_raw, scaler_tree, scaler_y):
+        self.gen = FeatureGenerator(df_raw)
+        self.scaler_tree = scaler_tree
+        self.scaler_y = scaler_y
+        super().__init__()
+
+    def next(self, input_data):
+        try:
+            X, y = next(self.gen)
+            # Transform
+            if self.scaler_tree:
+                X = self.scaler_tree.transform(X)
+            if self.scaler_y:
+                y = self.scaler_y.transform(y)
             
-        return X, y.flatten()
+            # Pass data to XGBoost
+            input_data(data=X, label=y.flatten())
+            return 1 # Continue
+        except StopIteration:
+            return 0 # Stop
+
+    def reset(self):
+        self.gen = FeatureGenerator(self.gen.df_raw, self.gen.chunk_size)
+
+def train_streaming():
+    logger.info("🚀 Starting V3 'Streaming' Training (Zero-Disk Architecture)...")
+    
+    # 1. Load Raw Data (Fits in RAM)
+    logger.info("📊 Loading Core Data...")
+    df_raw = pd.read_parquet(DATA_PATH, columns=['time', 'station_name', 'pickups', 'temp', 'prcp', 'wspd'])
+    
+    # Filter Top 200
+    top_stations = df_raw['station_name'].value_counts().head(200).index
+    df_raw = df_raw[df_raw['station_name'].isin(top_stations)].copy()
+    df_raw.sort_values(['station_name', 'time'], inplace=True)
+    
+    logger.info(f"✅ Filtered to {len(df_raw)} rows (Top 200). Ready stream.")
+
+    # 2. Pass 1: Fit Scalers
+    logger.info("🔄 Pass 1: Fitting Scalers Incrementally...")
+    scaler_tree = StandardScaler()
+    scaler_y = StandardScaler()
+    
+    iter_pass1 = ScalingIter(df_raw)
+    for X, y in iter_pass1:
+        scaler_tree.partial_fit(X)
+        scaler_y.partial_fit(y)
+        
+    joblib.dump(scaler_tree, os.path.join(MODELS_DIR, "scaler_tree_server.save"))
+    joblib.dump(scaler_y, os.path.join(MODELS_DIR, "scaler_y_server.save"))
+    logger.info("✅ Scalers Fitted and Saved.")
+
+    # 3. Pass 2: Train XGBoost
+    logger.info("🏋️ Pass 2: Training XGBoost (Streaming)...")
+    
+    # Use DataIter
+    iter_pass2 = XGBTrainingIter(df_raw, scaler_tree, scaler_y)
+    
+    dtrain = xgb.QuantileDMatrix(iter_pass2)
+    
+    params = {
+        'objective': 'reg:squarederror',
+        'learning_rate': 0.05,
+        'max_depth': 7,
+        'n_jobs': -1,
+        'device': 'cpu'
+    }
+    
+    model = xgb.train(params, dtrain, num_boost_round=100)
+    model.save_model(os.path.join(MODELS_DIR, "xgb_server.json"))
+    logger.info("✅ XGBoost Model Saved.")
+    
+    logger.info("🎉 Streaming Training Complete.")
 
 def engineer_features_vectorized(df):
     """Same logic as V2 but strictly in-memory for the chunk"""
