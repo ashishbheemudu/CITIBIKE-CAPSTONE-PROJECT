@@ -38,6 +38,9 @@ def retrain_smart():
     logger.info("📊 Loading Data...")
     ps._lazy_load_data()
     
+    # 3. Force Load Models (so we can overwrite the scaler AFTER)
+    ps._lazy_load_models()
+    
     if ps.historical_data is None or ps.historical_data.empty:
         logger.error("❌ Failed to load historical data!")
         return
