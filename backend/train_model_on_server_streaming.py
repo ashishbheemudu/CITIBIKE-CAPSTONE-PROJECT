@@ -207,9 +207,10 @@ def train_streaming():
     scaler_tree = StandardScaler()
     scaler_y = StandardScaler()
     
-    iter_pass1 = FeatureIterator(df_raw, scaler_tree, scaler_y, fit_scalers=True)
-    for _ in iter_pass1:
-        pass # The iterator calls partial_fit internally
+    iter_pass1 = ScalingIter(df_raw)
+    for X, y in iter_pass1:
+        scaler_tree.partial_fit(X)
+        scaler_y.partial_fit(y)
         
     joblib.dump(scaler_tree, os.path.join(MODELS_DIR, "scaler_tree_server.save"))
     joblib.dump(scaler_y, os.path.join(MODELS_DIR, "scaler_y_server.save"))
