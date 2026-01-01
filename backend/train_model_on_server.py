@@ -160,9 +160,9 @@ def train_server_model():
     
     model.fit(X_scaled, y_scaled)
     
-    # Save
+    # Save using Booster object for compatibility with prediction_service.py
     save_path = os.path.join(MODELS_DIR, "xgb_server.json")
-    model.save_model(save_path)
+    model.get_booster().save_model(save_path)
     logger.info(f"✅ Model saved to {save_path}")
     
     logger.info("🎉 Training Complete.")
