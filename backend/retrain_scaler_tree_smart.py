@@ -22,10 +22,23 @@ class MockScaler:
         self.captured_features = []
         
     def transform(self, X):
-        # Capture the features!
-        # X is (1, n_features)
-        self.captured_features.extend(X)
-        # Return dummy data to let the code proceed (it will crash in model.predict, but we catch it)
+        # Capture the features correctly!
+        # X can be a list of lists [[...]] or array
+        try:
+            data = np.array(X)
+            if data.ndim == 2:
+                for row in data:
+                    self.captured_features.append(list(row))
+            elif data.ndim == 1:
+                self.captured_features.append(list(data))
+            else:
+                 # Scalar or empty
+                 pass
+        except Exception:
+            # Fallback for weird inputs
+            pass
+            
+        # Return dummy data
         return X
 
 def retrain_smart():
