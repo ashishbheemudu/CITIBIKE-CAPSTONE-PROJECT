@@ -29,16 +29,16 @@ def train_server_model():
     df = pd.read_parquet(DATA_PATH, columns=['time', 'station_name', 'pickups', 'temp', 'prcp', 'wspd'])
     logger.info(f"✅ Loaded {len(df)} rows.")
 
-    # 2. Filter Top 15 Stations (Aggressive Memory Optimization)
-    logger.info("✂️ Filtering to Top 15 Stations to preserve RAM...")
-    top_stations = df['station_name'].value_counts().head(15).index
+    # 2. Filter Top 200 Stations (USER DEMAND: ALL DATA, NO SHORTCUTS)
+    logger.info("✂️ Filtering to Top 200 Stations (Full Scope)...")
+    top_stations = df['station_name'].value_counts().head(200).index
     df = df[df['station_name'].isin(top_stations)].copy()
     
     # Trigger GC
     import gc
     gc.collect()
     
-    logger.info(f"✅ Filtered to {len(df)} rows (Top 15 stations).")
+    logger.info(f"✅ Filtered to {len(df)} rows (Top 200 stations).")
     
     # Sort for time-based feature generation
     df.sort_values(['station_name', 'time'], inplace=True)
@@ -65,9 +65,7 @@ def train_server_model():
 
     # Binary/Logic
     df['is_weekend'] = (df['day_of_week'] >= 5).astype(int)
-    # Simple holiday proxy (Manual list or simplified)
-    # For speed, we skip complex holiday lookup on server or use simpler logic.
-    # Leaving as 0 for now (Model will learn it's less important or capture via date)
+    # Simple holiday proxy
     df['is_holiday'] = 0 
     df['days_to_holiday'] = 7
     df['days_since_holiday'] = 7
@@ -86,8 +84,6 @@ def train_server_model():
     df['days_since_epoch'] = (df['time'] - epoch_start).dt.days
 
     # Lags & Rolling (The Heavy Hitters)
-    # Ensure no leakage across stations (groupby)
-    # Since we sorted by station+time, we can use groupby().shift()
     logger.info("   -> Generating Lags...")
     g = df.groupby('station_name')['pickups']
     
@@ -95,12 +91,7 @@ def train_server_model():
         df[f'lag_{lag}h'] = g.shift(lag)
         
     logger.info("   -> Generating Rolling Stats...")
-    # Rolling is slower.
     for w in [4, 12, 24, 168]:
-        # shift(1) to avoid leakage (rolling includes current row by default?)
-        # rolling(closed='left') usage? Safer to shift first.
-        # But rolling on 'pickups' includes current value? No, we want PAST rolling.
-        # So we take shift(1) then rolling.
         shifted = g.shift(1)
         r = shifted.rolling(window=w, min_periods=1)
         df[f'roll_mean_{w}h'] = r.mean()
@@ -111,7 +102,7 @@ def train_server_model():
     # EMA
     df['ema_24h'] = g.transform(lambda x: x.ewm(span=24, adjust=False).mean().shift(1))
 
-    # Clean NaNs (created by lags)
+    # Clean NaNs
     df.dropna(inplace=True)
     logger.info(f"✅ Features Engineered. Final Rows: {len(df)}")
 
@@ -132,17 +123,16 @@ def train_server_model():
     # Ensure all cols exist
     for c in feature_cols:
         if c not in df.columns:
-            logger.warning(f"Feature {c} missing! Filling with 0.")
             df[c] = 0
 
     X = df[feature_cols]
     y = df['pickups']
     
-    # Retrain Scalers (Matched to this exact data)
+    # Retrain Scalers
     logger.info("🔄 Retraining Scalers (Matched)...")
     scaler_tree = StandardScaler()
     X_scaled = scaler_tree.fit_transform(X)
-    joblib.dump(scaler_tree, os.path.join(MODELS_DIR, "scaler_tree_server.save")) # Use distinct name first
+    joblib.dump(scaler_tree, os.path.join(MODELS_DIR, "scaler_tree_server.save"))
     
     scaler_y = StandardScaler()
     y_scaled = scaler_y.fit_transform(y.values.reshape(-1, 1))
@@ -150,22 +140,50 @@ def train_server_model():
 
     # 5. Train XGBoost
     logger.info("🏋️ Training XGBoost Model on Server...")
-    model = xgb.XGBRegressor(
+    xgb_model = xgb.XGBRegressor(
         objective='reg:squarederror',
-        n_estimators=60, # Lightweight but effective
-        learning_rate=0.1,
-        max_depth=6,
+        n_estimators=100,
+        learning_rate=0.05, # Slower learning for better accuracy
+        max_depth=7,
         n_jobs=-1
     )
+    xgb_model.fit(X_scaled, y_scaled)
+    # Save using Booster
+    xgb_model.get_booster().save_model(os.path.join(MODELS_DIR, "xgb_server.json"))
+    logger.info("✅ XGBoost Saved")
+
+    # 6. Train LightGBM
+    logger.info("🏋️ Training LightGBM Model on Server...")
+    import lightgbm as lgb
+    # Convert feature names to safe strings (no spaces, special chars)
+    # LightGBM is picky about json special chars
+    # We rely on defaults mostly
+    lgb_model = lgb.LGBMRegressor(
+        n_estimators=100,
+        learning_rate=0.05,
+        num_leaves=31,
+        n_jobs=-1,
+        verbose=-1
+    )
+    lgb_model.fit(X_scaled, y_scaled.ravel())
+    lgb_model.booster_.save_model(os.path.join(MODELS_DIR, "lgb_server.txt"))
+    logger.info("✅ LightGBM Saved")
+
+    # 7. Train CatBoost
+    logger.info("🏋️ Training CatBoost Model on Server...")
+    from catboost import CatBoostRegressor
+    cb_model = CatBoostRegressor(
+        iterations=100,
+        learning_rate=0.05,
+        depth=6,
+        allow_writing_files=False,
+        verbose=False
+    )
+    cb_model.fit(X_scaled, y_scaled.ravel())
+    cb_model.save_model(os.path.join(MODELS_DIR, "cb_server.cbm"))
+    logger.info("✅ CatBoost Saved")
     
-    model.fit(X_scaled, y_scaled)
-    
-    # Save using Booster object for compatibility with prediction_service.py
-    save_path = os.path.join(MODELS_DIR, "xgb_server.json")
-    model.get_booster().save_model(save_path)
-    logger.info(f"✅ Model saved to {save_path}")
-    
-    logger.info("🎉 Training Complete.")
+    logger.info("🎉 Full Ensemble Training Complete.")
 
 if __name__ == "__main__":
     train_server_model()

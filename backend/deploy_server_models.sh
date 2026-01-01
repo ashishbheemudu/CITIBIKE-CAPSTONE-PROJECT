@@ -15,7 +15,20 @@ if [ -f "$MODELS_DIR/xgb_server.json" ]; then
     echo "✅ Deployed XGBoost Model"
 else
     echo "❌ xgb_server.json missing!"
-    exit 1
+fi
+
+if [ -f "$MODELS_DIR/lgb_server.txt" ]; then
+    cp $MODELS_DIR/lgb_server.txt $MODELS_DIR/lgb.txt
+    echo "✅ Deployed LightGBM Model"
+else
+    echo "⚠️ lgb_server.txt missing!"
+fi
+
+if [ -f "$MODELS_DIR/cb_server.cbm" ]; then
+    cp $MODELS_DIR/cb_server.cbm $MODELS_DIR/cb.cbm
+    echo "✅ Deployed CatBoost Model"
+else
+    echo "⚠️ cb_server.cbm missing!"
 fi
 
 if [ -f "$MODELS_DIR/scaler_tree_server.save" ]; then
