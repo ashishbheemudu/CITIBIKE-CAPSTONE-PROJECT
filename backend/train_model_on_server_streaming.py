@@ -231,7 +231,9 @@ def train_streaming():
         'learning_rate': 0.05,
         'max_depth': 7,
         'n_jobs': -1,
-        'device': 'cpu'
+        'device': 'cpu',
+        'tree_method': 'hist',
+        'max_bin': 64 # Aggressive quantization for low-RAM
     }
     
     model = xgb.train(params, dtrain, num_boost_round=100)
