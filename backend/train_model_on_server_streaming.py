@@ -220,7 +220,7 @@ def train_streaming():
     logger.info("🏋️ Pass 2: Training XGBoost (Streaming)...")
     
     # Iterator produces (X, y) batches
-    iter_pass2 = FeatureIterator(df_raw, scaler_tree, scaler_y, fit_scalers=False)
+    iter_pass2 = XGBTrainingIter(df_raw, scaler_tree, scaler_y)
     
     # QuantileDMatrix reads from the iterator!
     # Explicitly providing missing=nan is good practice
