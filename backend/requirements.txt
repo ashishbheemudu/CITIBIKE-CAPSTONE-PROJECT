@@ -4,7 +4,8 @@ pandas
 numpy
 requests
 joblib
-python-holidays
+holidays
+pyarrow
 xgboost
 lightgbm
 catboost
