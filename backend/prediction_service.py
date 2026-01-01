@@ -134,8 +134,9 @@ class PredictionService:
                 logger.warning(f"⚠️ Historical data file not found at {hist_path}")
                 self.historical_data = pd.DataFrame() # Empty fallback
 
-
-
+        except Exception as e:
+            logger.error(f"❌ Error lazy loading data: {e}")
+            self.historical_data = pd.DataFrame() # Prevent NoneType errors
     def predict(self, station_name, start_time, hours_ahead=48):
         """Generate predictions using REAL ML models OR statistical fallback"""
         try:
