@@ -92,6 +92,8 @@ class PredictionService:
 
             # 4. Load scalers
             scaler_tree_path = os.path.join(MODELS_DIR, "scaler_tree.save")
+            # 5. Load scalers
+            scaler_tree_path = os.path.join(MODELS_DIR, "scaler_tree.save")
             if os.path.exists(scaler_tree_path):
                 self.scalers['tree'] = joblib.load(scaler_tree_path)
                 logger.info(f"✅ Loaded feature scaler")
@@ -100,15 +102,6 @@ class PredictionService:
             if os.path.exists(scaler_y_path):
                 self.scalers['y'] = joblib.load(scaler_y_path)
                 logger.info("✅ Loaded target scaler")
-            
-            # 5. Load LIGHTWEIGHT reference data for lag features (600KB - fits in memory!)
-            reference_path = os.path.join(MODELS_DIR, "reference_data_recent.parquet")
-            if os.path.exists(reference_path):
-                self.historical_data = pd.read_parquet(reference_path)
-                self.historical_data['time'] = pd.to_datetime(self.historical_data['time'])
-                logger.info(f"✅ Loaded reference data: {len(self.historical_data)} rows")
-            else:
-                logger.warning("⚠️ reference_data_recent.parquet not found - lag features will be zeros")
             
             logger.info(f"🎉 Lazy Loaded {len(self.models)} models!")
             self.use_fallback = False
@@ -120,35 +113,28 @@ class PredictionService:
             traceback.print_exc()
 
     def _lazy_load_data(self):
-        """Load historical data ONLY when needed (Lazy Loading) with aggressive pruning"""
+        """Load FULL historical data (11M rows) for maximum accuracy"""
         if self.historical_data is not None: return # Already loaded
 
         try:
-            logger.info("READING DATA: Lazy loading historical data...")
+            logger.info("READING DATA: Loading 11M rows of historical data... (May utilize Swap Space)")
             hist_path = os.path.join(BASE_DIR, "data", "v1_core", "final_station_demand_robust_features.parquet")
             
             if os.path.exists(hist_path):
-                # MEMORY OPTIMIZATION: Only load essential columns
-                # BEAST MODE UPDATE: AWS has 1GB RAM, can load 'wspd' and other columns if needed.
-                self.historical_data = pd.read_parquet(
-                    hist_path, 
-                    columns=['time', 'station_name', 'pickups', 'temp', 'prcp', 'wspd']
-                )
+                # NO COMPROMISE: Load full dataset, all columns
+                self.historical_data = pd.read_parquet(hist_path)
+                logger.info(f"✅ Loaded FULL historical data: {len(self.historical_data)} rows")
                 
-                # Optimize types
+                # Optimize types to save SOME RAM (still safe)
                 for col in self.historical_data.select_dtypes(include=['float64']).columns:
-                    self.historical_data[col] = self.historical_data[col].astype('float32')
-                
-                if 'time' in self.historical_data.columns:
-                    self.historical_data['time'] = pd.to_datetime(self.historical_data['time'])
-                
-                logger.info(f"✅ Lazy Loaded {len(self.historical_data)} rows of historical data (Optimized)")
+                    self.historical_data[col] = pd.to_numeric(self.historical_data[col], downcast='float')
+                for col in self.historical_data.select_dtypes(include=['int64']).columns:
+                    self.historical_data[col] = pd.to_numeric(self.historical_data[col], downcast='unsigned')
             else:
-                logger.warning("⚠️ Historical data file not found during lazy load")
-                
-        except Exception as e:
-            logger.error(f"❌ Error lazy loading data: {e}")
-            self.historical_data = pd.DataFrame() # Prevent NoneType errors
+                logger.warning(f"⚠️ Historical data file not found at {hist_path}")
+                self.historical_data = pd.DataFrame() # Empty fallback
+
+
 
     def predict(self, station_name, start_time, hours_ahead=48):
         """Generate predictions using REAL ML models OR statistical fallback"""
@@ -171,32 +157,27 @@ class PredictionService:
             import time as time_module
             perf_start = time_module.time()
             station_cache = None
-            if hasattr(self, 'historical_data') and self.historical_data is not None and not self.historical_data.empty:
+            if hasattr(self, 'historical_data') and self.historical_data is not None:
+                # NO COMPROMISE: Use full exact historical data
+                # Since we have full history loaded, we can just look up the exact timestamps
+                ts_start = pd.Timestamp(start_dt).tz_localize(None) if pd.Timestamp(start_dt).tz else pd.Timestamp(start_dt)
                 hist_station = self.historical_data[self.historical_data['station_name'] == station_name].copy()
+                
                 if not hist_station.empty:
-                    hist_station['time'] = pd.to_datetime(hist_station['time']).dt.tz_localize(None)
-                    ts_start = pd.Timestamp(start_dt).tz_localize(None) if pd.Timestamp(start_dt).tz else pd.Timestamp(start_dt)
+                    # Convert to datetime if not already
+                    if not pd.api.types.is_datetime64_any_dtype(hist_station['time']):
+                        hist_station['time'] = pd.to_datetime(hist_station['time'])
                     
-                    # Try exact date match first
+                    hist_station['time'] = hist_station['time'].dt.tz_localize(None)
+                    
+                    # Exact historical lookup
                     before_ts = hist_station[hist_station['time'] < ts_start]
-                    if len(before_ts) >= 168:
-                        station_cache = before_ts.tail(168)
-                        logger.info(f"📊 Using exact historical data: {len(station_cache)} rows")
+                    if not before_ts.empty:
+                        station_cache = before_ts.tail(168)  # Last week of real data
+                        logger.info(f"📊 Using EXACT FULL historical data: {len(station_cache)} rows")
                     else:
-                        # FALLBACK: Use matching month/day patterns from any year (smart temporal matching)
-                        target_month = ts_start.month
-                        target_day = ts_start.day
-                        hist_station['month'] = hist_station['time'].dt.month
-                        hist_station['day'] = hist_station['time'].dt.day
-                        similar_data = hist_station[(hist_station['month'] == target_month) & 
-                                                    (hist_station['day'] <= target_day)]
-                        if len(similar_data) >= 168:
-                            station_cache = similar_data.tail(168)
-                            logger.info(f"📊 Using similar month/day pattern data: {len(station_cache)} rows")
-                        elif not hist_station.empty:
-                            # Ultimate fallback: use any available data
-                            station_cache = hist_station.tail(168)
-                            logger.info(f"📊 Using any available historical data: {len(station_cache)} rows")
+                        logger.warning(f"⚠️ No history found before {ts_start}")
+                
             logger.info(f"⏱️ Station filter: {(time_module.time() - perf_start)*1000:.0f}ms")
 
             # Create features for all hours at once (VECTORIZED - 10x faster!)
