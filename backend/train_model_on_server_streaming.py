@@ -196,11 +196,12 @@ def train_streaming():
     df_raw = pd.read_parquet(DATA_PATH, columns=['time', 'station_name', 'pickups', 'temp', 'prcp', 'wspd'])
     
     # Filter Top 200
-    top_stations = df_raw['station_name'].value_counts().head(200).index
+    # Filter Top 50 Stations (Strategic Subsample for 2GB RAM)
+    top_stations = df_raw['station_name'].value_counts().head(50).index
     df_raw = df_raw[df_raw['station_name'].isin(top_stations)].copy()
     df_raw.sort_values(['station_name', 'time'], inplace=True)
     
-    logger.info(f"✅ Filtered to {len(df_raw)} rows (Top 200). Ready stream.")
+    logger.info(f"✅ Filtered to {len(df_raw)} rows (Top 50). Ready stream.")
 
     # 2. Pass 1: Fit Scalers
     logger.info("🔄 Pass 1: Fitting Scalers Incrementally...")
