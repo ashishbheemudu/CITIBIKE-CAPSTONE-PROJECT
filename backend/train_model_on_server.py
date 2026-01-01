@@ -29,11 +29,16 @@ def train_server_model():
     df = pd.read_parquet(DATA_PATH, columns=['time', 'station_name', 'pickups', 'temp', 'prcp', 'wspd'])
     logger.info(f"✅ Loaded {len(df)} rows.")
 
-    # 2. Filter Top 50 Stations (Memory Optimization)
-    logger.info("✂️ Filtering to Top 50 Stations to preserve RAM...")
-    top_stations = df['station_name'].value_counts().head(50).index
+    # 2. Filter Top 15 Stations (Aggressive Memory Optimization)
+    logger.info("✂️ Filtering to Top 15 Stations to preserve RAM...")
+    top_stations = df['station_name'].value_counts().head(15).index
     df = df[df['station_name'].isin(top_stations)].copy()
-    logger.info(f"✅ Filtered to {len(df)} rows (Top 50 stations).")
+    
+    # Trigger GC
+    import gc
+    gc.collect()
+    
+    logger.info(f"✅ Filtered to {len(df)} rows (Top 15 stations).")
     
     # Sort for time-based feature generation
     df.sort_values(['station_name', 'time'], inplace=True)
@@ -147,7 +152,7 @@ def train_server_model():
     logger.info("🏋️ Training XGBoost Model on Server...")
     model = xgb.XGBRegressor(
         objective='reg:squarederror',
-        n_estimators=100, # Lightweight but effective
+        n_estimators=60, # Lightweight but effective
         learning_rate=0.1,
         max_depth=6,
         n_jobs=-1
