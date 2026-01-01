@@ -103,23 +103,30 @@ def train_server_model_v2():
         chunk = df_raw[df_raw['station_name'].isin(stations_batch)].copy()
         processed_chunk = engineer_features_chunk(chunk)
         
-        # Select Columns explicitly to save space
-        processed_chunk.to_parquet(TEMP_PROCESSED_PATH, engine='pyarrow', append=os.path.exists(TEMP_PROCESSED_PATH))
+        # Save chunk to unique file
+        chunk_path = os.path.join(BASE_DIR, f"processed_chunk_{i}.parquet")
+        processed_chunk.to_parquet(chunk_path, engine='pyarrow')
         
         processed_count += len(processed_chunk)
         del chunk, processed_chunk
         gc.collect()
 
-    logger.info(f"✅ Feature Engineering Complete. Saved {processed_count} rows to disk.")
+    logger.info(f"✅ Feature Engineering Complete. Saved {processed_count} rows across chunks.")
     del df_raw
     gc.collect()
 
     # 3. Load for Training (Memory Efficient)
     logger.info("♻️ Loading Processed Features for Training...")
-    # Load from the temp parquet
-    df = pd.read_parquet(TEMP_PROCESSED_PATH)
+    # Find all chunk files
+    chunk_files = [os.path.join(BASE_DIR, f) for f in os.listdir(BASE_DIR) if f.startswith("processed_chunk_") and f.endswith(".parquet")]
     
-    feature_cols = [c for c in df.columns if c not in ['pickups', 'station_name', 'time']]
+    # Load and concat (this implies we must fit in RAM now)
+    # If 11M rows * 54 cols (float32) ~ 2.4 GB. It fits in 4GB (RAM+Swap)
+    df = pd.concat([pd.read_parquet(f) for f in chunk_files], ignore_index=True)
+    
+    # Clean up chunks immediately to free disk/inodes
+    for f in chunk_files:
+        os.remove(f)
     X = df[feature_cols]
     y = df['pickups']
     
