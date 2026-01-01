@@ -54,12 +54,14 @@ class PredictionService:
                 import lightgbm as lgb
                 from catboost import CatBoostRegressor
 
-                # XGBoost (101MB)
+                # XGBoost (101MB) - Use Booster for compatibility
                 xgb_path = os.path.join(MODELS_DIR, "xgb.json")
                 if os.path.exists(xgb_path):
-                    self.models['xgb'] = xgb.XGBRegressor()
-                    self.models['xgb'].load_model(xgb_path)
-                    logger.info("✅ Loaded XGBoost")
+                    booster = xgb.Booster()
+                    booster.load_model(xgb_path)
+                    self.models['xgb'] = booster
+                    self.xgb_is_booster = True  # Flag for predict method
+                    logger.info("✅ Loaded XGBoost (Booster)")
 
                 # LightGBM (3MB)
                 lgb_path = os.path.join(MODELS_DIR, "lgb.pkl")
@@ -187,7 +189,13 @@ class PredictionService:
             predictions = {}
             for model_name, model in self.models.items():
                 try:
-                    pred_scaled = model.predict(X_scaled)
+                    # XGBoost Booster needs DMatrix
+                    if model_name == 'xgb' and getattr(self, 'xgb_is_booster', False):
+                        import xgboost as xgb
+                        dmatrix = xgb.DMatrix(X_scaled, feature_names=self.feature_names)
+                        pred_scaled = model.predict(dmatrix)
+                    else:
+                        pred_scaled = model.predict(X_scaled)
                     predictions[model_name] = pred_scaled
                     logger.info(f"✅ {model_name} range: [{pred_scaled.min():.3f}, {pred_scaled.max():.3f}]")
                 except Exception as e:
