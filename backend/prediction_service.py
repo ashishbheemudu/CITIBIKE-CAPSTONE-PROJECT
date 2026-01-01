@@ -146,11 +146,12 @@ class PredictionService:
         try:
             # Enforce Lazy Loading on first request
             self._lazy_load_models()
-            self._lazy_load_data()
             
             # Check if we need to use fallback mode (ML libraries failed)
             if getattr(self, 'use_fallback', False) or not self.models:
                 logger.warning("🔄 Using STATISTICAL fallback predictor (ML models unavailable)")
+                # Only load historical data for fallback (saves ~1GB RAM!)
+                self._lazy_load_data()
                 return self._predict_statistical_fallback(station_name, start_time, hours_ahead)
 
             # Create prediction timestamps
