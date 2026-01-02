@@ -187,7 +187,7 @@ const RebalancingDashboard = () => {
     };
 
     const systemHealth = actions.length > 0
-        ? Math.round(100 - (actions.filter(a => a.priority === 'CRITICAL').length * 5 + actions.filter(a => a.priority === 'HIGH').length * 2))
+        ? Math.max(0, Math.round(100 - (actions.filter(a => a.priority === 'CRITICAL').length * 5 + actions.filter(a => a.priority === 'HIGH').length * 2)))
         : 100;
 
     return (

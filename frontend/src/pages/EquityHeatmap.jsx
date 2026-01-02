@@ -43,7 +43,11 @@ const EquityHeatmap = () => {
             if (Array.isArray(data)) {
                 // API returns array of {borough, score} objects
                 data.forEach(item => {
-                    boroughScores[item.borough || item.name] = item.score || item.equity_score || 0.85;
+                    const key = item.borough || item.name;
+                    // Skip items without a valid name to prevent 'undefined' key
+                    if (key && key !== 'undefined') {
+                        boroughScores[key] = item.score || item.equity_score || 0.85;
+                    }
                 });
             } else {
                 boroughScores = data;
